@@ -1,0 +1,31 @@
+# Dependencies and generated output
+node_modules/
+dist/
+build/
+coverage/
+.vite/
+
+# Secrets (examples remain trackable)
+.env
+.env.*
+!.env.example
+!**/.env.example
+*.pem
+*.key
+
+# Logs and runtime files
+*.log
+logs/
+*.pid
+npm-debug.log*
+
+# Editors and operating systems
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*~
+
+# Local ICTAK reference documents (preserve locally; do not commit)
+/MERN_Stack_Project_Guidelines_Student_Reference.docx
+/Summer Internship Report __ React.docx
