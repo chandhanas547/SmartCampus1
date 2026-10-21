@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { join } from 'node:path';
 import { createIdentity } from './identity/index.js';
 import { HttpError } from './errors.js';
+import { domainRouter } from './domain/routes.js';
 
 export function createApp({ checkDatabase, origin, production = false, clientDist, connection, sessionSecret, now, trustProxyHops = 0 }) {
   const app = express();
@@ -22,7 +23,7 @@ export function createApp({ checkDatabase, origin, production = false, clientDis
       if (request.get('x-labflow-request') !== '1') {
         return response.status(403).json({ error: { code: 'CSRF_REJECTED', message: 'Refresh the page and try again.' } });
       }
-      if (!request.is('application/json')) {
+      if (request.get('content-type')?.split(';')[0].trim().toLowerCase() !== 'application/json') {
         return response.status(415).json({ error: { code: 'UNSUPPORTED_MEDIA_TYPE', message: 'Use application/json.' } });
       }
     }
@@ -42,6 +43,7 @@ export function createApp({ checkDatabase, origin, production = false, clientDis
     const identity = createIdentity({ connection, sessionSecret, production, now });
     app.use('/api', identity.sessions, identity.restoreUser);
     app.use('/api/auth', identity.router);
+    app.use('/api', domainRouter(connection, now));
   }
   app.use('/api', (_request, response) => {
     response.status(404).json({ error: { code: 'NOT_FOUND', message: 'Resource not found.' } });
@@ -70,6 +72,10 @@ export function createApp({ checkDatabase, origin, production = false, clientDis
     if (error.type === 'entity.too.large') {
       return response.status(413).json({ error: { code: 'PAYLOAD_TOO_LARGE', message: 'Request body is too large.' } });
     }
+    if (['charset.unsupported', 'encoding.unsupported'].includes(error.type)) {
+      return response.status(415).json({ error: { code: 'UNSUPPORTED_MEDIA_TYPE', message: 'Use UTF-8 application/json.' } });
+    }
+    console.error(JSON.stringify({ event: 'request_failed', name: error.name, code: String(error.code ?? 'UNEXPECTED'), field: error.path }));
     response.status(500).json({ error: { code: 'INTERNAL_ERROR', message: 'Something went wrong. Please try again.' } });
   });
   return app;

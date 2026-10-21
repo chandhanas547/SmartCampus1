@@ -4,6 +4,7 @@ import { createApp } from './app.js';
 import { readConfig } from './config.js';
 import { checkDatabase, connectDatabase } from './database.js';
 import { prepareIdentity } from './identity/index.js';
+import { prepareDomain } from './domain/models.js';
 
 let connection;
 try {
@@ -12,6 +13,7 @@ try {
   if (clientDist) await access(`${clientDist}/index.html`);
   connection = await connectDatabase(config.mongoUri);
   await prepareIdentity(connection);
+  await prepareDomain(connection);
   const app = createApp({ ...config, connection, clientDist, checkDatabase: () => checkDatabase(connection) });
   const server = app.listen(config.port, config.host);
   await new Promise((resolve, reject) => {
