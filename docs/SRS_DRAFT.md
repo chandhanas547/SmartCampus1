@@ -3,9 +3,9 @@
 | Document field | Value |
 |---|---|
 | Project | LabFlow — College Laboratory Equipment Management System |
-| Document version | 0.2 Draft |
+| Document version | 0.3 Draft |
 | Status | Draft for review — not approved or submitted |
-| Prepared by | TBD: team member names and student IDs |
+| Prepared by | TBD: individual author name and student ID |
 | Institution | TBD |
 | Faculty/mentor | TBD |
 | LMS submission deadline | TBD |
@@ -16,12 +16,13 @@
 |---|---|---|---|
 | 0.1 | TBD | TBD | Initial SRS draft based on the approved LabFlow master plan and ICTAK references. |
 | 0.2 | TBD | TBD | Clarified inventory guards, dates, damage inspection and PATCH contract; finalized demo defaults. |
+| 0.3 | 2026-10-21 | TBD | Recorded individual submission and owner authorization to start development; requirements remain a review draft. |
 
 ## 1. Introduction
 
 ### 1.1 Purpose
 
-This Software Requirements Specification (SRS) defines the MVP requirements and verification basis for LabFlow. It is intended for the student team, instructor/reviewer and future implementation sessions. It must be reviewed and submitted through the LMS before application coding begins.
+This Software Requirements Specification (SRS) defines the MVP requirements and verification basis for LabFlow. It is intended for the student team, instructor/reviewer and future implementation sessions. It remains awaiting review and submission. On 21 October 2026 the owner authorized application coding to begin before that process is complete.
 
 This SRS uses an IEEE-inspired structure because no mandatory LMS template has been supplied. The LMS requirement for a separate SRS was communicated independently; it is not stated in either local ICTAK DOCX reference.
 
@@ -503,7 +504,7 @@ This table defines planned evidence, not completed results.
 - Transactional inventory safety, server RBAC, ownership and boundary validation are mandatory.
 - Original ICTAK references remain unchanged and outside Git.
 - No paid service without explicit approval.
-- SRS approval/submission precedes coding.
+- The owner authorized coding on 21 October 2026 while SRS approval/submission remain pending.
 - Demo defaults finalized by the owner: JavaScript/JSX; name/email/password-only registration; maximum seven days (168 hours) from approval; UTC persistence and `Asia/Kolkata` display.
 - Existing cancellation policy is retained: students cancel own pending/approved-unissued requests; admins cancel approved-unissued reservations with a reason.
 - No automatic expiry/rejection worker; pending requests and expired reservations require the explicit handling in Section 6.3.

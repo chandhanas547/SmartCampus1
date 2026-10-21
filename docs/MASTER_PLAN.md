@@ -6,7 +6,7 @@ LabFlow is a demo-only MERN capstone for managing equipment in one college labor
 
 The two local ICTAK documents are authoritative project references. Their required final package includes an accessible repository, working hosted application, complete README, key/mobile screenshots, live core-flow evidence, safe environment examples, clean secret handling, meaningful history, and honest limitations. The internship report must cover its prescribed sections and make only evidence-backed claims.
 
-An **SRS submission is mandatory per the LMS screenshot** and is scheduled before coding. The screenshot/template, exact deadline and submission procedure are not currently stored in this repository and must be confirmed during M1.
+An **SRS submission was recorded as mandatory from prior LMS guidance**. On 21 October 2026 the owner authorized coding to begin while SRS review and submission remain pending. The screenshot/template, exact deadline and submission procedure are not currently stored in this repository and must be confirmed during M1.
 
 ## 2. MVP boundary
 
@@ -240,7 +240,7 @@ Initial target for auth/ownership/circulation code is at least 80% line and bran
 | ID | Scope | Completion gate |
 |---|---|---|
 | M0 | Initialize Git; ignore references/secrets/artifacts; record README, master plan and decisions. | Reviewed staged snapshot, secret check and initial commit when identity is configured. |
-| M1 | Confirm policies; produce and submit mandatory SRS with wireframes, state/data diagrams and API contract. | User approval plus LMS submission evidence. **No coding before this gate.** |
+| M1 | Confirm policies; produce and submit mandatory SRS with wireframes, state/data diagrams and API contract. | Owner SRS approval plus actual submission evidence. The owner authorized development before completion of this gate on 21 October 2026. |
 | M2 | Pin tools; scaffold client/server; configure database, validation, errors, API client and basic CI/tests. | Both apps run locally; build and transaction smoke check pass; setup/env docs work. |
 | M3 | Deliver registration, sessions, logout, RBAC, ownership and controlled admin provisioning. | F1–F2 and negative security cases pass. |
 | M4 | Deliver inventory management and searchable/paginated catalog. | F3–F4, index checks and basic responsive/keyboard checks pass. |

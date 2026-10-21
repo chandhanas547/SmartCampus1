@@ -9,7 +9,7 @@ This document records the assumptions that future sessions must not silently cha
 - Equipment is tracked as individual physical assets with unique asset tags.
 - One borrowing request concerns one asset.
 - The original ICTAK DOCX files stay local and unmodified but are excluded from Git.
-- The SRS is a mandatory LMS submission and must be submitted before application coding.
+- SRS approval and submission remain pending. On 21 October 2026 the owner instructed development to begin, superseding the earlier submission-before-coding gate.
 - No paid service may be provisioned without explicit approval.
 - No real personal data, secrets or reusable demonstration passwords belong in source, history or screenshots.
 - Transactional inventory safety, server-side RBAC, ownership enforcement and input validation are MVP requirements, not polish.
@@ -44,7 +44,7 @@ This document records the assumptions that future sessions must not silently cha
 - Existing damage reports must be resolved at return with reviewer/time, matching inspection result and non-empty note, even for serviceable returns.
 - Inventory PATCH uses expected version and one explicit action: metadata edit, enter maintenance or restore. Manual transition notes are mandatory; allocation states cannot be set through PATCH.
 
-These policies supersede the older provisional labels in MASTER_PLAN. The detailed contract is in `SRS_DRAFT.md` revision 0.2 and remains subject to document review; it is not evidence of SRS submission.
+These policies supersede the older provisional labels in MASTER_PLAN. The detailed contract is in `SRS_DRAFT.md` revision 0.3 Draft and remains subject to document review; it is not evidence of SRS submission.
 
 ## Provisional implementation choices
 
@@ -78,3 +78,7 @@ Deferral does not remove basic security, accessibility, responsive design, trans
 ## Change rule
 
 Update this document and the SRS before implementing a changed role, lifecycle rule, schema contract or security boundary. Record actual verification results only after running the relevant checks.
+
+## Development authorization on 21 October 2026
+
+The owner instructed: "start building". Development may proceed with the existing scope and reviewed contract as the working baseline; SRS approval/submission are still pending. Individual submission is confirmed. Work proceeds one milestone at a time, with a concise result and model-switch opportunity at each checkpoint. The current chat model cannot be changed by this agent. No publishing, payment or submission is authorized by this change.
