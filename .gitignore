@@ -4,6 +4,9 @@ dist/
 build/
 coverage/
 .vite/
+.local/
+test-results/
+playwright-report/
 
 # Secrets (examples remain trackable)
 .env

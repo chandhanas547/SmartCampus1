@@ -1,0 +1,33 @@
+{
+  "name": "labflow",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "workspaces": ["client", "server"],
+  "engines": { "node": "24.x", "npm": "11.x" },
+  "packageManager": "npm@11.19.0",
+  "scripts": {
+    "db": "node scripts/database.js",
+    "dev:server": "node --env-file-if-exists=server/.env --watch server/src/index.js",
+    "dev:client": "npm run dev --workspace client",
+    "start": "node --env-file-if-exists=server/.env server/src/index.js",
+    "build": "npm run build --workspace client",
+    "test": "node --test server/test/*.test.js && node --test --test-isolation=none client/src/*.test.js",
+    "test:integration": "node --test server/test/integration/*.test.js",
+    "lint": "eslint .",
+    "check": "npm run lint && npm test && npm run test:integration && npm run build"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "eslint": "10.13.0",
+    "globals": "17.13.0",
+    "mongodb-memory-server-core": "11.3.0"
+  },
+  "config": {
+    "mongodbMemoryServer": {
+      "version": "8.0.34",
+      "distro": "ubuntu-22.04",
+      "downloadDir": "./.local/mongodb-binaries"
+    }
+  }
+}
