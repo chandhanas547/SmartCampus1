@@ -25,18 +25,32 @@ This document records the assumptions that future sessions must not silently cha
 | MongoDB transactions plus unique/partial indexes | Accepted | Prevents partial lifecycle updates and simultaneous double approval. |
 | Server-side sessions in MongoDB | Proposed | Keeps authentication tokens out of browser-accessible storage and avoids another data service. Confirm in SRS. |
 | Single-origin production deployment | Proposed | Simplifies cookies, CORS and deployment. Provider remains unselected. |
-| JavaScript/JSX rather than TypeScript | Proposed | Minimizes capstone setup while retaining runtime schema validation. Confirm team preference. |
+| JavaScript/JSX rather than TypeScript | Accepted demo default | Finalized by the owner for this capstone; boundary validation remains mandatory. |
 
-## Provisional policy choices
+## Finalized demo policies
 
-- Maximum lending period: **seven days from approval**. This is provisional pending laboratory/instructor confirmation.
+- Maximum lending period: **seven days (168 hours) from the server-recorded approval instant**. `requestedDueAt` must be future at creation and approval; approved `dueAt` must be future and within this limit. An admin may choose a different due date at approval, not at issue.
+- Registration fields are `name`, `email` and `password` only; actual report authorship/institution metadata remains TBD.
 - Pending requests do not reserve an asset; more than one student may have a pending request for it.
 - A student may not have more than one active request for the same asset.
 - Students may cancel pending or approved-but-unissued requests. Admin cancellation requires a reason.
 - Uncollected approved requests require explicit cancellation; the MVP has no scheduled expiry worker.
 - Only an admin records physical issue and return.
 - Overdue is derived from an issued request whose due date has passed; it does not release the asset.
-- Store timestamps in UTC. Display timezone is provisionally `Asia/Kolkata`.
+- Store timestamps in UTC and display in `Asia/Kolkata`.
+- Open/active requests are `PENDING`, `APPROVED` and `ISSUED`. Manual entry into maintenance and archive are blocked by any open request.
+- A damaged return must enter maintenance even with unrelated pending requests. Those requests remain pending without automatic rejection; restoration permits them, but approval requires availability and an unexpired requested date.
+- Expired pending requests remain pending until explicitly rejected or cancelled. Expired approved reservations cannot be issued or extended; cancellation under the existing policy is required before a fresh request.
+- Existing damage reports must be resolved at return with reviewer/time, matching inspection result and non-empty note, even for serviceable returns.
+- Inventory PATCH uses expected version and one explicit action: metadata edit, enter maintenance or restore. Manual transition notes are mandatory; allocation states cannot be set through PATCH.
+
+These policies supersede the older provisional labels in MASTER_PLAN. The detailed contract is in `SRS_DRAFT.md` revision 0.2 and remains subject to document review; it is not evidence of SRS submission.
+
+## Provisional implementation choices
+
+- MongoDB-backed server sessions and single-origin deployment remain proposed.
+- Password/hash parameters, session store/lifetime, CSRF mechanism and numeric rate limits require security implementation review.
+- Input lengths, critical-code coverage and draft accessibility/browser targets require review before enforcement; essential security and accessibility outcomes remain mandatory.
 
 ## Deferred from MVP
 
@@ -55,10 +69,8 @@ Deferral does not remove basic security, accessibility, responsive design, trans
 | Question | Needed by |
 |---|---|
 | What LMS SRS template, deadline, filename and submission evidence are required? | Before M1 submission |
-| Does the laboratory approve the seven-day lending rule and cancellation policy? | Before SRS approval |
-| What fields establish a student identity for this demo? | Before identity implementation |
-| JavaScript/JSX or TypeScript? | Before scaffolding |
-| Exact session lifetime and password policy? | Before identity implementation |
+| Is the revised SRS transition/date/PATCH contract approved for submission? | Before SRS approval |
+| Exact session/password/hash policy, session store, CSRF mechanism and rate limits? | Before identity implementation |
 | Which free hosting options are currently suitable, and is sleeping acceptable for evaluation? | Before deployment planning |
 | What is the team size, ownership split and final deadline? | Before scheduling milestones |
 | How will reviewers receive an admin demo account without exposing credentials? | Before final submission |
