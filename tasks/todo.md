@@ -1,6 +1,6 @@
 # LabFlow work queue
 
-Status on 21 October 2026: M2 foundation locally verified; M3 identity next; M1 not approved/submitted. This is the single task queue; MASTER_PLAN remains the milestone baseline.
+Status on 21 October 2026: M2 foundation locally verified; M3 identity locally verified; M4 inventory in progress; M1 not approved/submitted. This is the single task queue; MASTER_PLAN remains the milestone baseline.
 
 Each row is an unchecked task with an acceptance condition, verification and dependency. The file areas are prospective, not existing application files. Split any row into smaller tasks before implementation if it exceeds about five files. Record actual commands and results as work finishes.
 
@@ -17,9 +17,9 @@ Each row is an unchecked task with an acceptance condition, verification and dep
 | [x] | B2 | Establish a real MongoDB replica set and focused transaction test harness. | Commit/rollback smoke test against the actual database; document setup. | B1 | Server database/test setup |
 | [x] | B3 | Establish React shell and centralized API/error handling. | Development startup and production build; safe API failure UI. | B1 | Client entry, layout and API module |
 | [x] | B4 | Add reproducible lint/test/build commands and CI definition. | Run configured commands; environment examples contain variable names only. | B2, B3 | Root scripts, CI, env examples, README |
-| [ ] | I1 | Deliver student registration with normalized email, safe output and validated input. | Duplicate, invalid-input and role-injection API tests plus registration form flow. | B4 | User model, registration handler/schema/UI/test |
-| [ ] | I2 | Deliver login, restored session and logout. | Credential rejection, session regeneration/expiry/logout, CSRF and rate-limit tests. | I1 | Session middleware, auth handler/UI/test |
-| [ ] | I3 | Establish role/owner enforcement and controlled admin provisioning. | Wrong-role denial; no public admin creation; seed command handles credentials safely. | I2 | Authorization, admin setup, tests |
+| [x] | I1 | Deliver student registration with normalized email, safe output and validated input. | Duplicate, invalid-input and role-injection API tests plus registration form flow. | B4 | User model, registration handler/schema/UI/test |
+| [x] | I2 | Deliver login, restored session and logout. | Credential rejection, session regeneration/expiry/logout, CSRF and rate-limit tests. | I1 | Session middleware, auth handler/UI/test |
+| [x] | I3 | Establish role/owner enforcement and controlled admin provisioning. | Wrong-role denial; no public admin creation; seed command handles credentials safely. | I2 | Authorization, admin setup, tests |
 | [ ] | E1 | Deliver searchable paginated catalog/detail with archived exclusion. | Filters/page boundaries and student/admin visibility; keyboard/mobile review. | I3 | Equipment model, queries, catalog/detail UI, tests |
 | [ ] | E2 | Deliver equipment creation and versioned metadata edits. | Unique immutable tags, field allowlist, stale version and archived-edit tests. | E1 | Equipment mutations, form and tests |
 | [ ] | E3 | Deliver maintenance, restoration and archival guards. | State/note/open-request tests; extend with creation races when R1 exists. | E2 | Inventory service, action UI and tests |

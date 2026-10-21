@@ -552,3 +552,7 @@ This revision finalizes defaults previously marked provisional in MASTER_PLAN an
 6. LMS SRS requirement communicated by the project owner. The screenshot/template, deadline and submission procedure are not present in the repository and remain TBD.
 
 Official implementation references identified by ICTAK include React, Node.js, Express, MongoDB, Mongoose, MDN HTTP/CORS, OWASP Top 10 and WCAG 2.2 documentation. Exact framework versions and implementation patterns will be verified before M2; this draft does not select or claim installed versions.
+
+## Implementation policy note
+
+On 21 October 2026 the engineering baseline in `docs/SECURITY.md` selected exact identity/session/CSRF/rate-limit and registration bounds for implementation. Earlier TBD/provisional mechanism references in this draft must be read with that dated note. The SRS remains unapproved and unsubmitted. No functional endpoint is added by the security mechanism.

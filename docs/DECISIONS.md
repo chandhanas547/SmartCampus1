@@ -23,7 +23,7 @@ This document records the assumptions that future sessions must not silently cha
 | Individually tagged assets | Accepted | Makes availability, handover, return and damage history unambiguous. |
 | Reserve equipment only when an admin approves | Accepted | Pending requests remain requests; conditional transactional approval chooses one winner. |
 | MongoDB transactions plus unique/partial indexes | Accepted | Prevents partial lifecycle updates and simultaneous double approval. |
-| Server-side sessions in MongoDB | Proposed | Keeps authentication tokens out of browser-accessible storage and avoids another data service. Confirm in SRS. |
+| Server-side sessions in MongoDB | Selected for implementation | Keeps authentication tokens out of browser-accessible storage and avoids another data service. Confirm in SRS. |
 | Single-origin production deployment | Proposed | Simplifies cookies, CORS and deployment. Provider remains unselected. |
 | JavaScript/JSX rather than TypeScript | Accepted demo default | Finalized by the owner for this capstone; boundary validation remains mandatory. |
 
@@ -48,8 +48,8 @@ These policies supersede the older provisional labels in MASTER_PLAN. The detail
 
 ## Provisional implementation choices
 
-- MongoDB-backed server sessions and single-origin deployment remain proposed.
-- Password/hash parameters, session store/lifetime, CSRF mechanism and numeric rate limits require security implementation review.
+- MongoDB-backed sessions are selected for implementation; single-origin operation is implemented. Hosting provider remains unselected.
+- Identity implementation policies are recorded in `docs/SECURITY.md`: scrypt, eight-hour absolute MongoDB sessions, strict Origin/custom-header CSRF defense and MongoDB-backed authentication limits.
 - Input lengths, critical-code coverage and draft accessibility/browser targets require review before enforcement; essential security and accessibility outcomes remain mandatory.
 
 ## Deferred from MVP
@@ -70,7 +70,7 @@ Deferral does not remove basic security, accessibility, responsive design, trans
 |---|---|
 | What LMS SRS template, deadline, filename and submission evidence are required? | Before M1 submission |
 | Is the revised SRS transition/date/PATCH contract approved for submission? | Before SRS approval |
-| Exact session/password/hash policy, session store, CSRF mechanism and rate limits? | Before identity implementation |
+| Identity policy baseline | Selected for implementation in `docs/SECURITY.md`; verify at M3 |
 | Which free hosting options are currently suitable, and is sleeping acceptable for evaluation? | Before deployment planning |
 | What is the team size, ownership split and final deadline? | Before scheduling milestones |
 | How will reviewers receive an admin demo account without exposing credentials? | Before final submission |
@@ -81,4 +81,4 @@ Update this document and the SRS before implementing a changed role, lifecycle r
 
 ## Development authorization on 21 October 2026
 
-The owner instructed: "start building". Development may proceed with the existing scope and reviewed contract as the working baseline; SRS approval/submission are still pending. Individual submission is confirmed. Work proceeds one milestone at a time, with a concise result and model-switch opportunity at each checkpoint. The current chat model cannot be changed by this agent. No publishing, payment or submission is authorized by this change.
+The owner instructed: "start building". Development may proceed with the existing scope and reviewed contract as the working baseline; SRS approval/submission are still pending. Individual submission is confirmed. Work proceeds continuously through authorized local milestones, with concise progress and incremental handoff updates. Do not stop merely because a milestone completes; the owner will steer a model/chat change when desired. The current chat model cannot be changed by this agent. No publishing, payment or submission is authorized by this change.

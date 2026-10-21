@@ -7,15 +7,15 @@ Updated 21 October 2026. Read this first after moving to another chat, then insp
 - Individual ICTAK submission. The two local DOCX references are all the institutional guidance currently available. Name/student ID, institution, mentor, deadlines and LMS procedure remain unknown; do not repeatedly ask for unavailable details or invent them.
 - On 21 October the owner said “start building,” superseding the old SRS-before-coding gate. SRS is revision 0.3 Draft; approval and submission remain pending. Revision 0.2 is preserved in checkpoint commit `9cfdb2f`.
 - Routine local development, tests, fixes, documentation and focused local commits are authorized. Publishing, payments and final submission need approval for the concrete action.
-- Keep documentation current because development may move between chats. Prefer economical model use; report milestones so the owner can switch models. The running chat cannot switch its own model.
+- Continue developing in this chat until a real external approval/access blocker; milestone completion is a progress update, not a reason to stop. Keep documentation current because development may move between chats. Prefer economical model use; report milestones so the owner can switch models. The running chat cannot switch its own model.
 
 ## Actual implementation
 
-M0 commit `8b85cf2` is preserved. Work is on `codex/m2-foundation`. The verified M2 implementation is commit `8b9f079`; later documentation commits record its evidence.
+M0 commit `8b85cf2` is preserved. Work is on the current feature branch; inspect `git branch --show-current`. The verified M2 implementation is commit `8b9f079`; later documentation commits record its evidence.
 
 M2 foundation includes an npm workspace with pinned Node/npm/dependencies, Express readiness and safe error boundaries, strict environment validation, security headers, JSON/origin/body-size guards, React/Vite preview, same-origin API client, persistent local replica-set runner, real database transaction smoke tests, static/deep-link tests and a CI definition.
 
-The browser preview is an explicitly unfinished development screen. No accounts, inventory, requests, lending operations or admin dashboard exist yet. Do not confuse the illustrated borrowing journey with implemented features.
+M3 identity is implemented and verified: student registration, normalized unique email, scrypt hashes, MongoDB sessions, login/regeneration/restoration/logout/expiry, strict CSRF checks, MongoDB-backed auth limits and controlled admin provisioning. Browser registration, reload restoration and logout passed. Inventory, borrowing and dashboard work are next. See `docs/SECURITY.md` for exact policies.
 
 At this checkpoint the local database and development servers were running on 27017, 3000 and 5173. They may not survive a chat/app restart; check ports before starting duplicates. Run/setup commands and environment meanings are in README. Local startup uses `npm run db`, `npm run dev:server`, `npm run dev:client`; verification uses `npm run check`. `server/.env` is ignored. Use synthetic data only. Do not copy local credentials into this handoff.
 
@@ -34,7 +34,7 @@ CI is defined but has not run remotely. No Git remote or deployment exists. Neve
 
 ## Next task
 
-M2 is locally complete. Start M3 identity in small tested slices: first document the exact password/session/CSRF/rate-limit choices, then registration, session login/restoration/logout and controlled administrator provisioning. Use existing SRS F1–F2, DECISIONS and `tasks/todo.md`; do not add password recovery, real student verification or extra roles.
+M3 is locally complete. Continue with M4 inventory and catalog, then M5/M6 borrowing/issue/return, without stopping at milestone boundaries. Keep checkpoints/evidence current. Owner/role checks on actual request records must be verified when those endpoints exist.
 
 M1 wireframes, field bounds and final SRS export remain open in parallel. Do not mark M1 complete just because coding was authorized.
 

@@ -1,6 +1,9 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { readConfig } from '../src/config.js';
+import { readConfig as parseConfig } from '../src/config.js';
+import { randomBytes } from 'node:crypto';
+const secret = randomBytes(48).toString('hex');
+const readConfig = (env) => parseConfig({ SESSION_SECRET: secret, ...env });
 
 test('development requires a database URI and uses local defaults', () => {
   assert.throws(() => readConfig({}), /MONGODB_URI/);

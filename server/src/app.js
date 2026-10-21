@@ -2,10 +2,13 @@ import express from 'express';
 import helmet from 'helmet';
 import { z } from 'zod';
 import { join } from 'node:path';
+import { createIdentity } from './identity/index.js';
+import { HttpError } from './errors.js';
 
-export function createApp({ checkDatabase, origin, production = false, clientDist }) {
+export function createApp({ checkDatabase, origin, production = false, clientDist, connection, sessionSecret, now, trustProxyHops = 0 }) {
   const app = express();
   app.disable('x-powered-by');
+  app.set('trust proxy', trustProxyHops);
   app.use(helmet({
     contentSecurityPolicy: { directives: { 'upgrade-insecure-requests': production ? [] : null } },
     strictTransportSecurity: production ? undefined : false,
@@ -15,6 +18,9 @@ export function createApp({ checkDatabase, origin, production = false, clientDis
     if (!['GET', 'HEAD', 'OPTIONS'].includes(request.method)) {
       if (request.get('origin') !== origin || request.get('sec-fetch-site') === 'cross-site') {
         return response.status(403).json({ error: { code: 'UNTRUSTED_ORIGIN', message: 'Request origin is not allowed.' } });
+      }
+      if (request.get('x-labflow-request') !== '1') {
+        return response.status(403).json({ error: { code: 'CSRF_REJECTED', message: 'Refresh the page and try again.' } });
       }
       if (!request.is('application/json')) {
         return response.status(415).json({ error: { code: 'UNSUPPORTED_MEDIA_TYPE', message: 'Use application/json.' } });
@@ -32,6 +38,11 @@ export function createApp({ checkDatabase, origin, production = false, clientDis
       response.status(503).json({ error: { code: 'NOT_READY', message: 'Service temporarily unavailable.' } });
     }
   });
+  if (connection) {
+    const identity = createIdentity({ connection, sessionSecret, production, now });
+    app.use('/api', identity.sessions, identity.restoreUser);
+    app.use('/api/auth', identity.router);
+  }
   app.use('/api', (_request, response) => {
     response.status(404).json({ error: { code: 'NOT_FOUND', message: 'Resource not found.' } });
   });
@@ -47,6 +58,12 @@ export function createApp({ checkDatabase, origin, production = false, clientDis
   // https://expressjs.com/en/guide/error-handling/
   app.use((error, _request, response, next) => {
     if (response.headersSent) return next(error);
+    if (error instanceof HttpError) {
+      return response.status(error.status).json({ error: { code: error.code, message: error.message } });
+    }
+    if (error.code === 11000) {
+      return response.status(409).json({ error: { code: 'DUPLICATE', message: 'A record with these values already exists.' } });
+    }
     if (error instanceof z.ZodError || error.type === 'entity.parse.failed') {
       return response.status(400).json({ error: { code: 'INVALID_INPUT', message: 'Check the request input.' } });
     }

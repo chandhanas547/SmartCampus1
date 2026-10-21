@@ -3,6 +3,7 @@ import { access } from 'node:fs/promises';
 import { createApp } from './app.js';
 import { readConfig } from './config.js';
 import { checkDatabase, connectDatabase } from './database.js';
+import { prepareIdentity } from './identity/index.js';
 
 let connection;
 try {
@@ -10,7 +11,8 @@ try {
   const clientDist = config.production ? fileURLToPath(new URL('../../client/dist/', import.meta.url)) : undefined;
   if (clientDist) await access(`${clientDist}/index.html`);
   connection = await connectDatabase(config.mongoUri);
-  const app = createApp({ ...config, clientDist, checkDatabase: () => checkDatabase(connection) });
+  await prepareIdentity(connection);
+  const app = createApp({ ...config, connection, clientDist, checkDatabase: () => checkDatabase(connection) });
   const server = app.listen(config.port, config.host);
   await new Promise((resolve, reject) => {
     server.once('listening', resolve);

@@ -8,6 +8,7 @@
   "packageManager": "npm@11.19.0",
   "scripts": {
     "db": "node scripts/database.js",
+    "admin": "node --env-file-if-exists=server/.env scripts/admin.js",
     "dev:server": "node --env-file-if-exists=server/.env --watch server/src/index.js",
     "dev:client": "npm run dev --workspace client",
     "start": "node --env-file-if-exists=server/.env server/src/index.js",

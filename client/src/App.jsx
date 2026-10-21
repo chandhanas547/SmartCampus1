@@ -1,9 +1,22 @@
 import { useEffect, useState } from 'react';
 import { apiRequest } from './api.js';
+import { createElement } from 'react';
+import AuthForm from './AuthForm.jsx';
 
 export default function App() {
   const [connection, setConnection] = useState({ state: 'loading' });
   const [attempt, setAttempt] = useState(0);
+  const [user, setUser] = useState(null);
+  const [restoring, setRestoring] = useState(true);
+  useEffect(() => {
+    const controller = new AbortController();
+    apiRequest('/auth/me', { signal: controller.signal }).then(setUser).catch(() => {}).finally(() => { if (!controller.signal.aborted) setRestoring(false); });
+    return () => controller.abort();
+  }, []);
+  async function signOut() {
+    try { await apiRequest('/auth/logout', { method: 'POST', body: '{}' }); setUser(null); }
+    catch (error) { if (error.status === 401) setUser(null); else setConnection({ state: 'error', message: error.message }); }
+  }
   useEffect(() => {
     const controller = new AbortController();
     apiRequest('/health', { signal: controller.signal })
@@ -30,28 +43,7 @@ export default function App() {
         <span className="preview-label">Development preview</span>
       </header>
       <main id="main" tabIndex="-1">
-        <section className="intro" aria-labelledby="page-title">
-          <div className="intro-copy">
-            <p className="eyebrow">YOUR COLLEGE LABORATORY</p>
-            <h1 id="page-title">Good equipment.<br />Great possibilities.</h1>
-            <p className="lede">A place to find the tools you need, keep track of what you borrow, and look after what comes next.</p>
-            <div className="development-note"><span className="note-marker" aria-hidden="true">↗</span><p><strong>We’re getting the lab ready.</strong><br />Equipment browsing and borrowing will arrive in the next milestones.</p></div>
-          </div>
-          <div className="lab-illustration" aria-hidden="true">
-            <svg viewBox="0 0 400 320" fill="none">
-              <path d="M20 260H380M60 280H340" stroke="#8eaaa0" strokeWidth="2" />
-              <rect x="63" y="128" width="130" height="132" rx="12" fill="#faf9f4" stroke="#183c34" strokeWidth="3" />
-              <rect x="80" y="147" width="96" height="60" rx="4" fill="#d7e7db" stroke="#183c34" strokeWidth="2" />
-              <path d="M88 180H100L108 163L118 192L131 168L140 180H168" stroke="#487358" strokeWidth="3" />
-              <circle cx="94" cy="231" r="9" stroke="#183c34" strokeWidth="3" /><circle cx="131" cy="231" r="9" stroke="#183c34" strokeWidth="3" />
-              <path d="M238 71L271 52L310 119L277 138Z" fill="#d4af71" stroke="#183c34" strokeWidth="3" />
-              <path d="M286 136C327 150 342 204 296 237M270 196H325M243 260H339L326 241H257Z" stroke="#183c34" strokeWidth="9" strokeLinejoin="round" />
-              <path d="M252 91L236 100M264 112L248 121" stroke="#183c34" strokeWidth="3" />
-              <path d="M91 82H139M115 58V106M336 59V83M324 71H348" stroke="#8eaaa0" strokeWidth="2" />
-            </svg>
-            <span className="illustration-caption">MAKE MORE. BORROW MINDFULLY.</span>
-          </div>
-        </section>
+        {restoring ? <p role="status" className="page-message">Restoring your session…</p> : user ? <section className="workspace-welcome"><p className="eyebrow">{user.role === 'ADMIN' ? 'LAB ADMINISTRATOR' : 'STUDENT WORKSPACE'}</p><h1>Welcome, {user.name}.</h1><p className="lede">Your equipment catalog is next. You are securely signed in.</p><button type="button" onClick={signOut}>Sign out</button></section> : createElement(AuthForm, { onSignIn: setUser })}
         <section className="connection-panel" aria-labelledby="connection-title">
           <div><p className="eyebrow">LIVE CONNECTION</p><h2 id="connection-title">Ready for the next step</h2></div>
           <div className="connection-action">

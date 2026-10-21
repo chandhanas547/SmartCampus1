@@ -6,6 +6,8 @@ const schema = z.object({
   HOST: z.enum(['127.0.0.1', '0.0.0.0']).default('127.0.0.1'),
   MONGODB_URI: z.string().regex(/^mongodb(?:\+srv)?:\/\/\S+$/),
   APP_ORIGIN: z.url().optional(),
+  SESSION_SECRET: z.string().min(32),
+  TRUST_PROXY_HOPS: z.enum(['0', '1']).transform(Number).default(0),
 });
 
 export function readConfig(env) {
@@ -23,5 +25,5 @@ export function readConfig(env) {
       url.username || url.password || (production && url.protocol !== 'https:')) {
     throw new Error('Invalid configuration: APP_ORIGIN');
   }
-  return { production, port: values.PORT, host: values.HOST, mongoUri: values.MONGODB_URI, origin };
+  return { production, port: values.PORT, host: values.HOST, mongoUri: values.MONGODB_URI, origin, sessionSecret: values.SESSION_SECRET, trustProxyHops: values.TRUST_PROXY_HOPS };
 }

@@ -57,7 +57,7 @@ test('mutation boundary rejects untrusted origins, non-JSON, malformed and overs
     [{ origin: 'http://localhost:5173', 'content-type': 'application/json' }, '{', 400],
     [{ origin: 'http://localhost:5173', 'content-type': 'application/json' }, JSON.stringify({ text: 'x'.repeat(17000) }), 413],
   ]) {
-    const response = await fetch(`${base}/api/missing`, { method: 'POST', headers, body });
+    const response = await fetch(`${base}/api/missing`, { method: 'POST', headers: { 'x-labflow-request': '1', ...headers }, body });
     assert.equal(response.status, status);
     const error = await response.json();
     assert.equal(typeof error.error.code, 'string');

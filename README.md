@@ -38,7 +38,7 @@ The planned architecture is a React client communicating with an Express JSON AP
 
 ## Current status
 
-**M2 — foundation implemented locally.** React connects through the Express API to a real MongoDB replica set. The development preview includes a live connection check; account and equipment features are next. No hosted application or submission is claimed.
+**M3 — identity implemented locally; inventory is next.** React connects through the Express API to a real MongoDB replica set. Student registration, login, restored sessions and logout are implemented. Equipment features are next. No hosted application or submission is claimed.
 
 The owner authorized development on 21 October 2026 while SRS approval and submission remain pending. See [decisions](docs/DECISIONS.md), [current handoff](docs/HANDOFF.md) and [task queue](tasks/todo.md).
 
@@ -62,7 +62,7 @@ MONGODB_URI=mongodb://127.0.0.1:27017/labflow?replicaSet=labflow-dev
 APP_ORIGIN=http://127.0.0.1:5173
 ```
 
-`server/.env.example` lists variable names only. The example above is for the loopback development database; production credentials must come from the deployment platform.
+Generate `SESSION_SECRET` with at least 32 random characters and add it to the ignored `server/.env` (for example, generate bytes with Node crypto without committing the value). `server/.env.example` lists variable names only. The example above is for the loopback development database; production credentials must come from the deployment platform.
 
 Run these in three terminals, all from the repository root:
 
@@ -106,3 +106,7 @@ This capstone is a demonstration for one laboratory with two roles: student and 
 ## Reference material
 
 Two original ICTAK DOCX files remain in the local project root for reference. They are intentionally ignored by Git and are not part of the repository.
+
+## Administrator provisioning
+
+Set `ADMIN_NAME`, `ADMIN_EMAIL` and a strong `ADMIN_PASSWORD` in ignored runtime configuration, then run `npm run admin`. The command refuses to elevate an existing account and never prints credentials. Remove the admin password from local configuration after provisioning. Public registration creates students only. `TRUST_PROXY_HOPS` defaults to `0`; set it to `1` only behind the verified single proxy selected for deployment. Identity implementation parameters are in `docs/SECURITY.md`.
