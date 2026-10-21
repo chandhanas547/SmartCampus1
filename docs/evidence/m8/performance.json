@@ -1,0 +1,1 @@
+{"status":"not measured yet","reason":"First attempt correctly returned HTTP 429 after browser login checks; waiting for the existing window to expire without resetting it."}

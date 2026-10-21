@@ -89,6 +89,8 @@ npm run build
 
 Or run `npm run check` for all four. `npm test` covers API/configuration/static-serving behavior and the client API module; integration tests prove transaction commit and rollback on a real replica set. The client tests use a dedicated process with Node's test isolation disabled to ensure all five cases are individually executed and reported on the pinned runtime.
 
+`npm run test:coverage` enforces the existing 80% line/branch target for auth, ownership and circulation. Accessibility tooling, local performance measurement and the scope of these checks are documented in [the quality baseline](docs/QUALITY.md).
+
 A GitHub Actions workflow performs the same checks plus an audit. It is prepared but has not run on GitHub because no remote is configured. Local results and browser evidence are recorded in [foundation verification](docs/evidence/m2/verification.md) and [inventory/circulation verification](docs/evidence/m4-m7/verification.md).
 
 ## Production shape

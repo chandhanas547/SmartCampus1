@@ -40,7 +40,7 @@ export default function App() {
     <div className="app">
       <a className="skip-link" href="#main" onClick={(event) => { event.preventDefault(); document.getElementById('main').focus(); }}>Skip to content</a>
       <header className="site-header">
-        <a className="brand" href="/" aria-label="LabFlow home"><span className="brand-mark" aria-hidden="true">L<span>F</span></span>LabFlow</a>
+        <a className="brand" href="/" aria-label="LabFlow home"><span className="brand-mark" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 28 28" focusable="false"><path d="M5 6v15h9M17 9v15m0-15h8m-8 7h6" fill="none" stroke="currentColor" strokeWidth="2" /></svg></span>LabFlow</a>
         <span className="preview-label">ICTAK demonstration</span>
       </header>
       {connection.state === 'error' && <p className="form-error" role="alert">{connection.message}</p>}

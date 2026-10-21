@@ -1,0 +1,15 @@
+{
+  "engine": {
+    "name": "axe-core",
+    "version": "4.14.0"
+  },
+  "timestamp": "2026-10-21T18:39:12.811Z",
+  "route": "#equipment/6ad9031f3e34d153dfdbee41",
+  "viewport": {
+    "width": 1280,
+    "height": 720
+  },
+  "violations": [],
+  "incomplete": [],
+  "passedRules": 37
+}
