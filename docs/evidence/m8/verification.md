@@ -16,5 +16,6 @@
 - Offline clean install initially failed because the npm cache lacked `tar-stream` 3.2.2. The documented online `npm ci --ignore-scripts` then passed (233 audited packages, zero vulnerabilities); this is not a lockfile change or reason to enable scripts.
 - The first local performance run returned HTTP 429 after repeated browser sign-ins. Authentication limits were retained; measurement awaits the window expiry.
 - Fresh-clone reproduction, final production-mode smoke check and security/history scan remain pending at this checkpoint.
+- A cold local clone at `6c42ac7` installed successfully but exposed a parallel MongoDB download-lock failure in the integration harness. The explicit preparation script now resolves the pinned binary before Node starts parallel files; all 25 integration tests pass after the change. A second fully cold clone is required to accept the fix.
 - Native browser 200% zoom, screen-reader testing and Firefox/Chromium/WebKit matrix are not verified. In-app browser evidence alone is not full WCAG conformance.
 - Remote CI, HTTPS deployment, cloud transaction acceptance and college approval/submission remain not run.

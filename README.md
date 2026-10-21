@@ -50,7 +50,7 @@ Use Node **24.21.0** and npm **11.19.0**. Install from the repository root:
 npm ci --ignore-scripts
 ```
 
-Install scripts are deliberately disabled. The first database start or integration test downloads the pinned MongoDB **8.0.34** binary from MongoDB's distribution service. A supported OS and internet access are required for that first download. The Linux binary selection is Ubuntu 22.04; it was also verified on this development machine's CachyOS system. No system MongoDB installation, Docker or cloud account is required for local development.
+Install scripts are deliberately disabled. The first database start or integration test downloads the pinned MongoDB **8.0.34** binary from MongoDB's distribution service. Test commands explicitly prepare that binary once before parallel test files start. A supported OS and internet access are required for that first download. The Linux binary selection is Ubuntu 22.04; it was also verified on this development machine's CachyOS system. No system MongoDB installation, Docker or cloud account is required for local development.
 
 Create an ignored `server/.env` using these **local-only, non-secret** settings:
 

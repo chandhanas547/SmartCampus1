@@ -21,8 +21,8 @@
     "start": "node --env-file-if-exists=server/.env server/src/index.js",
     "build": "npm run build --workspace client",
     "test": "node --test server/test/*.test.js && node --test --test-isolation=none client/src/*.test.js",
-    "test:integration": "node --test server/test/integration/*.test.js",
-    "test:coverage": "node --test --experimental-test-coverage --test-coverage-include='server/src/domain/**' --test-coverage-include='server/src/identity/**' --test-coverage-include='server/src/errors.js' --test-coverage-lines=80 --test-coverage-branches=80 server/test/*.test.js server/test/integration/*.test.js",
+    "test:integration": "node scripts/prepare-test-db.js && node --test server/test/integration/*.test.js",
+    "test:coverage": "node scripts/prepare-test-db.js && node --test --experimental-test-coverage --test-coverage-include='server/src/domain/**' --test-coverage-include='server/src/identity/**' --test-coverage-include='server/src/errors.js' --test-coverage-lines=80 --test-coverage-branches=80 server/test/*.test.js server/test/integration/*.test.js",
     "measure:local": "node scripts/measure-local.js",
     "lint": "eslint .",
     "check": "npm run lint && npm test && npm run test:integration && npm run build"
