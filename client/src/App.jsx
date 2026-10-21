@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { apiRequest } from './api.js';
 import { createElement } from 'react';
 import AuthForm from './AuthForm.jsx';
+import Workspace from './Workspace.jsx';
 
 export default function App() {
   const [connection, setConnection] = useState({ state: 'loading' });
@@ -10,7 +11,7 @@ export default function App() {
   const [restoring, setRestoring] = useState(true);
   useEffect(() => {
     const controller = new AbortController();
-    apiRequest('/auth/me', { signal: controller.signal }).then(setUser).catch(() => {}).finally(() => { if (!controller.signal.aborted) setRestoring(false); });
+    apiRequest('/auth/me', { signal: controller.signal }).then((value) => { if (!controller.signal.aborted) setUser(value); }).catch(() => {}).finally(() => { if (!controller.signal.aborted) setRestoring(false); });
     return () => controller.abort();
   }, []);
   async function signOut() {
@@ -37,14 +38,15 @@ export default function App() {
 
   return (
     <div className="app">
-      <a className="skip-link" href="#main">Skip to content</a>
+      <a className="skip-link" href="#main" onClick={(event) => { event.preventDefault(); document.getElementById('main').focus(); }}>Skip to content</a>
       <header className="site-header">
         <a className="brand" href="/" aria-label="LabFlow home"><span className="brand-mark" aria-hidden="true">L<span>F</span></span>LabFlow</a>
-        <span className="preview-label">Development preview</span>
+        <span className="preview-label">ICTAK demonstration</span>
       </header>
+      {connection.state === 'error' && <p className="form-error" role="alert">{connection.message}</p>}
       <main id="main" tabIndex="-1">
-        {restoring ? <p role="status" className="page-message">Restoring your session…</p> : user ? <section className="workspace-welcome"><p className="eyebrow">{user.role === 'ADMIN' ? 'LAB ADMINISTRATOR' : 'STUDENT WORKSPACE'}</p><h1>Welcome, {user.name}.</h1><p className="lede">Your equipment catalog is next. You are securely signed in.</p><button type="button" onClick={signOut}>Sign out</button></section> : createElement(AuthForm, { onSignIn: setUser })}
-        <section className="connection-panel" aria-labelledby="connection-title">
+        {restoring ? <p role="status" className="page-message">Restoring your session…</p> : user ? createElement(Workspace, { user, onSignOut: signOut }) : createElement(AuthForm, { onSignIn: setUser })}
+        {!user && <><section className="connection-panel" aria-labelledby="connection-title">
           <div><p className="eyebrow">LIVE CONNECTION</p><h2 id="connection-title">Ready for the next step</h2></div>
           <div className="connection-action">
             <p role="status" className={`connection-status ${connection.state}`}>
@@ -61,7 +63,7 @@ export default function App() {
               <li key={title}><span className="step-number">0{index + 1}</span><h3>{title}</h3><p>{description}</p></li>
             ))}
           </ol>
-        </section>
+        </section></>}
       </main>
       <footer><span>LabFlow</span><p>One lab. Shared possibilities.</p><span>ICTAK capstone · Demo</span></footer>
     </div>

@@ -1,6 +1,6 @@
 # LabFlow current handoff
 
-Updated 21 October 2026. Read this first after moving to another chat, then inspect actual Git status. This file describes project state; it is not approval/submission evidence.
+Updated 22 October 2026. Read this first after moving to another chat, then inspect actual Git status. This file describes project state; it is not approval/submission evidence.
 
 ## Owner instructions and authority
 
@@ -15,7 +15,7 @@ M0 commit `8b85cf2` is preserved. Work is on the current feature branch; inspect
 
 M2 foundation includes an npm workspace with pinned Node/npm/dependencies, Express readiness and safe error boundaries, strict environment validation, security headers, JSON/origin/body-size guards, React/Vite preview, same-origin API client, persistent local replica-set runner, real database transaction smoke tests, static/deep-link tests and a CI definition.
 
-M3 identity is implemented and verified: student registration, normalized unique email, scrypt hashes, MongoDB sessions, login/regeneration/restoration/logout/expiry, strict CSRF checks, MongoDB-backed auth limits and controlled admin provisioning. Browser registration, reload restoration and logout passed. Inventory, borrowing and dashboard work are next. See `docs/SECURITY.md` for exact policies.
+M3 identity is implemented and verified: student registration, normalized unique email, scrypt hashes, MongoDB sessions, login/regeneration/restoration/logout/expiry, strict CSRF checks, MongoDB-backed auth limits and controlled admin provisioning. Browser registration, reload restoration and logout passed. Inventory, circulation and dashboard are implemented. Fourteen real database domain acceptance/race/fault checks pass. The browser journey passed creation/edit, request, approval, issue, damage report, inspected damaged return and restoration. Responsive catalog/dashboard checks at 320px and keyboard skip navigation passed. Automated accessibility, broader keyboard/zoom and reproducibility checks are next; M7 UI acceptance remains open. See `docs/SECURITY.md` for exact policies.
 
 At this checkpoint the local database and development servers were running on 27017, 3000 and 5173. They may not survive a chat/app restart; check ports before starting duplicates. Run/setup commands and environment meanings are in README. Local startup uses `npm run db`, `npm run dev:server`, `npm run dev:client`; verification uses `npm run check`. `server/.env` is ignored. Use synthetic data only. Do not copy local credentials into this handoff.
 
@@ -34,8 +34,7 @@ CI is defined but has not run remotely. No Git remote or deployment exists. Neve
 
 ## Next task
 
-M3 is locally complete. Continue with M4 inventory and catalog, then M5/M6 borrowing/issue/return, without stopping at milestone boundaries. Keep checkpoints/evidence current. Owner/role checks on actual request records must be verified when those endpoints exist.
-
+M4–M6 core lifecycle and dashboard counts are locally verified on `codex/inventory-circulation`. See `docs/evidence/m4-m7/verification.md`. Continue M7/M8 with automated accessibility, keyboard/zoom, clean setup and measured performance. Save the backend and frontend as focused local increments; inspect actual log/status for completion. No cloud publishing is authorized.
 M1 wireframes, field bounds and final SRS export remain open in parallel. Do not mark M1 complete just because coding was authorized.
 
 ## Migration procedure

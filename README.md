@@ -1,6 +1,6 @@
 # LabFlow
 
-LabFlow is a demo-only, single-laboratory equipment management capstone. It will let students find individually tagged equipment, request borrowing, review request history and report damage. Lab administrators will manage inventory, decide requests, record issue and return, and monitor current activity.
+LabFlow is a demo-only, single-laboratory equipment management capstone. Students find individually tagged equipment, request borrowing, review request history and report damage. Lab administrators manage inventory, decide requests, record issue and inspected return, and monitor current activity.
 
 ## Planned stack
 
@@ -38,7 +38,7 @@ The planned architecture is a React client communicating with an Express JSON AP
 
 ## Current status
 
-**M3 — identity implemented locally; inventory is next.** React connects through the Express API to a real MongoDB replica set. Student registration, login, restored sessions and logout are implemented. Equipment features are next. No hosted application or submission is claimed.
+**M4–M6 implemented and locally verified; M7/M8 verification in progress.** React connects through the Express API to a real MongoDB replica set. Identity, inventory, request decisions/cancellation, issue, damage reporting, inspected returns, maintenance and dashboard are implemented. The actual student/admin browser journey passed. No hosted application or submission is claimed.
 
 The owner authorized development on 21 October 2026 while SRS approval and submission remain pending. See [decisions](docs/DECISIONS.md), [current handoff](docs/HANDOFF.md) and [task queue](tasks/todo.md).
 
@@ -89,7 +89,7 @@ npm run build
 
 Or run `npm run check` for all four. `npm test` covers API/configuration/static-serving behavior and the client API module; integration tests prove transaction commit and rollback on a real replica set. The client tests use a dedicated process with Node's test isolation disabled to ensure all five cases are individually executed and reported on the pinned runtime.
 
-A GitHub Actions workflow performs the same checks plus an audit. It is prepared but has not run on GitHub because no remote is configured. Local results and browser evidence are recorded in [M2 verification](docs/evidence/m2/verification.md).
+A GitHub Actions workflow performs the same checks plus an audit. It is prepared but has not run on GitHub because no remote is configured. Local results and browser evidence are recorded in [foundation verification](docs/evidence/m2/verification.md) and [inventory/circulation verification](docs/evidence/m4-m7/verification.md).
 
 ## Production shape
 
@@ -110,3 +110,5 @@ Two original ICTAK DOCX files remain in the local project root for reference. Th
 ## Administrator provisioning
 
 Set `ADMIN_NAME`, `ADMIN_EMAIL` and a strong `ADMIN_PASSWORD` in ignored runtime configuration, then run `npm run admin`. The command refuses to elevate an existing account and never prints credentials. Remove the admin password from local configuration after provisioning. Public registration creates students only. `TRUST_PROXY_HOPS` defaults to `0`; set it to `1` only behind the verified single proxy selected for deployment. Identity implementation parameters are in `docs/SECURITY.md`.
+
+For synthetic **local development only**, run `npm run seed:demo` with the local database running. This creates two demo accounts and six example assets without overwriting existing inventory. Random account passwords are saved only in ignored `.local/demo-access.json` with owner-only file permissions. Repeated runs reuse those accounts. Never publish that file or use this seed command against a cloud database.

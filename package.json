@@ -3,12 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "workspaces": ["client", "server"],
-  "engines": { "node": "24.x", "npm": "11.x" },
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "engines": {
+    "node": "24.x",
+    "npm": "11.x"
+  },
   "packageManager": "npm@11.19.0",
   "scripts": {
     "db": "node scripts/database.js",
     "admin": "node --env-file-if-exists=server/.env scripts/admin.js",
+    "seed:demo": "node --env-file-if-exists=server/.env scripts/seed-demo.js",
     "dev:server": "node --env-file-if-exists=server/.env --watch server/src/index.js",
     "dev:client": "npm run dev --workspace client",
     "start": "node --env-file-if-exists=server/.env server/src/index.js",

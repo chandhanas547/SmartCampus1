@@ -1,6 +1,6 @@
 # LabFlow work queue
 
-Status on 21 October 2026: M2 foundation locally verified; M3 identity locally verified; M4 inventory in progress; M1 not approved/submitted. This is the single task queue; MASTER_PLAN remains the milestone baseline.
+Status on 22 October 2026: M2–M6 locally verified; dashboard implemented; M7/M8 verification in progress; M1 not approved/submitted. This is the single task queue; MASTER_PLAN remains the milestone baseline.
 
 Each row is an unchecked task with an acceptance condition, verification and dependency. The file areas are prospective, not existing application files. Split any row into smaller tasks before implementation if it exceeds about five files. Record actual commands and results as work finishes.
 
@@ -20,16 +20,16 @@ Each row is an unchecked task with an acceptance condition, verification and dep
 | [x] | I1 | Deliver student registration with normalized email, safe output and validated input. | Duplicate, invalid-input and role-injection API tests plus registration form flow. | B4 | User model, registration handler/schema/UI/test |
 | [x] | I2 | Deliver login, restored session and logout. | Credential rejection, session regeneration/expiry/logout, CSRF and rate-limit tests. | I1 | Session middleware, auth handler/UI/test |
 | [x] | I3 | Establish role/owner enforcement and controlled admin provisioning. | Wrong-role denial; no public admin creation; seed command handles credentials safely. | I2 | Authorization, admin setup, tests |
-| [ ] | E1 | Deliver searchable paginated catalog/detail with archived exclusion. | Filters/page boundaries and student/admin visibility; keyboard/mobile review. | I3 | Equipment model, queries, catalog/detail UI, tests |
-| [ ] | E2 | Deliver equipment creation and versioned metadata edits. | Unique immutable tags, field allowlist, stale version and archived-edit tests. | E1 | Equipment mutations, form and tests |
-| [ ] | E3 | Deliver maintenance, restoration and archival guards. | State/note/open-request tests; extend with creation races when R1 exists. | E2 | Inventory service, action UI and tests |
-| [ ] | R1 | Deliver idempotent request creation and owner-scoped history. | Replay including expired original date; changed replay conflict; duplicate-open and inventory races. | E3 | Request model/service, form/history UI, tests |
-| [ ] | R2 | Deliver approval/rejection with atomic reservation and 168-hour limits. | Real simultaneous approvals and injected rollback; expired and exact-boundary cases. | R1 | Circulation service, decision UI and tests |
-| [ ] | R3 | Deliver eligible cancellation with single reservation release. | Owner/admin policy, repeated/after-issue conflicts, approve-versus-cancel race. | R2 | Circulation service, cancellation UI and tests |
-| [ ] | L1 | Deliver physical issue of an unexpired reservation. | Linked records transition together; expired dueAt and repeat issue fail safely. | R3 | Circulation service, issue UI and tests |
-| [ ] | L2 | Deliver owner-only single damage report while issued. | Wrong-owner/state and duplicate report tests; student/admin display. | L1 | Damage service, report UI and tests |
-| [ ] | L3 | Deliver inspected return, resolving reports and retaining unrelated pending requests. | Both return conditions, required notes, repeated return, report/return race and rollback. | L2 | Return service/form and tests |
-| [ ] | D1 | Deliver dashboard from known fixture counts. | Counts including overdue and unreviewed damage; student denial and empty/error UI. | L3 | Dashboard query/UI/test |
+| [x] | E1 | Deliver searchable paginated catalog/detail with archived exclusion. | Filters/page boundaries and student/admin visibility; keyboard/mobile review. | I3 | Equipment model, queries, catalog/detail UI, tests |
+| [x] | E2 | Deliver equipment creation and versioned metadata edits. | Unique immutable tags, field allowlist, stale version and archived-edit tests. | E1 | Equipment mutations, form and tests |
+| [x] | E3 | Deliver maintenance, restoration and archival guards. | State/note/open-request tests; extend with creation races when R1 exists. | E2 | Inventory service, action UI and tests |
+| [x] | R1 | Deliver idempotent request creation and owner-scoped history. | Replay including expired original date; changed replay conflict; duplicate-open and inventory races. | E3 | Request model/service, form/history UI, tests |
+| [x] | R2 | Deliver approval/rejection with atomic reservation and 168-hour limits. | Real simultaneous approvals and injected rollback; expired and exact-boundary cases. | R1 | Circulation service, decision UI and tests |
+| [x] | R3 | Deliver eligible cancellation with single reservation release. | Owner/admin policy, repeated/after-issue conflicts, approve-versus-cancel race. | R2 | Circulation service, cancellation UI and tests |
+| [x] | L1 | Deliver physical issue of an unexpired reservation. | Linked records transition together; expired dueAt and repeat issue fail safely. | R3 | Circulation service, issue UI and tests |
+| [x] | L2 | Deliver owner-only single damage report while issued. | Wrong-owner/state and duplicate report tests; student/admin display. | L1 | Damage service, report UI and tests |
+| [x] | L3 | Deliver inspected return, resolving reports and retaining unrelated pending requests. | Both return conditions, required notes, repeated return, report/return race and rollback. | L2 | Return service/form and tests |
+| [x] | D1 | Deliver dashboard from known fixture counts. | Counts including overdue and unreviewed damage; student denial and empty/error UI. | L3 | Dashboard query/UI/test |
 | [ ] | U1 | Complete navigation, responsive states and core demonstration. | Browser journey, keyboard, 320px and 200% zoom; automated accessibility findings. | D1 | Shared UI, styles, E2E tests |
 | [ ] | V1 | Complete regression/security review and approved coverage checks. | Run tests/lint/build; record failures, fixes and untested limitations honestly. | U1 | Tests, quality configuration, evidence |
 | [ ] | V2 | Verify fresh setup and measure browser/performance behavior. | Clean setup from README; record tested browser versions and measured budgets. | V1 | README, verification record |

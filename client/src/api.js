@@ -1,4 +1,4 @@
-export async function apiRequest(path, { signal, headers, ...options } = {}) {
+export async function apiRequest(path, { signal, headers, envelope = false, ...options } = {}) {
   let response;
   try {
     response = await fetch(`/api${path}`, {
@@ -26,5 +26,5 @@ export async function apiRequest(path, { signal, headers, ...options } = {}) {
   if (!payload || typeof payload !== 'object' || !Object.hasOwn(payload, 'data')) {
     throw new Error('Unexpected response. Please try again.');
   }
-  return payload.data;
+  return envelope ? payload : payload.data;
 }
