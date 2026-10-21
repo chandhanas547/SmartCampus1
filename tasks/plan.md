@@ -1,16 +1,16 @@
 # LabFlow execution plan
 
-Prepared 20 October 2026. Status: proposed execution plan; M0 exists, M1 is incomplete.
+Updated 21 October 2026. Status: M2 foundation implemented and locally verified; M1 documentation/approval/submission remains incomplete.
 
 ## Handover and authority
 
 Continue in this local desktop chat using `/home/milan/Projects/capstone`. The owner confirmed that this is an **individual submission** and the two original ICTAK DOCX files are all the submission information currently available. Do not ask again for a team or assume an LMS template, deadline, mentor, institution, or submission receipt exists.
 
-Preserve commit `8b85cf247813ba8342a98d9a4c27e4f5871dc1ac`, the existing uncommitted DECISIONS changes, and SRS revision 0.2. The original DOCX files remain local, ignored, and unchanged. The takeover adds planning/review documents only.
+Preserve commit `8b85cf247813ba8342a98d9a4c27e4f5871dc1ac` and checkpoint `9cfdb2f`, which saved the prior DECISIONS changes and SRS revision 0.2. The original DOCX files remain local, ignored, and unchanged. The initial takeover added planning/review documents; development began after the owner’s 21 October authorization.
 
-Use SRS 0.2 and DECISIONS for the finalized JavaScript/JSX, 168-hour lending, registration, timezone, maintenance and return rules. MASTER_PLAN retains older provisional wording; DECISIONS explicitly supersedes it. Synchronize these documents when preparing the next SRS revision.
+Use SRS 0.3 Draft and DECISIONS for the finalized JavaScript/JSX, 168-hour lending, registration, timezone, maintenance and return rules. MASTER_PLAN retains older provisional wording; DECISIONS explicitly supersedes it. Synchronize these documents when preparing the next SRS revision.
 
-The existing project contract requires SRS approval **and submission before coding**. The DOCX references do not independently establish that separate LMS requirement. Keep the gate pending; lack of an LMS template is neither submission evidence nor authorization to waive it. The owner must confirm submission or explicitly revise this project sequencing constraint before M2.
+On 21 October 2026 the owner explicitly instructed development to start. This supersedes the earlier SRS-before-coding sequencing gate. SRS approval and submission remain pending; neither is implied by coding authorization. M1 documentation work remains open alongside development.
 
 ## Execution sequence
 
@@ -31,9 +31,9 @@ Each feature is a small API/database/UI slice with relevant tests, rather than c
 
 ## Working agreement
 
-- The owner has authorized local development work subject to the SRS gate. Routine reversible edits, tests, fixes and documentation do not need repeated permission.
+- The owner has authorized local development work under the revised sequencing decision. Routine reversible edits, tests, fixes and documentation do not need repeated permission.
 - Report milestones with the exact checks executed and their outcomes. Keep passing, failing and not-run evidence distinct.
-- After the gate, use focused `codex/` branches and meaningful commits without rewriting M0 or discarding existing changes. Review before merge.
+- Use focused `codex/` branches and meaningful commits without rewriting M0 or discarding existing changes. Review before merge.
 - No remote is configured. Obtain the intended repository destination and visibility when publishing becomes actionable, not now.
 - Ask for approval at the concrete publishing, payment or submission step. Use secure provider configuration for credentials; do not put credentials in chat, Git or report screenshots.
 - Use synthetic demo identities. The owner's report authorship information is separate from application registration data.
@@ -53,4 +53,4 @@ Each feature is a small API/database/UI slice with relevant tests, rather than c
 
 ## Next checkpoint
 
-Complete the M1 preparation tasks while retaining Draft status. Present the revised SRS and any remaining institutional blanks for owner review. Record approval and submission separately. Do not ask for unavailable college information again unless a concrete submission step requires it.
+M2 is implemented locally; see `docs/evidence/m2/verification.md` and `docs/HANDOFF.md`. Begin M3 identity with documented technical policies and tested registration/session slices. Continue M1 wireframes, field limits and final SRS export in parallel. SRS approval and submission remain separately pending. Do not ask for unavailable college information again unless a concrete submission step requires it.

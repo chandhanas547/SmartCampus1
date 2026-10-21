@@ -38,9 +38,66 @@ The planned architecture is a React client communicating with an Express JSON AP
 
 ## Current status
 
-**Milestone M0 — repository setup.** The repository contains planning documentation only. No application has been scaffolded, no dependencies have been installed, and no test or deployment result is claimed.
+**M2 — foundation implemented locally.** React connects through the Express API to a real MongoDB replica set. The development preview includes a live connection check; account and equipment features are next. No hosted application or submission is claimed.
 
-An SRS submission is mandatory and must be completed before coding starts. See [`docs/MASTER_PLAN.md`](docs/MASTER_PLAN.md) and [`docs/DECISIONS.md`](docs/DECISIONS.md).
+The owner authorized development on 21 October 2026 while SRS approval and submission remain pending. See [decisions](docs/DECISIONS.md), [current handoff](docs/HANDOFF.md) and [task queue](tasks/todo.md).
+
+## Run locally
+
+Use Node **24.21.0** and npm **11.19.0**. Install from the repository root:
+
+```sh
+npm ci --ignore-scripts
+```
+
+Install scripts are deliberately disabled. The first database start or integration test downloads the pinned MongoDB **8.0.34** binary from MongoDB's distribution service. A supported OS and internet access are required for that first download. The Linux binary selection is Ubuntu 22.04; it was also verified on this development machine's CachyOS system. No system MongoDB installation, Docker or cloud account is required for local development.
+
+Create an ignored `server/.env` using these **local-only, non-secret** settings:
+
+```dotenv
+NODE_ENV=development
+HOST=127.0.0.1
+PORT=3000
+MONGODB_URI=mongodb://127.0.0.1:27017/labflow?replicaSet=labflow-dev
+APP_ORIGIN=http://127.0.0.1:5173
+```
+
+`server/.env.example` lists variable names only. The example above is for the loopback development database; production credentials must come from the deployment platform.
+
+Run these in three terminals, all from the repository root:
+
+```sh
+npm run db
+npm run dev:server
+npm run dev:client
+```
+
+Open **http://127.0.0.1:5173/**. The connection status must become “Connected to LabFlow.” The API is at **http://127.0.0.1:3000/api/health**. Stop each process with Ctrl+C.
+
+Development data persists in ignored `.local/mongodb/`; binary downloads are cached in `.local/mongodb-binaries/`. Integration tests use a separate temporary database. The loopback database has no authentication and is for synthetic local demo data only; never expose it to a network.
+
+The client uses relative `/api` requests. Vite proxies them to port 3000 during development, and Express serves the build in production. If changing the API port, set `API_PROXY_TARGET` when starting the Vite process. Keep `APP_ORIGIN` equal to the exact browser origin used for mutations.
+
+## Verify
+
+```sh
+npm test
+npm run test:integration
+npm run lint
+npm run build
+```
+
+Or run `npm run check` for all four. `npm test` covers API/configuration/static-serving behavior and the client API module; integration tests prove transaction commit and rollback on a real replica set. The client tests use a dedicated process with Node's test isolation disabled to ensure all five cases are individually executed and reported on the pinned runtime.
+
+A GitHub Actions workflow performs the same checks plus an audit. It is prepared but has not run on GitHub because no remote is configured. Local results and browser evidence are recorded in [M2 verification](docs/evidence/m2/verification.md).
+
+## Production shape
+
+Run `npm run build`, provide valid runtime configuration, then run `npm start` with `NODE_ENV=production`. Production requires an explicit HTTPS `APP_ORIGIN`, a transaction-capable MongoDB URI and an appropriate `HOST` (usually `0.0.0.0` on a managed host). HTTPS terminates at the selected host/reverse proxy; the application process listens over HTTP behind it. Provider, credentials, remote repository and publishing approval remain pending.
+
+## Continue in another chat
+
+Give the new chat access to this folder and ask it to read `AGENTS.md` and `docs/HANDOFF.md`. Those files point to the current decisions, exact checks and next task. Inspect actual Git status before proceeding.
 
 ## Scope
 

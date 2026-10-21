@@ -1,6 +1,6 @@
 # LabFlow work queue
 
-Status on 20 October 2026: handover inspection complete; M1 not approved/submitted. This is the single task queue; MASTER_PLAN remains the milestone baseline.
+Status on 21 October 2026: M2 foundation locally verified; M3 identity next; M1 not approved/submitted. This is the single task queue; MASTER_PLAN remains the milestone baseline.
 
 Each row is an unchecked task with an acceptance condition, verification and dependency. The file areas are prospective, not existing application files. Split any row into smaller tasks before implementation if it exceeds about five files. Record actual commands and results as work finishes.
 
@@ -12,11 +12,11 @@ Each row is an unchecked task with an acceptance condition, verification and dep
 | [ ] | S3 | Propose supported password/session/CSRF/rate-limit choices and testable quality thresholds. | Verify official documentation; distinguish accepted baseline from proposed parameters. | S2 | SRS, DECISIONS |
 | [ ] | S4 | Add mobile/desktop wireframes and readable lifecycle/data diagrams covering all core screens and transitions. | Trace student/admin navigation and error states against F1–F11 and the permission table. | S2 | SRS supporting design document |
 | [ ] | S5 | Export a reviewable SRS with individual author fields and clearly identified remaining blanks. | Render and inspect every page; no invented metadata, approvals or results. | S3, S4 | SRS export and review record |
-| [ ] | G1 | Record owner SRS approval and submission evidence, or an explicit owner revision to the pre-coding gate. | Inspect exact approved revision and receipt/confirmation; approval alone is not submission. | S5 | SRS status, decisions |
-| [ ] | B1 | Pin tool versions and establish server startup plus validated configuration and readiness. | Run startup/configuration/readiness checks; invalid configuration fails safely. | G1 | Root/server configuration and entry files |
-| [ ] | B2 | Establish a real MongoDB replica set and focused transaction test harness. | Commit/rollback smoke test against the actual database; document setup. | B1 | Server database/test setup |
-| [ ] | B3 | Establish React shell and centralized API/error handling. | Development startup and production build; safe API failure UI. | B1 | Client entry, layout and API module |
-| [ ] | B4 | Add reproducible lint/test/build commands and CI definition. | Run configured commands; environment examples contain variable names only. | B2, B3 | Root scripts, CI, env examples, README |
+| [x] | G1 | Record owner authorization to begin coding before SRS completion. Approval and submission remain pending. | Inspect exact approved revision and receipt/confirmation; approval alone is not submission. | H1 | SRS status, decisions; owner authorization dated 2026-10-21 |
+| [x] | B1 | Pin tool versions and establish server startup plus validated configuration and readiness. | Run startup/configuration/readiness checks; invalid configuration fails safely. | G1 | Root/server configuration and entry files |
+| [x] | B2 | Establish a real MongoDB replica set and focused transaction test harness. | Commit/rollback smoke test against the actual database; document setup. | B1 | Server database/test setup |
+| [x] | B3 | Establish React shell and centralized API/error handling. | Development startup and production build; safe API failure UI. | B1 | Client entry, layout and API module |
+| [x] | B4 | Add reproducible lint/test/build commands and CI definition. | Run configured commands; environment examples contain variable names only. | B2, B3 | Root scripts, CI, env examples, README |
 | [ ] | I1 | Deliver student registration with normalized email, safe output and validated input. | Duplicate, invalid-input and role-injection API tests plus registration form flow. | B4 | User model, registration handler/schema/UI/test |
 | [ ] | I2 | Deliver login, restored session and logout. | Credential rejection, session regeneration/expiry/logout, CSRF and rate-limit tests. | I1 | Session middleware, auth handler/UI/test |
 | [ ] | I3 | Establish role/owner enforcement and controlled admin provisioning. | Wrong-role denial; no public admin creation; seed command handles credentials safely. | I2 | Authorization, admin setup, tests |
