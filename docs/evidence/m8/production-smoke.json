@@ -1,0 +1,17 @@
+{
+  "timestamp": "2026-10-22T02:10:40.400Z",
+  "commit": "a8a84f9",
+  "mode": "Production entry point with pruned dependencies over loopback HTTP and a simulated trusted HTTPS proxy; no real public TLS",
+  "checks": [
+    "readiness",
+    "built SPA deep link in hidden checkout",
+    "compiled asset delivery",
+    "development audit absent",
+    "relative API paths",
+    "secure host-only session cookie",
+    "restored session",
+    "missing asset/API 404",
+    "logout invalidation"
+  ],
+  "passed": true
+}

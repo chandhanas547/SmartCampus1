@@ -23,7 +23,7 @@ button.addEventListener('click', async () => {
   try {
     const result = await axe.run({ exclude: ['#labflow-audit-tools'] }, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice'] } });
     const summarize = (rules) => rules.map(({ id, impact, help, nodes }) => ({ id, impact, help, targets: nodes.map(({ target }) => target) }));
-    output.textContent = JSON.stringify({ engine: result.testEngine, timestamp: result.timestamp, route: location.hash, viewport: { width: innerWidth, height: innerHeight }, violations: summarize(result.violations), incomplete: summarize(result.incomplete), passedRules: result.passes.length }, null, 2);
+    output.textContent = JSON.stringify({ engine: result.testEngine, browser: result.testEnvironment, timestamp: result.timestamp, route: location.hash, viewport: { width: innerWidth, height: innerHeight }, violations: summarize(result.violations), incomplete: summarize(result.incomplete), passedRules: result.passes.length }, null, 2);
   } catch { output.textContent = 'Accessibility check failed; inspect the local development setup.'; }
   finally { button.disabled = false; }
 });

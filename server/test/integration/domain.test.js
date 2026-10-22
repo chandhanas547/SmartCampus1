@@ -80,6 +80,8 @@ test('inventory enforces roles, unique tags, strict input and safe student disco
 test('inventory PATCH is versioned and maintenance/archive preserve visibility rules', async () => {
   let row = await createAsset();
   const patch = { action: 'EDIT_METADATA', version: row.version, name: 'Bench oscilloscope' };
+  assert.equal((await call('PATCH', `/equipment/${row.id}`, { ...patch, assetTag: 'OTHER' })).status, 400);
+  assert.equal((await call('PATCH', `/equipment/${row.id}`, { action: 'EDIT_METADATA', version: row.version })).status, 400);
   assert.equal((await call('PATCH', `/equipment/${row.id}`, patch)).status, 200);
   assert.equal((await call('PATCH', `/equipment/${row.id}`, patch)).status, 409);
   assert.equal((await call('PATCH', `/equipment/${row.id}`, { action: 'ENTER_MAINTENANCE', version: 1 })).status, 400);
@@ -90,6 +92,9 @@ test('inventory PATCH is versioned and maintenance/archive preserve visibility r
   assert.equal((await call('DELETE', `/equipment/${row.id}`)).status, 204);
   assert.equal((await call('GET', `/equipment/${row.id}`, undefined, studentCookie)).status, 404);
   assert.equal((await call('GET', `/equipment/${row.id}`)).status, 200);
+  const archived = (await call('GET', `/equipment/${row.id}`)).body.data;
+  assert.equal((await call('PATCH', `/equipment/${row.id}`, { action: 'EDIT_METADATA', version: archived.version, name: 'Forbidden edit' })).status, 409);
+  assert.equal((await requestEquipment(row.id)).status, 404);
   assert.equal((await call('GET', '/equipment', undefined, studentCookie)).body.pagination.total, 0);
 });
 
@@ -283,4 +288,32 @@ test('dashboard and admin filters distinguish overdue, pending and unreviewed da
   assert.equal((await call('GET', '/requests?overdue=false&damage=false')).body.pagination.total, 1);
   assert.equal((await call('GET', '/requests?overdue=true', undefined, studentCookie)).status, 400);
   assert.equal((await call('POST', `/requests/${issued.id}/cancellation`, {}, studentCookie)).status, 409);
+});
+
+test('every domain route rejects missing authentication and each restricted role at its boundary', async () => {
+  const equipment = await createAsset();
+  const row = (await requestEquipment(equipment.id)).body.data;
+  const adminOnly = [
+    ['POST', '/equipment', asset],
+    ['PATCH', `/equipment/${equipment.id}`, { action: 'EDIT_METADATA', version: 1, name: 'Updated equipment' }],
+    ['DELETE', `/equipment/${equipment.id}`],
+    ['POST', `/requests/${row.id}/decision`, { action: 'REJECT', reason: 'Synthetic test' }],
+    ['POST', `/requests/${row.id}/issue`, {}],
+    ['POST', `/requests/${row.id}/return`, { condition: 'SERVICEABLE' }],
+    ['GET', '/dashboard'],
+  ];
+  const studentOnly = [
+    ['POST', '/requests', { equipmentId: equipment.id, purpose: 'Synthetic boundary verification', requestKey: randomUUID(), requestedDueAt: new Date(clock + 60000).toISOString() }],
+    ['POST', `/requests/${row.id}/damage-report`, { description: 'Synthetic boundary verification' }],
+  ];
+  const shared = [['GET', '/equipment'], ['GET', `/equipment/${equipment.id}`], ['GET', '/requests'], ['GET', `/requests/${row.id}`], ['POST', `/requests/${row.id}/cancellation`, {}]];
+  for (const [method, path, body] of [...adminOnly, ...studentOnly, ...shared]) assert.equal((await call(method, path, body, null)).status, 401, `${method} ${path}`);
+  for (const [method, path, body] of adminOnly) assert.equal((await call(method, path, body, studentCookie)).status, 403, `${method} ${path}`);
+  for (const [method, path, body] of studentOnly) assert.equal((await call(method, path, body, adminCookie)).status, 403, `${method} ${path}`);
+  assert.equal((await call('POST', `/requests/${row.id}/cancellation`, {}, otherCookie)).status, 404);
+  assert.equal((await call('POST', `/requests/${row.id}/damage-report`, { description: 'Not issued' }, studentCookie)).status, 409);
+  assert.equal((await call('POST', `/requests/${row.id}/issue`, {})).status, 409);
+  assert.equal(await models.BorrowingRequest.countDocuments(), 1);
+  assert.equal((await models.BorrowingRequest.findById(row.id)).status, 'PENDING');
+  assert.equal((await models.Equipment.findById(equipment.id)).status, 'AVAILABLE');
 });

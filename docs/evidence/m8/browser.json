@@ -1,0 +1,22 @@
+{
+  "engine": {
+    "name": "axe-core",
+    "version": "4.14.0"
+  },
+  "browser": {
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+    "windowWidth": 1280,
+    "windowHeight": 720,
+    "orientationAngle": 0,
+    "orientationType": "landscape-primary"
+  },
+  "timestamp": "2026-10-22T02:20:55.686Z",
+  "route": "#dashboard",
+  "viewport": {
+    "width": 1280,
+    "height": 720
+  },
+  "violations": [],
+  "incomplete": [],
+  "passedRules": 33
+}
