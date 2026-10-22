@@ -24,7 +24,7 @@ This document records the assumptions that future sessions must not silently cha
 | Reserve equipment only when an admin approves | Accepted | Pending requests remain requests; conditional transactional approval chooses one winner. |
 | MongoDB transactions plus unique/partial indexes | Accepted | Prevents partial lifecycle updates and simultaneous double approval. |
 | Server-side sessions in MongoDB | Selected for implementation | Keeps authentication tokens out of browser-accessible storage and avoids another data service. Confirm in SRS. |
-| Single-origin production deployment | Proposed | Simplifies cookies, CORS and deployment. A free Render/Atlas proposal is prepared; publication is not authorized. |
+| Single-origin production deployment | Proposed | Simplifies cookies, CORS and deployment. A free Render/Atlas proposal is prepared; cloud deployment is not authorized. Repository publishing to `milan-kb/LabFlow` was authorized on 22 October 2026. |
 | JavaScript/JSX rather than TypeScript | Accepted demo default | Finalized by the owner for this capstone; boundary validation remains mandatory. |
 
 ## Finalized demo policies

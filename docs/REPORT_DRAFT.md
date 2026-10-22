@@ -1,6 +1,6 @@
 # LabFlow individual capstone report
 
-Draft dated 22 October 2026. Prepared for review; not submitted. Author/student ID, institution, mentor and required submission date remain TBD. Hosted URL, repository URL and live evaluation evidence remain pending.
+Draft dated 22 October 2026. Prepared for review; not submitted. Author/student ID, institution, mentor and required submission date remain TBD. Source repository: [milan-kb/LabFlow](https://github.com/milan-kb/LabFlow). Hosted URL and live evaluation evidence remain pending.
 
 ## Executive summary
 

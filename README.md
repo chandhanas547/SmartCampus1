@@ -1,5 +1,7 @@
 # LabFlow
 
+Source repository: [milan-kb/LabFlow](https://github.com/milan-kb/LabFlow).
+
 LabFlow is a demo-only, single-laboratory equipment management capstone. Students find individually tagged equipment, request borrowing, review request history and report damage. Lab administrators manage inventory, decide requests, record issue and inspected return, and monitor current activity.
 
 ## Stack
@@ -91,11 +93,11 @@ Or run `npm run check` for all four. `npm test` covers API/configuration/static-
 
 `npm run test:coverage` enforces the existing 80% line/branch target for auth, ownership and circulation. Accessibility tooling, local performance measurement and the scope of these checks are documented in [the quality baseline](docs/QUALITY.md).
 
-A GitHub Actions workflow performs the same checks plus an audit. It is prepared but has not run on GitHub because no remote is configured. Current verification is summarized below; older milestone records remain available in Git history.
+A GitHub Actions workflow runs the same checks plus an audit on pushes and pull requests. Check [Actions](https://github.com/milan-kb/LabFlow/actions) for remote results; the local verification below does not claim a GitHub CI result. Current verification is summarized below; older milestone records remain available in Git history.
 
 ## Production shape
 
-Run `npm run build`, provide valid runtime configuration, then run `npm start` with `NODE_ENV=production`. Production requires an explicit HTTPS `APP_ORIGIN`, a transaction-capable MongoDB URI and an appropriate `HOST` (usually `0.0.0.0` on a managed host). HTTPS terminates at the selected host/reverse proxy; the application process listens over HTTP behind it. Provider, credentials, remote repository and publishing approval remain pending.
+Run `npm run build`, provide valid runtime configuration, then run `npm start` with `NODE_ENV=production`. Production requires an explicit HTTPS `APP_ORIGIN`, a transaction-capable MongoDB URI and an appropriate `HOST` (usually `0.0.0.0` on a managed host). HTTPS terminates at the selected host/reverse proxy; the application process listens over HTTP behind it. Cloud hosting, deployment credentials and approval to publish the hosted application remain pending. Repository publishing to `milan-kb/LabFlow` was authorized separately.
 
 ## Scope
 

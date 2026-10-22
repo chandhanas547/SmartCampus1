@@ -1,10 +1,10 @@
 # Proposed LabFlow demonstration release
 
-Prepared 22 October 2026. No repository publication, cloud provisioning or hosted verification has occurred. This is the concrete plan for owner approval; all costs must remain zero, with no card, paid tier or automatic paid upgrade.
+Prepared 22 October 2026. The owner authorized repository publishing to `milan-kb/LabFlow`; cloud provisioning and hosted verification remain pending. The remaining cloud plan requires owner approval; all costs must remain zero, with no card, paid tier or automatic paid upgrade.
 
 ## Named destinations
 
-1. Create a GitHub repository named `labflow` under the owner's chosen account. Proposed visibility is public for reviewer access; owner must approve visibility and destination. Publish the preserved M0 and verified increments, excluding original ICTAK references, local data, secrets and generated credentials. No remote is currently configured.
+1. Use the owner-selected [milan-kb/LabFlow repository](https://github.com/milan-kb/LabFlow) and `main` branch. The owner supplied the SSH remote and authorized pushing the preserved M0 history and verified increments. Original ICTAK references, local data, secrets and generated credentials remain excluded. Repository visibility is not changed by this operation; reviewer access must be confirmed before submission.
 2. Create a **separate** Atlas project `labflow-capstone` and Free/M0 cluster `labflow-demo` on AWS Mumbai, subject to current free-tier availability. Read-only plugin inspection found an existing free `Cluster0` in project `assignment` (AWS Mumbai, MongoDB 8.0.34, idle/active); this proposal does not modify or repurpose it.
 3. Create one Render **Free** Node web service `labflow-demo` in Singapore, serving the React build and Express API from one HTTPS origin. Names/URL remain subject to availability; do not invent a live URL. The prepared `render.yaml` disables automatic deployments.
 
@@ -42,4 +42,4 @@ During live acceptance, inspect health, safe error counts, client errors, latenc
 
 ## Approval needed
 
-Approve the named free infrastructure, public repository visibility and public synthetic demonstration, then identify the GitHub account and available Render login. This approval is separate from SRS approval and college submission. If the free provider requires payment/card entry or a resource limit is exhausted, stop and present the actual choice without upgrading.
+Approve the named free cloud infrastructure and public synthetic demonstration, then provide the available Render login. Repository publishing to `milan-kb/LabFlow` has already been authorized; its visibility and reviewer access remain separate checks. This approval is separate from SRS approval and college submission. If the free provider requires payment/card entry or a resource limit is exhausted, stop and present the actual choice without upgrading.
