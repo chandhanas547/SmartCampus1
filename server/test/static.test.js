@@ -6,11 +6,13 @@ import { join } from 'node:path';
 import { createApp } from '../src/app.js';
 
 let directory;
+let temporaryRoot;
 let server;
 let base;
 before(async () => {
-  directory = await mkdtemp(join(tmpdir(), 'labflow-static-test-'));
-  await mkdir(join(directory, 'assets'));
+  temporaryRoot = await mkdtemp(join(tmpdir(), 'labflow-static-test-'));
+  directory = join(temporaryRoot, '.checkout');
+  await mkdir(join(directory, 'assets'), { recursive: true });
   await writeFile(join(directory, 'index.html'), '<!doctype html><title>LabFlow</title>');
   await writeFile(join(directory, 'assets/app.js'), 'export const ready = true;');
   server = createApp({ clientDist: directory, checkDatabase: async () => {}, origin: 'https://lab.example.com', production: true }).listen(0, '127.0.0.1');
@@ -19,7 +21,7 @@ before(async () => {
 });
 after(async () => {
   if (server) await new Promise((resolve) => server.close(resolve));
-  if (directory) await rm(directory, { recursive: true });
+  if (temporaryRoot) await rm(temporaryRoot, { recursive: true });
 });
 
 test('a production deep link receives the SPA with HTTPS security headers', async () => {

@@ -106,3 +106,26 @@ test('controlled provisioning creates an admin and never elevates an existing st
   assert.equal(admin.role, 'ADMIN');
   assert.equal('passwordHash' in admin, false);
 });
+
+test('production secure cookies require explicit proxy trust and retain host-only session behavior', async () => {
+  const origin = 'https://labflow.example.test';
+  for (const trustProxyHops of [0, 1]) {
+    const productionServer = createApp({ connection, sessionSecret: randomBytes(48).toString('hex'), production: true, origin, trustProxyHops, checkDatabase: async () => {} }).listen(0, '127.0.0.1');
+    await new Promise((resolve) => productionServer.once('listening', resolve));
+    const url = `http://127.0.0.1:${productionServer.address().port}`;
+    const proxyHeaders = { ...headers, origin, 'x-forwarded-proto': 'https' };
+    try {
+      const response = await fetch(`${url}/api/auth/login`, { method: 'POST', headers: proxyHeaders, body: JSON.stringify({ email: input.email, password }) });
+      assert.equal(response.status, 200);
+      const rawCookie = response.headers.get('set-cookie');
+      if (!trustProxyHops) { assert.equal(rawCookie, null); continue; }
+      assert.match(rawCookie, /^__Host-labflow\.sid=/);
+      for (const attribute of [/; Secure/, /; HttpOnly/, /; SameSite=Lax/, /; Path=\//]) assert.match(rawCookie, attribute);
+      assert.doesNotMatch(rawCookie, /Domain=/i);
+      const cookie = rawCookie.split(';')[0];
+      assert.equal((await fetch(`${url}/api/auth/me`, { headers: { ...proxyHeaders, cookie } })).status, 200);
+      assert.equal((await fetch(`${url}/api/auth/logout`, { method: 'POST', headers: { ...proxyHeaders, cookie }, body: '{}' })).status, 204);
+      assert.equal((await fetch(`${url}/api/auth/me`, { headers: { ...proxyHeaders, cookie } })).status, 401);
+    } finally { await new Promise((resolve) => productionServer.close(resolve)); }
+  }
+});

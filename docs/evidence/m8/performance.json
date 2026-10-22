@@ -1,1 +1,25 @@
-{"status":"not measured yet","reason":"First attempt correctly returned HTTP 429 after browser login checks; waiting for the existing window to expire without resetting it."}
+{
+  "environment": "Local loopback, synthetic small dataset, sequential warm reads; not a hosted/load benchmark",
+  "timestamp": "2026-10-22T02:07:14.538Z",
+  "loginMs": 307.5,
+  "results": {
+    "/equipment?limit=20": {
+      "samples": 30,
+      "medianMs": 5.03,
+      "p95Ms": 7.66,
+      "maxMs": 8.92
+    },
+    "/requests?limit=20": {
+      "samples": 30,
+      "medianMs": 4.96,
+      "p95Ms": 5.14,
+      "maxMs": 5.95
+    },
+    "/dashboard": {
+      "samples": 30,
+      "medianMs": 4.95,
+      "p95Ms": 5.42,
+      "maxMs": 6.21
+    }
+  }
+}

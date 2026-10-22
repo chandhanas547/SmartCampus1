@@ -1,7 +1,6 @@
 import express from 'express';
 import helmet from 'helmet';
 import { z } from 'zod';
-import { join } from 'node:path';
 import { createIdentity } from './identity/index.js';
 import { HttpError } from './errors.js';
 import { domainRouter } from './domain/routes.js';
@@ -52,7 +51,7 @@ export function createApp({ checkDatabase, origin, production = false, clientDis
     app.use(express.static(clientDist, { index: false }));
     app.get('/{*path}', (request, response, next) => {
       if (!request.accepts('html') || request.path.startsWith('/assets/')) return next();
-      response.set('Cache-Control', 'no-cache').sendFile(join(clientDist, 'index.html'));
+      response.set('Cache-Control', 'no-cache').sendFile('index.html', { root: clientDist });
     });
   }
   app.use((_request, response) => response.status(404).json({ error: { code: 'NOT_FOUND', message: 'Resource not found.' } }));
