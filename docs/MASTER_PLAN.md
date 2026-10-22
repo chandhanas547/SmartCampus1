@@ -1,5 +1,7 @@
 # LabFlow master plan
 
+Original project baseline retained as an SRS reference. Its milestone plan and older provisional wording are historical; current implemented policies are in `DECISIONS.md` and release status is in the root README.
+
 ## 1. Purpose and authority
 
 LabFlow is a demo-only MERN capstone for managing equipment in one college laboratory. Students request individually tagged assets; lab administrators control inventory and the physical borrowing lifecycle.

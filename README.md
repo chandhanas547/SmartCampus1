@@ -38,9 +38,9 @@ The architecture is a React client communicating with an Express JSON API; only 
 
 ## Current status
 
-**Core application locally verified; release preparation is ready for review.** Identity, inventory, decisions/cancellation, issue, damage, inspected return, maintenance and dashboard are implemented. All 44 tests, lint/build and the 80% critical coverage gates pass; real browser and production-process evidence is recorded. Native browser zoom and public deployment acceptance remain open. No hosted application or submission is claimed.
+**Core application locally verified; release preparation is ready for review.** Identity, inventory, decisions/cancellation, issue, damage, inspected return, maintenance and dashboard are implemented. All 45 tests, lint/build and the 80% critical coverage gates pass; real browser and production-process evidence is recorded. Native browser zoom and public deployment acceptance remain open. No hosted application or submission is claimed.
 
-The owner authorized development on 21 October 2026 while SRS approval and submission remain pending. See [decisions](docs/DECISIONS.md), [current handoff](docs/HANDOFF.md) and [task queue](tasks/todo.md).
+The owner authorized development on 21 October 2026 while SRS approval and submission remain pending. Scope and business rules are recorded in [decisions](docs/DECISIONS.md).
 
 ## Run locally
 
@@ -72,7 +72,7 @@ npm run dev:server
 npm run dev:client
 ```
 
-Open **http://127.0.0.1:5173/**. The connection status must become “Connected to LabFlow.” The API is at **http://127.0.0.1:3000/api/health**. Stop each process with Ctrl+C.
+Open **http://127.0.0.1:5173/**. The API is at **http://127.0.0.1:3000/api/health**. Stop each process with Ctrl+C.
 
 Development data persists in ignored `.local/mongodb/`; binary downloads are cached in `.local/mongodb-binaries/`. Integration tests use a separate temporary database. The loopback database has no authentication and is for synthetic local demo data only; never expose it to a network.
 
@@ -91,15 +91,11 @@ Or run `npm run check` for all four. `npm test` covers API/configuration/static-
 
 `npm run test:coverage` enforces the existing 80% line/branch target for auth, ownership and circulation. Accessibility tooling, local performance measurement and the scope of these checks are documented in [the quality baseline](docs/QUALITY.md).
 
-A GitHub Actions workflow performs the same checks plus an audit. It is prepared but has not run on GitHub because no remote is configured. Local results and browser evidence are recorded in [foundation verification](docs/evidence/m2/verification.md) and [inventory/circulation verification](docs/evidence/m4-m7/verification.md).
+A GitHub Actions workflow performs the same checks plus an audit. It is prepared but has not run on GitHub because no remote is configured. Current verification is summarized below; older milestone records remain available in Git history.
 
 ## Production shape
 
 Run `npm run build`, provide valid runtime configuration, then run `npm start` with `NODE_ENV=production`. Production requires an explicit HTTPS `APP_ORIGIN`, a transaction-capable MongoDB URI and an appropriate `HOST` (usually `0.0.0.0` on a managed host). HTTPS terminates at the selected host/reverse proxy; the application process listens over HTTP behind it. Provider, credentials, remote repository and publishing approval remain pending.
-
-## Continue in another chat
-
-Give the new chat access to this folder and ask it to read `AGENTS.md` and `docs/HANDOFF.md`. Those files point to the current decisions, exact checks and next task. Inspect actual Git status before proceeding.
 
 ## Scope
 
@@ -115,6 +111,15 @@ Set `ADMIN_NAME`, `ADMIN_EMAIL` and a strong `ADMIN_PASSWORD` in ignored runtime
 
 For synthetic **local development only**, run `npm run seed:demo` with the local database running. This creates two demo accounts and six example assets without overwriting existing inventory. Random account passwords are saved only in ignored `.local/demo-access.json` with owner-only file permissions. Repeated runs reuse those accounts. Never publish that file or use this seed command against a cloud database.
 
-## Review and release preparation
+## Verification and remaining release work
 
-The [SRS review copy](docs/exports/LabFlow_SRS_DRAFT_0.4.docx) remains unapproved/unsubmitted. [Readiness notes](docs/SRS_READINESS.md), the [evidence index](docs/EVIDENCE_INDEX.md), [report draft](docs/REPORT_DRAFT.md) and [deployment proposal](docs/DEPLOYMENT.md) distinguish verified local results from remaining approvals/live checks. [HANDOFF_PROMPT](docs/HANDOFF_PROMPT.md) routes a future chat to the incrementally maintained project state.
+The local review passes 45 tests (12 server, five client API and 28 real database integration tests), lint and the production build. Tests cover authentication, ownership, concurrent allocation, rollback, strict inputs and administrator-only borrower contacts. Dashboard counts open filtered lists; damaged returns require an inspection note. The browser review checks these changes with synthetic accounts. Critical coverage is 99.41% lines and 92.66% branches; the unchanged 80% gates pass. The dependency audit found zero vulnerabilities. The updated return screen passed axe checks at 1280px and 320px with no findings or horizontal overflow; the equipment archive disclosure also passed and supports keyboard cancellation. Full accessibility scope is recorded in [QUALITY](docs/QUALITY.md).
+
+Report illustrations and local performance/production measurements are in `docs/evidence/`. Old milestone logs, handoff prompts and temporary review files were removed; their history is preserved in Git. The maintained regression suite and developer accessibility helper remain available to verify fixes.
+
+Remaining before assessment:
+
+- Approve and execute the [deployment proposal](docs/DEPLOYMENT.md), then verify real HTTPS, cloud transactions and the public student/admin journey.
+- Complete native browser zoom and the selected browser checks; in-app scans and CSS enlargement have narrower scope.
+- Review the [SRS DOCX](docs/exports/LabFlow_SRS_DRAFT_0.4.docx) and [report draft](docs/REPORT_DRAFT.md). The SRS is a 23-page review export, not approved or submitted. Its source is [SRS_DRAFT](docs/SRS_DRAFT.md); regeneration requires rendering and inspecting every page.
+- Fill individual author/student ID, institution/mentor if required; confirm LMS filename, format, deadline and procedure. These details are unknown from the two supplied ICTAK references. Submission requires explicit authorization and a real receipt.

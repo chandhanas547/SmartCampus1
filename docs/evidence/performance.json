@@ -1,25 +1,25 @@
 {
   "environment": "Local loopback, synthetic small dataset, sequential warm reads; not a hosted/load benchmark",
-  "timestamp": "2026-10-22T02:07:14.538Z",
-  "loginMs": 307.5,
+  "timestamp": "2026-10-22T13:01:34.343Z",
+  "loginMs": 290.98,
   "results": {
     "/equipment?limit=20": {
       "samples": 30,
-      "medianMs": 5.03,
-      "p95Ms": 7.66,
-      "maxMs": 8.92
+      "medianMs": 5.12,
+      "p95Ms": 6.12,
+      "maxMs": 7.09
     },
     "/requests?limit=20": {
       "samples": 30,
-      "medianMs": 4.96,
-      "p95Ms": 5.14,
-      "maxMs": 5.95
+      "medianMs": 5.89,
+      "p95Ms": 7.03,
+      "maxMs": 7.08
     },
     "/dashboard": {
       "samples": 30,
-      "medianMs": 4.95,
-      "p95Ms": 5.42,
-      "maxMs": 6.21
+      "medianMs": 5.04,
+      "p95Ms": 6.27,
+      "maxMs": 6.32
     }
   }
 }

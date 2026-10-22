@@ -1,6 +1,6 @@
 # LabFlow screen and data design
 
-22 October 2026. Individual demo capstone, one lab. These layouts document the implemented scope; screenshots in `docs/evidence/` show actual rendering. SRS approval remains pending.
+22 October 2026. Individual demo capstone, one lab. These layouts document the implemented scope; report screenshots in `docs/evidence/` show the locally implemented workflow. SRS approval remains pending.
 
 ## Navigation and screen coverage
 
@@ -49,7 +49,7 @@ Report and inspected result          Labelled fields and constraints
 Chronological timeline               Submit / pending feedback
 ```
 
-The overview places four count links above equipment-state counts. Identity screens pair a short introduction with a labelled login/registration form. No dashboard count or inventory record is fabricated in the interface.
+The overview places four filtered request links above equipment-state counts. Administrator request details show borrower name/email for handover; students do not receive contact fields. Archive opens an inline warning and requires a separate confirmation button. Identity screens pair a short introduction with a labelled login/registration form. No dashboard count or inventory record is fabricated in the interface.
 
 ## Phone layouts
 

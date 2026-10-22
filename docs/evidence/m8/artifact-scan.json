@@ -1,9 +1,0 @@
-{
-  "timestamp": "2026-10-22T02:23:07.206Z",
-  "trackedAndProposedFiles": 102,
-  "historyBlobsScanned": 148,
-  "knownSecretValuesChecked": 5,
-  "findings": [],
-  "m0Preserved": true,
-  "scope": "Exact matching of currently stored local random secrets and tracked-file exclusion review; not a universal secret detector"
-}

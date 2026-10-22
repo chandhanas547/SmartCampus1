@@ -1,6 +1,6 @@
 # LabFlow implementation contract details
 
-21 October 2026. These bounded details implement the existing 19-endpoint SRS contract; document approval remains pending.
+22 October 2026. These bounded details implement the existing 19-endpoint SRS contract; document approval remains pending.
 
 | Input | Bound |
 |---|---|

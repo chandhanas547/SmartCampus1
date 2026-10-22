@@ -6,7 +6,7 @@ Draft dated 22 October 2026. Prepared for review; not submitted. Author/student 
 
 LabFlow is a MERN demonstration for managing individually tagged equipment in one college laboratory. It brings discovery, borrowing decisions, physical handover, inspected return and damage history into a shared system. Students can access their own requests; administrators manage inventory and circulation. The implementation uses React/Vite, Express and MongoDB/Mongoose with server validation, role checks and database transactions.
 
-The local application completes the core borrowing journey and passes 44 automated tests. Real MongoDB tests exercise simultaneous approvals, conflicting actions and rollback after failed writes. Seventeen saved accessibility scans have no violations or incomplete findings; keyboard and responsive samples were also checked. These are local results. Public deployment, college approval and submission have not occurred, and the remaining browser checks are identified below.
+The local application completes the core borrowing journey and passes 45 automated tests. Real MongoDB tests exercise simultaneous approvals, conflicting actions and rollback after failed writes. Earlier local accessibility scans found no violations or incomplete findings; keyboard and responsive samples were also checked. These are local results. Public deployment, college approval and submission have not occurred, and the remaining browser checks are identified below.
 
 ## Introduction
 
@@ -26,7 +26,7 @@ LabFlow models these transitions explicitly. Equipment is tracked per physical a
 
 The application supports one laboratory and two roles. Students register with name/email/password, sign in, browse non-archived assets, request one asset, cancel eligible requests and report damage while borrowing. Administrators create/edit/maintain/archive assets, approve or reject, record issue/return, resolve reports and view current counts. Loans are limited to 168 hours from approval. Times are stored in UTC and displayed in Asia/Kolkata.
 
-Deliverables available locally include the application source, npm workspace/lockfile, SRS draft and review export, API/security/design/quality documents, tests, screenshots, milestone evidence, CI definition, deployment proposal and an incremental handoff. Multi-lab operation, payments, notifications, uploads, QR scanning, renewals and advanced analytics are excluded.
+Deliverables available locally include the application source, npm workspace/lockfile, SRS draft and review export, API/security/design/quality documents, regression tests, report screenshots, CI definition and deployment proposal. Multi-lab operation, payments, notifications, uploads, QR scanning, renewals and advanced analytics are excluded.
 
 ## Methodology
 
@@ -38,7 +38,7 @@ Passwords use salted asynchronous scrypt. MongoDB-backed sessions regenerate at 
 
 ## Project activities
 
-The initial takeover inspected the repository, both original ICTAK references, available local-folder tools and installed skills/plugins. The references remain unchanged and ignored. Shared engineering skills are readable, as are the locally installed OpenCode skill files; availability was verified rather than assumed.
+The supplied ICTAK project guidelines and report template informed the requirements and report structure. Both original files remain unchanged.
 
 The foundation established validated configuration, readiness, the React shell, a persistent local replica set and reproducible commands. Identity added registration, session behavior and controlled administrator provisioning. Inventory and circulation then added guarded state transitions and the corresponding student/admin screens.
 
@@ -50,34 +50,34 @@ Accessibility testing found a mismatch between the logo's visible and accessible
 
 | Verification | Observed local result | Evidence |
 |---|---|---|
-| Regression | 12 fast server, five client and 27 real database integration tests pass; lint/build pass | M8 verification |
-| Critical coverage | 99.40% lines and 92.83% branches; existing 80% gates enforced | M8 verification; quality baseline |
+| Regression | 12 fast server, five client and 28 real database integration tests pass; lint/build pass | `npm run check` |
+| Critical coverage | 99.41% lines and 92.66% branches; existing 80% gates enforced | `npm run test:coverage`; quality baseline |
 | Concurrency and rollback | One approval winner; consistent cancellation/report-return races; injected approval/return failures roll back | Domain integration suite |
-| Actual browser journey | Request, approve, issue, damage, inspected return and restoration passed with synthetic identities | M4–M7 screenshots and verification |
-| Automated accessibility | 17 saved screen-state scans with zero violations/incomplete findings | M8 axe JSON reports |
-| Keyboard and reflow | Core keyboard flow, 320px samples and 200% CSS content enlargement checked | M8 verification and screenshots |
-| Fresh setup | A fully cold clone at 94bc7e9 installed, downloaded the pinned binary, and passed check/coverage | M8 verification |
-| Performance | 30 warm sequential reads per endpoint: equipment p95 7.66ms, requests 5.14ms, dashboard 5.42ms; login sample 307.5ms | M8 performance JSON |
-| Production process | Built assets/deep links and secure sessions checked locally after pruning development dependencies | Production smoke JSON |
+| Actual browser journey | Request, approve, issue, damage, inspected return and restoration passed with synthetic identities | Report screenshots; local browser review |
+| Automated accessibility | Updated return screen at 1280px/320px and equipment archive disclosure: zero violations/incomplete findings | Local axe helper; broader earlier checks at `f6af63a` |
+| Keyboard and reflow | Core keyboard flow, 320px samples and 200% CSS content enlargement checked | Historical verification at `f6af63a` |
+| Fresh setup | A fully cold clone at 94bc7e9 installed, downloaded the pinned binary, and passed check/coverage | Historical verification at `f6af63a` |
+| Performance | 30 warm sequential reads per endpoint: equipment p95 6.12ms, requests 7.03ms, dashboard 6.27ms; login sample 290.98ms | `evidence/performance.json` |
+| Production process | Built assets/deep links and secure sessions checked locally after pruning development dependencies | `evidence/production-smoke.json` |
 
 The measurements use a small synthetic loopback dataset and cannot predict load behavior or a sleeping free host. Native browser zoom, standalone stable Chromium and other-engine checks are not established by CSS enlargement or in-app testing alone. Screen-reader testing is also not claimed. Remote CI, real public HTTPS, Atlas acceptance and live screenshots remain pending.
 
-![Administrator dashboard from the local synthetic demonstration](evidence/m4-m7/dashboard.jpg)
+![Administrator dashboard from the local synthetic demonstration](evidence/dashboard.jpg)
 
-![Inspected damaged return with retained timeline](evidence/m4-m7/inspected-return.jpg)
+![Inspected return with retained timeline](evidence/inspected-return.jpg)
 
 ## Conclusion
 
-The local implementation demonstrates the intended single-lab borrowing workflow and verifies its main authorization and transaction invariants. Testing against real concurrent database operations and a cold setup exposed failures that a simple browser demonstration would have missed. Durable decisions, evidence and handoff files allow work to continue without reconstructing chat history.
+The local implementation demonstrates the intended single-lab borrowing workflow and verifies its main authorization and transaction invariants. Testing against real concurrent database operations and a cold setup exposed failures that a simple browser demonstration would have missed. The regression suite keeps these invariants reproducible as the application changes.
 
 Completion for assessment still requires approval and execution of the proposed free deployment, public core-flow verification, the outstanding browser checks, final author/institution fields and the actual college submission procedure. This draft must be updated with genuine live results before it becomes the final report.
 
 ## Appendix
 
-- Requirements and review copy: `SRS_DRAFT.md`, `SRS_READINESS.md`, `exports/LabFlow_SRS_DRAFT_0.4.docx`.
+- Requirements and review copy: `SRS_DRAFT.md`, `exports/LabFlow_SRS_DRAFT_0.4.docx`.
 - Design and contracts: `DESIGN.md`, `API_DETAILS.md`, `SECURITY.md`, `QUALITY.md`.
-- Evidence: `evidence/m2/`, `evidence/m3/`, `evidence/m4-m7/`, `evidence/m8/`.
+- Evidence: `evidence/`.
 - Reproduction: root README, package lockfile and documented npm commands.
 - Release proposal and pending live acceptance: `DEPLOYMENT.md`, root `render.yaml`.
-- Continuation: `HANDOFF.md`, `HANDOFF_PROMPT.md`, `DECISIONS.md`, `tasks/todo.md`.
+- Business rules and implementation choices: `DECISIONS.md`.
 - Source references: the unchanged local ICTAK project guidelines and internship report template. The supplied report reference defines the nine sections used here; its sample names/date are not project facts.
