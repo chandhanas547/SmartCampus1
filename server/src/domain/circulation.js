@@ -1,5 +1,6 @@
 import { HttpError } from '../errors.js';
 import { domainModels, OPEN, requestData } from './models.js';
+import { userModel } from '../identity/user.js';
 
 const conflict = (message = 'This request or equipment has changed. Refresh and try again.') => new HttpError(409, 'STATE_CONFLICT', message);
 const invalid = (message) => new HttpError(400, 'INVALID_INPUT', message);
@@ -8,6 +9,12 @@ const samePayload = (row, input) => row.equipmentId.toString() === input.equipme
 
 export function circulationService(connection, now = Date.now) {
   const { Equipment, BorrowingRequest } = domainModels(connection);
+  async function present(user, rows) {
+    if (user.role !== 'ADMIN') return rows.map(requestData);
+    const borrowers = await userModel(connection).find({ _id: { $in: rows.map((row) => row.studentId) } }).select('name email').lean();
+    const contacts = new Map(borrowers.map(({ _id, name, email }) => [_id.toString(), { name, email }]));
+    return rows.map((row) => ({ ...requestData(row), borrower: contacts.get(row.studentId.toString()) ?? null }));
+  }
   async function replay(user, input, session = null) {
     const existing = await BorrowingRequest.findOne({ studentId: user._id, requestKey: input.requestKey }).session(session);
     if (!existing) return null;
@@ -47,7 +54,7 @@ export function circulationService(connection, now = Date.now) {
     async get(user, id) {
       const row = await BorrowingRequest.findOne({ _id: id, ...scope(user) });
       if (!row) throw new HttpError(404, 'NOT_FOUND', 'Request not found.');
-      return requestData(row);
+      return (await present(user, [row]))[0];
     },
     async list(user, input) {
       if (user.role !== 'ADMIN' && (input.overdue !== undefined || input.damage !== undefined)) throw invalid('These filters are for administrators.');
@@ -62,7 +69,7 @@ export function circulationService(connection, now = Date.now) {
         BorrowingRequest.find(filter).sort({ createdAt: -1, _id: -1 }).skip((input.page - 1) * input.limit).limit(input.limit),
         BorrowingRequest.countDocuments(filter),
       ]);
-      return { data: rows.map(requestData), pagination: { page: input.page, limit: input.limit, total } };
+      return { data: await present(user, rows), pagination: { page: input.page, limit: input.limit, total } };
     },
     async act(user, id, action, input) {
       return connection.transaction(async (session) => {

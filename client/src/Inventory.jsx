@@ -27,7 +27,7 @@ export function Catalog({ user }) {
     }, 'Equipment added.');
   }
   return <>
-    <div className="page-heading"><div><p className="eyebrow">{admin ? 'LAB INVENTORY' : 'FIND YOUR NEXT TOOL'}</p><h1>Equipment catalog</h1><p className="lede">Individually tagged. Ready for your next idea.</p></div>{admin && <button type="button" onClick={() => setAdding(!adding)}>{adding ? 'Close form' : 'Add equipment'}</button>}</div>
+    <div className="page-heading"><div><p className="eyebrow">{admin ? 'LAB INVENTORY' : 'LAB EQUIPMENT'}</p><h1>Equipment catalog</h1><p className="lede">Check availability and choose equipment for your work.</p></div>{admin && <button type="button" onClick={() => setAdding(!adding)}>{adding ? 'Close form' : 'Add equipment'}</button>}</div>
     {adding && <section className="panel" aria-labelledby="create-equipment-title"><h2 id="create-equipment-title">Add equipment</h2><form onSubmit={create} aria-busy={mutation.busy}>{createElement(EquipmentFields, { create: true })}<button disabled={mutation.busy}>Add equipment</button></form></section>}
     <p role="status" className="feedback">{mutation.message}</p>
     <form className="filters" onSubmit={(event) => setFilters({ ...values(event), page: 1 })}>
@@ -73,7 +73,7 @@ export function EquipmentDetail({ user, id }) {
           <button type="button" className="secondary-button" disabled={mutation.busy} onClick={() => setEditing(!editing)}>{editing ? 'Close editing' : 'Edit details'}</button>
           {editing && <form onSubmit={change} aria-busy={mutation.busy}><input type="hidden" name="action" value="EDIT_METADATA" />{createElement(EquipmentFields, { equipment: row })}<button disabled={mutation.busy}>Save details</button></form>}
           {['AVAILABLE', 'MAINTENANCE'].includes(row.status) && <form onSubmit={change} aria-busy={mutation.busy}><input type="hidden" name="action" value={row.status === 'MAINTENANCE' ? 'RESTORE' : 'ENTER_MAINTENANCE'} /><label>{row.status === 'MAINTENANCE' ? 'Restoration note' : 'Maintenance reason'}<textarea name="note" required maxLength="2000" /></label><button disabled={mutation.busy}>{row.status === 'MAINTENANCE' ? 'Restore to available' : 'Enter maintenance'}</button></form>}
-          {['AVAILABLE', 'MAINTENANCE'].includes(row.status) && <button type="button" className="danger-button" disabled={mutation.busy} onClick={() => mutation.run(async () => { await apiRequest(`/equipment/${id}`, { method: 'DELETE' }); window.location.hash = 'catalog'; }, 'Equipment archived.')}>Archive equipment</button>}
+          {['AVAILABLE', 'MAINTENANCE'].includes(row.status) && <button type="button" className="danger-button" disabled={mutation.busy} onClick={() => { if (window.confirm('Archive this equipment? It will be hidden from students and cannot be restored.')) mutation.run(async () => { await apiRequest(`/equipment/${id}`, { method: 'DELETE' }); window.location.hash = 'catalog'; }, 'Equipment archived.'); }}>Archive equipment</button>}
           <p className="field-hint">Open requests block manual maintenance and archive. Historical borrowing records are retained.</p>
         </>}
         {admin && row.status === 'ARCHIVED' && <p>Archived equipment is read-only. Its borrowing history is retained.</p>}

@@ -16,7 +16,7 @@
 | Search | At most 80 trimmed characters; treated as literal text, never executable regex/operators |
 | Pagination | Page 1–10,000; limit 1–50, default 20; stable createdAt/id sorting |
 
-All writable bodies and query objects reject unknown fields. Equipment lists accept search/category/status/page/limit. Request lists accept status/page/limit; administrators may additionally use overdue=true/false and damage=true/false. Student lists remain ownership scoped. Invalid identifiers use 400; missing/inaccessible records use 404; duplicate/stale/state conflicts use 409.
+All writable bodies and query objects reject unknown fields. Equipment lists accept search/category/status/page/limit. Request lists accept status/page/limit; administrators may additionally use overdue=true/false and damage=true/false. Student lists remain ownership scoped. Administrator request lists/details additionally include `borrower: { name, email }` for physical handover, or null if the account is unavailable; student responses never include this contact field. Contacts are fetched in one bounded query per page, and password fields are excluded. Invalid identifiers use 400; missing/inaccessible records use 404; duplicate/stale/state conflicts use 409.
 
 Return `condition` is the explicit inspection result. When a damage report exists, the server stores that same result with reviewer/time and requires a non-empty inspection note, even when condition is SERVICEABLE.
 

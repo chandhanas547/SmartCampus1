@@ -18,9 +18,9 @@ export default function AuthForm({ onSignIn }) {
   }
   return (
     <section className="auth-layout" aria-labelledby="auth-title">
-      <div className="auth-intro"><p className="eyebrow">YOUR COLLEGE LABORATORY</p><h1>Good equipment.<br />Great possibilities.</h1><p className="lede">Find the tools for your next idea. Borrow mindfully, and keep the lab moving.</p><p className="auth-note">One laboratory. Individually tagged equipment.<br />A clear journey from request to return.</p></div>
+      <div className="auth-intro"><p className="eyebrow">YOUR COLLEGE LABORATORY</p><h1>Borrow lab<br />equipment.</h1><p className="lede">Check availability, request equipment and track your loans.</p><p className="auth-note">Collect approved equipment from the lab and return it for inspection.</p></div>
       <div className="auth-panel">
-        <p className="eyebrow">{mode === 'login' ? 'WELCOME BACK' : 'MAKE YOURSELF AT HOME'}</p>
+        <p className="eyebrow">{mode === 'login' ? 'WELCOME BACK' : 'STUDENT REGISTRATION'}</p>
         <h2 id="auth-title">{mode === 'login' ? 'Sign in to LabFlow' : 'Create your student account'}</h2>
         <form onSubmit={submit} aria-busy={busy}>
           {mode === 'register' && <label>Your name<input name="name" autoComplete="name" required minLength="2" maxLength="120" aria-describedby={error ? 'auth-error' : undefined} /></label>}

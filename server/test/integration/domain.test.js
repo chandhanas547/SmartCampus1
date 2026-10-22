@@ -123,6 +123,22 @@ test('open-request guards and ownership apply at the API boundary', async () => 
   assert.equal((await call('DELETE', `/equipment/${equipment.id}`)).status, 409);
 });
 
+test('only administrators receive borrower contact details for handover', async () => {
+  const equipment = await createAsset();
+  const request = (await requestEquipment(equipment.id)).body.data;
+  const expected = { name: 'Demo Student', email: 'student@example.test' };
+  for (const path of ['/requests', `/requests/${request.id}`]) {
+    const admin = (await call('GET', path)).body.data;
+    const student = (await call('GET', path, undefined, studentCookie)).body.data;
+    const adminRow = Array.isArray(admin) ? admin[0] : admin;
+    const studentRow = Array.isArray(student) ? student[0] : student;
+    assert.deepEqual(adminRow.borrower, expected);
+    assert.equal('borrower' in studentRow, false);
+    assert.equal('passwordHash' in adminRow, false);
+    assert.equal(adminRow.studentId, studentRow.studentId);
+  }
+});
+
 test('simultaneous approvals choose one winner with a matching allocation', async () => {
   const equipment = await createAsset();
   const first = (await requestEquipment(equipment.id)).body.data;
