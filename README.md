@@ -95,11 +95,11 @@ Or run `npm run check` for all four. `npm test` covers API/configuration/static-
 
 `npm run test:coverage` enforces the existing 80% line/branch target for auth, ownership and circulation. Accessibility tooling, local performance measurement and the scope of these checks are documented in [the quality baseline](docs/QUALITY.md).
 
-The initial GitHub Actions run passed for `80582af`. A GitHub Actions workflow runs the same checks plus an audit on pushes and pull requests. Check [Actions](https://github.com/milan-kb/LabFlow/actions) for remote results; the local verification below does not claim a GitHub CI result. Current verification is summarized below; older milestone records remain available in Git history.
+The [GitHub Actions run for `bac83f0`](https://github.com/milan-kb/LabFlow/actions/runs/39823154784) passed, including the workflow's checks, coverage gates and audit. The workflow runs on pushes and pull requests. Current local verification is summarized below; older milestone records remain available in Git history.
 
 ## Production shape
 
-Run `npm run build`, provide valid runtime configuration, then run `npm start` with `NODE_ENV=production`. Production requires an explicit HTTPS `APP_ORIGIN`, a transaction-capable MongoDB URI and an appropriate `HOST` (usually `0.0.0.0` on a managed host). HTTPS terminates at the selected host/reverse proxy; the application process listens over HTTP behind it. The owner approved the zero-cost Render/Atlas deployment and public synthetic demonstration on 22 October 2026; setup and hosted verification are in progress. Repository publishing to `milan-kb/LabFlow` was authorized separately.
+Run `npm run build`, provide valid runtime configuration, then run `npm start` with `NODE_ENV=production`. Production requires an explicit HTTPS `APP_ORIGIN`, a transaction-capable MongoDB URI and an appropriate `HOST` (usually `0.0.0.0` on a managed host). HTTPS terminates at the selected host/reverse proxy; the application process listens over HTTP behind it. On 22 October 2026 the owner deferred hosting and chose localhost after Render required a card even for Free. No web service or hosted URL exists. The previously created Atlas Free cluster has no network access-list entries and is not used by the local app. See [deployment status](docs/DEPLOYMENT.md). Repository publishing to `milan-kb/LabFlow` was authorized separately.
 
 ## Scope
 
@@ -123,7 +123,7 @@ Report illustrations and local performance/production measurements are in `docs/
 
 Remaining before assessment:
 
-- Complete the approved [deployment](docs/DEPLOYMENT.md), then verify real HTTPS, cloud transactions and the public student/admin journey.
+- Hosting is deferred by the owner. The ICTAK guide's final checklist still asks for a hosted URL and live core-flow evidence; localhost does not satisfy those items unless the reviewer accepts an exception. Resume [deployment](docs/DEPLOYMENT.md) only on the owner's instruction.
 - Complete native browser zoom and the selected browser checks; in-app scans and CSS enlargement have narrower scope.
 - Review the [SRS DOCX](docs/exports/LabFlow_SRS_DRAFT_0.4.docx) and [report draft](docs/REPORT_DRAFT.md). The SRS is a 23-page review export, not approved or submitted. Its source is [SRS_DRAFT](docs/SRS_DRAFT.md); regeneration requires rendering and inspecting every page.
 - Fill individual author/student ID, institution/mentor if required; confirm LMS filename, format, deadline and procedure. These details are unknown from the two supplied ICTAK references. Submission requires explicit authorization and a real receipt.

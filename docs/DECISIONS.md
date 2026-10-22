@@ -24,7 +24,7 @@ This document records the assumptions that future sessions must not silently cha
 | Reserve equipment only when an admin approves | Accepted | Pending requests remain requests; conditional transactional approval chooses one winner. |
 | MongoDB transactions plus unique/partial indexes | Accepted | Prevents partial lifecycle updates and simultaneous double approval. |
 | Server-side sessions in MongoDB | Selected for implementation | Keeps authentication tokens out of browser-accessible storage and avoids another data service. Confirm in SRS. |
-| Single-origin production deployment | Proposed | Simplifies cookies, CORS and deployment. The owner approved the free Render/Atlas deployment and public synthetic demonstration on 22 October 2026; provisioning and live verification are in progress. Repository publishing to `milan-kb/LabFlow` was authorized on 22 October 2026. |
+| Single-origin production deployment | Implemented locally; hosting deferred | Simplifies cookies, CORS and deployment. The owner initially approved the free Render/Atlas demonstration on 22 October 2026, then chose localhost after Render required a card. See the current hosting decision below. Repository publishing to `milan-kb/LabFlow` was authorized separately. |
 | JavaScript/JSX rather than TypeScript | Accepted demo default | Finalized by the owner for this capstone; boundary validation remains mandatory. |
 
 ## Finalized demo policies
@@ -48,7 +48,7 @@ These policies supersede the older provisional labels in MASTER_PLAN. The detail
 
 ## Provisional implementation choices
 
-- MongoDB-backed sessions are selected for implementation; single-origin operation is implemented. The free Render/Atlas deployment in `DEPLOYMENT.md` is authorized and in progress.
+- MongoDB-backed sessions and single-origin operation are implemented. Hosting is deferred; `DEPLOYMENT.md` records the attempted setup and remaining assessment requirements.
 - Identity implementation policies are recorded in `docs/SECURITY.md`: scrypt, eight-hour absolute MongoDB sessions, strict Origin/custom-header CSRF defense and MongoDB-backed authentication limits.
 - Bounded inputs in `docs/API_DETAILS.md` and the unchanged 80% critical coverage target in `docs/QUALITY.md` are selected implementation baselines. Formal SRS approval remains pending; browser/zoom limits are reported explicitly.
 
@@ -72,6 +72,12 @@ Deferral does not remove basic security, accessibility, responsive design, trans
 | Is the revised SRS transition/date/PATCH contract approved for submission? | Before SRS approval |
 | What are the individual author/student ID, institution/mentor and final deadline? | Before final submission |
 | How will reviewers receive an admin demo account without exposing credentials? | Before final submission |
+
+## Current hosting decision
+
+On 22 October 2026 the owner instructed the project to remain on localhost and stopped the search for another host. This supersedes the earlier instruction to proceed with public deployment. Render required payment information through both its API (HTTP 402) and Dashboard despite Free being selected; no card or web service was added. The separate Atlas Free project/cluster and restricted database users already exist, with no network access-list entries. Local configuration remains local.
+
+The original ICTAK guide's section 13 asks for a working hosted URL, README live links and core flows tested on the live site. Those assessment items remain outstanding; a local-only exception has not been confirmed. Do not remove these requirements from the SRS or claim hosted acceptance. Further cloud setup/publication is deferred until the owner requests it again.
 
 ## Change rule
 
