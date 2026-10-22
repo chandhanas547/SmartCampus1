@@ -99,7 +99,7 @@ The [GitHub Actions run for `bac83f0`](https://github.com/milan-kb/LabFlow/actio
 
 ## Production shape
 
-Run `npm run build`, provide valid runtime configuration, then run `npm start` with `NODE_ENV=production`. Production requires an explicit HTTPS `APP_ORIGIN`, a transaction-capable MongoDB URI and an appropriate `HOST` (usually `0.0.0.0` on a managed host). HTTPS terminates at the selected host/reverse proxy; the application process listens over HTTP behind it. On 22 October 2026 the owner deferred hosting and chose localhost after Render required a card even for Free. No web service or hosted URL exists. The previously created Atlas Free cluster has no network access-list entries and is not used by the local app. See [deployment status](docs/DEPLOYMENT.md). Repository publishing to `milan-kb/LabFlow` was authorized separately.
+Run `npm run build`, provide valid runtime configuration, then run `npm start` with `NODE_ENV=production`. Production requires an explicit HTTPS `APP_ORIGIN`, a transaction-capable MongoDB URI and an appropriate `HOST` (usually `0.0.0.0` on a managed host). HTTPS terminates at the selected host/reverse proxy; the application process listens over HTTP behind it. Render required a card even for Free. After reviewing the ICTAK hosted-URL checklist, the owner resumed card-free hosting evaluation, including Vercel and Netlify. No web service or hosted URL exists. The previously created Atlas Free cluster has no network access-list entries and is not used by the local app. See [deployment status](docs/DEPLOYMENT.md). Repository publishing to `milan-kb/LabFlow` was authorized separately.
 
 ## Scope
 
@@ -123,7 +123,7 @@ Report illustrations and local performance/production measurements are in `docs/
 
 Remaining before assessment:
 
-- Hosting is deferred by the owner. The ICTAK guide's final checklist still asks for a hosted URL and live core-flow evidence; localhost does not satisfy those items unless the reviewer accepts an exception. Resume [deployment](docs/DEPLOYMENT.md) only on the owner's instruction.
+- Complete card-free [hosting selection and deployment](docs/DEPLOYMENT.md). The ICTAK guide's final checklist asks for a hosted URL and live core-flow evidence; localhost does not satisfy those items unless the reviewer accepts an exception.
 - Complete native browser zoom and the selected browser checks; in-app scans and CSS enlargement have narrower scope.
 - Review the [SRS DOCX](docs/exports/LabFlow_SRS_DRAFT_0.4.docx) and [report draft](docs/REPORT_DRAFT.md). The SRS is a 23-page review export, not approved or submitted. Its source is [SRS_DRAFT](docs/SRS_DRAFT.md); regeneration requires rendering and inspecting every page.
 - Fill individual author/student ID, institution/mentor if required; confirm LMS filename, format, deadline and procedure. These details are unknown from the two supplied ICTAK references. Submission requires explicit authorization and a real receipt.

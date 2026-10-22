@@ -6,7 +6,7 @@ Draft dated 22 October 2026. Prepared for review; not submitted. Author/student 
 
 LabFlow is a MERN demonstration for managing individually tagged equipment in one college laboratory. It brings discovery, borrowing decisions, physical handover, inspected return and damage history into a shared system. Students can access their own requests; administrators manage inventory and circulation. The implementation uses React/Vite, Express and MongoDB/Mongoose with server validation, role checks and database transactions.
 
-The local application completes the core borrowing journey and passes 47 automated tests. Real MongoDB tests exercise simultaneous approvals, conflicting actions and rollback after failed writes. Earlier local accessibility scans found no violations or incomplete findings; keyboard and responsive samples were also checked. These are local results. Public deployment, college approval and submission have not occurred. Hosting is deferred by the owner; the remaining browser and submission checks are identified below.
+The local application completes the core borrowing journey and passes 47 automated tests. Real MongoDB tests exercise simultaneous approvals, conflicting actions and rollback after failed writes. Earlier local accessibility scans found no violations or incomplete findings; keyboard and responsive samples were also checked. These are local results. Public deployment, college approval and submission have not occurred. Card-free hosting is under evaluation; the remaining browser and submission checks are identified below.
 
 ## Introduction
 
@@ -61,7 +61,7 @@ Accessibility testing found a mismatch between the logo's visible and accessible
 | Performance | 30 warm sequential reads per endpoint: equipment p95 6.12ms, requests 7.03ms, dashboard 6.27ms; login sample 290.98ms | `evidence/performance.json` |
 | Production process | Built assets/deep links and secure sessions checked locally after pruning development dependencies | `evidence/production-smoke.json` |
 
-The measurements use a small synthetic loopback dataset and cannot predict load behavior or a sleeping free host. Native browser zoom, standalone stable Chromium and other-engine checks are not established by CSS enlargement or in-app testing alone. Screen-reader testing is also not claimed. Real public HTTPS, Atlas acceptance and live screenshots remain unverified. The owner chose localhost after Render required a card even for Free. A separate Atlas Free cluster and empty Render Hobby workspace exist, but no app service was created and no Atlas network access was opened.
+The measurements use a small synthetic loopback dataset and cannot predict load behavior or a sleeping free host. Native browser zoom, standalone stable Chromium and other-engine checks are not established by CSS enlargement or in-app testing alone. Screen-reader testing is also not claimed. Real public HTTPS, Atlas acceptance and live screenshots remain unverified. Card-free alternatives are under evaluation after Render required a card even for Free. A separate Atlas Free cluster and empty Render Hobby workspace exist, but no app service was created and no Atlas network access was opened.
 
 ![Administrator dashboard from the local synthetic demonstration](evidence/dashboard.jpg)
 
@@ -71,7 +71,7 @@ The measurements use a small synthetic loopback dataset and cannot predict load 
 
 The local implementation demonstrates the intended single-lab borrowing workflow and verifies its main authorization and transaction invariants. Testing against real concurrent database operations and a cold setup exposed failures that a simple browser demonstration would have missed. The regression suite keeps these invariants reproducible as the application changes.
 
-Completion for assessment still requires the outstanding browser checks, final author/institution fields and the actual college submission procedure. The ICTAK guide's final checklist also asks for a hosted URL and live core-flow verification. Hosting is deferred at the owner's request; a reviewer exception for a local demonstration has not been established. This draft must describe any remaining exception honestly before final submission.
+Completion for assessment still requires the outstanding browser checks, final author/institution fields and the actual college submission procedure. The ICTAK guide's final checklist also asks for a hosted URL and live core-flow verification. Card-free hosting is under evaluation; a reviewer exception for a local demonstration has not been established. This draft must describe any remaining exception honestly before final submission.
 
 ## Appendix
 
