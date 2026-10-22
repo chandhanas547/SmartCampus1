@@ -25,7 +25,8 @@
     "test:coverage": "node scripts/prepare-test-db.js && node --test --experimental-test-coverage --test-coverage-include='server/src/domain/**' --test-coverage-include='server/src/identity/**' --test-coverage-include='server/src/errors.js' --test-coverage-lines=80 --test-coverage-branches=80 server/test/*.test.js server/test/integration/*.test.js",
     "measure:local": "node scripts/measure-local.js",
     "lint": "eslint .",
-    "check": "npm run lint && npm test && npm run test:integration && npm run build"
+    "check": "npm run lint && npm test && npm run test:integration && npm run build",
+    "test:cloud": "node --env-file=.local/cloud/acceptance.env scripts/verify-cloud.js"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

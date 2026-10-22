@@ -1,15 +1,14 @@
 import assert from 'node:assert/strict';
 import { after, before, beforeEach, test } from 'node:test';
 import { randomBytes, randomUUID } from 'node:crypto';
-import { MongoMemoryReplSet } from 'mongodb-memory-server-core';
-import { connectDatabase } from '../../src/database.js';
+import { openTestDatabase } from '../database-fixture.js';
 import { prepareIdentity } from '../../src/identity/index.js';
 import { prepareDomain, domainModels } from '../../src/domain/models.js';
 import { userModel } from '../../src/identity/user.js';
 import { hashPassword } from '../../src/identity/password.js';
 import { createApp } from '../../src/app.js';
 
-let replica, connection, server, base, adminCookie, studentCookie, otherCookie;
+let fixture, connection, server, base, adminCookie, studentCookie, otherCookie;
 let clock = Date.now();
 let models;
 const headers = { origin: 'http://localhost:5173', 'content-type': 'application/json', 'x-labflow-request': '1' };
@@ -27,8 +26,8 @@ async function requestEquipment(equipmentId, cookie = studentCookie, change = {}
   return call('POST', '/requests', { equipmentId, purpose: 'A synthetic laboratory experiment', requestedDueAt: new Date(clock + 86400000).toISOString(), requestKey: randomUUID(), ...change }, cookie);
 }
 before(async () => {
-  replica = await MongoMemoryReplSet.create({ replSet: { count: 1, ip: '127.0.0.1' } });
-  connection = await connectDatabase(replica.getUri('domain_test'));
+  fixture = await openTestDatabase('domain');
+  connection = fixture.connection;
   await prepareIdentity(connection); await prepareDomain(connection);
   models = domainModels(connection);
   const password = randomBytes(24).toString('base64url');
@@ -56,7 +55,7 @@ beforeEach(async () => {
 });
 after(async () => {
   if (server) await new Promise((resolve) => server.close(resolve));
-  await connection?.close(); await replica?.stop();
+  await fixture?.close();
 });
 
 test('inventory enforces roles, unique tags, strict input and safe student discovery', async () => {

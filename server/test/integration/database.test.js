@@ -1,19 +1,18 @@
 import assert from 'node:assert/strict';
 import { after, before, test } from 'node:test';
-import { MongoMemoryReplSet } from 'mongodb-memory-server-core';
-import { checkDatabase, connectDatabase } from '../../src/database.js';
+import { openTestDatabase } from '../database-fixture.js';
+import { checkDatabase } from '../../src/database.js';
 
-let replica;
+let fixture;
 let connection;
 before(async () => {
-  replica = await MongoMemoryReplSet.create({ replSet: { count: 1, storageEngine: 'wiredTiger', ip: '127.0.0.1' } });
-  connection = await connectDatabase(replica.getUri('labflow_test'));
+  fixture = await openTestDatabase('database');
+  connection = fixture.connection;
   await connection.db.createCollection('assets');
   await connection.db.createCollection('requests');
 });
 after(async () => {
-  await connection?.close();
-  await replica?.stop();
+  await fixture?.close();
 });
 
 test('real replica set is ready and commits writes to both collections', async () => {

@@ -24,7 +24,7 @@ This document records the assumptions that future sessions must not silently cha
 | Reserve equipment only when an admin approves | Accepted | Pending requests remain requests; conditional transactional approval chooses one winner. |
 | MongoDB transactions plus unique/partial indexes | Accepted | Prevents partial lifecycle updates and simultaneous double approval. |
 | Server-side sessions in MongoDB | Selected for implementation | Keeps authentication tokens out of browser-accessible storage and avoids another data service. Confirm in SRS. |
-| Single-origin production deployment | Proposed | Simplifies cookies, CORS and deployment. A free Render/Atlas proposal is prepared; cloud deployment is not authorized. Repository publishing to `milan-kb/LabFlow` was authorized on 22 October 2026. |
+| Single-origin production deployment | Proposed | Simplifies cookies, CORS and deployment. The owner approved the free Render/Atlas deployment and public synthetic demonstration on 22 October 2026; provisioning and live verification are in progress. Repository publishing to `milan-kb/LabFlow` was authorized on 22 October 2026. |
 | JavaScript/JSX rather than TypeScript | Accepted demo default | Finalized by the owner for this capstone; boundary validation remains mandatory. |
 
 ## Finalized demo policies
@@ -48,7 +48,7 @@ These policies supersede the older provisional labels in MASTER_PLAN. The detail
 
 ## Provisional implementation choices
 
-- MongoDB-backed sessions are selected for implementation; single-origin operation is implemented. The free Render/Atlas proposal in `DEPLOYMENT.md` awaits approval.
+- MongoDB-backed sessions are selected for implementation; single-origin operation is implemented. The free Render/Atlas deployment in `DEPLOYMENT.md` is authorized and in progress.
 - Identity implementation policies are recorded in `docs/SECURITY.md`: scrypt, eight-hour absolute MongoDB sessions, strict Origin/custom-header CSRF defense and MongoDB-backed authentication limits.
 - Bounded inputs in `docs/API_DETAILS.md` and the unchanged 80% critical coverage target in `docs/QUALITY.md` are selected implementation baselines. Formal SRS approval remains pending; browser/zoom limits are reported explicitly.
 
@@ -70,7 +70,6 @@ Deferral does not remove basic security, accessibility, responsive design, trans
 |---|---|
 | What LMS SRS template, deadline, filename and submission evidence are required? | Before SRS submission |
 | Is the revised SRS transition/date/PATCH contract approved for submission? | Before SRS approval |
-| Which free hosting options are currently suitable, and is sleeping acceptable for evaluation? | Before approving deployment |
 | What are the individual author/student ID, institution/mentor and final deadline? | Before final submission |
 | How will reviewers receive an admin demo account without exposing credentials? | Before final submission |
 

@@ -1,6 +1,6 @@
-# Proposed LabFlow demonstration release
+# LabFlow demonstration deployment
 
-Prepared 22 October 2026. The owner authorized repository publishing to `milan-kb/LabFlow`; cloud provisioning and hosted verification remain pending. The remaining cloud plan requires owner approval; all costs must remain zero, with no card, paid tier or automatic paid upgrade.
+Prepared 22 October 2026. The owner authorized repository publishing to `milan-kb/LabFlow`; cloud provisioning and hosted verification remain pending. On 22 October 2026 the owner approved the named free infrastructure and public synthetic demonstration. All costs must remain zero, with no card, paid tier or automatic paid upgrade.
 
 ## Named destinations
 
@@ -8,7 +8,7 @@ Prepared 22 October 2026. The owner authorized repository publishing to `milan-k
 2. Create a **separate** Atlas project `labflow-capstone` and Free/M0 cluster `labflow-demo` on AWS Mumbai, subject to current free-tier availability. Read-only plugin inspection found an existing free `Cluster0` in project `assignment` (AWS Mumbai, MongoDB 8.0.34, idle/active); this proposal does not modify or repurpose it.
 3. Create one Render **Free** Node web service `labflow-demo` in Singapore, serving the React build and Express API from one HTTPS origin. Names/URL remain subject to availability; do not invent a live URL. The prepared `render.yaml` disables automatic deployments.
 
-The Atlas project/user/network changes and public app exposure require approval. Use the installed Atlas plugin for supported approved actions. GitHub/Render account access may require the owner to sign in; do not ask for passwords in chat. No additional plugin is necessary for local work.
+The Atlas project/user/network changes and public synthetic app exposure are authorized under the approved zero-cost plan. Use the installed Atlas plugin for supported approved actions. GitHub/Render account access may require the owner to sign in; do not ask for passwords in chat. No additional plugin is necessary for local work.
 
 ## Free-tier tradeoffs and sources
 
@@ -31,7 +31,7 @@ The Blueprint uses documented manual deployment, secret prompts and generated se
 
 1. Record approved repo/account/visibility, cloud project/cluster and Render service/URL, zero-cost plan, deployed commit and timestamp. Run remote CI once available.
 2. Confirm readiness, HTTPS/security headers, correct origin, secure cookies, restored login/logout and source-IP authentication limits. Check browser requests use relative API URLs and no localhost endpoint.
-3. Run real transaction commit/rollback and competing-approval acceptance against **isolated synthetic test records** on the approved cloud cluster. The current test harness always creates a temporary local replica set; it is not an Atlas acceptance command. Add an explicit cloud verification harness that refuses non-test database names before cloud testing.
+3. Run real transaction commit/rollback and competing-approval acceptance against **isolated synthetic test records** on the approved cloud cluster. The current test harness always creates a temporary local replica set; it is not an Atlas acceptance command. Run `npm run test:cloud` with the dedicated verification user and empty acceptance databases. Its guarded fixture refuses the demo database and cleans its own test collections.
 4. Complete the actual public student/admin journey: request, approve/reject/cancel, issue, damage, both return conditions, maintenance/restore, dashboard and retained history. Capture genuine screenshots without secrets.
 5. Verify refresh of a SPA deep link, missing-asset/API errors, keyboard/mobile behavior, native browser 200% zoom and the selected stable Chromium browser/version. Other-engine and screen-reader claims require their own evidence. Current CSS enlargement and in-app scans remain explicitly scoped.
 6. Inspect provider logs and memory during sign-ins, measure warm/cold behavior, and record the limitations for reviewers. The local 250ms p95 target is not a guarantee for sleeping free hosting.
@@ -40,6 +40,6 @@ The Blueprint uses documented manual deployment, secret prompts and generated se
 
 During live acceptance, inspect health, safe error counts, client errors, latency and provider memory. A readiness failure, broken authentication, allocation inconsistency or new repeated 500 response stops evaluation. Return to the last verified deployment commit through Render's manual deployment/rollback, then repeat health/session/core-flow checks. Keep Atlas data and indexes intact; code rollback does not mean database deletion or a destructive reset. No schema migration is currently planned. If no previous hosted version exists, suspend the demo and fix it rather than advertise success.
 
-## Approval needed
+## Authorization and current progress
 
-Approve the named free cloud infrastructure and public synthetic demonstration, then provide the available Render login. Repository publishing to `milan-kb/LabFlow` has already been authorized; its visibility and reviewer access remain separate checks. This approval is separate from SRS approval and college submission. If the free provider requires payment/card entry or a resource limit is exhausted, stop and present the actual choice without upgrading.
+The owner approved the plan on 22 October 2026. Atlas project `labflow-capstone` (`6ada129837098679707baf8a`) and Free cluster `labflow-demo` are created on AWS Mumbai (`AP_SOUTH_1`), running MongoDB 8.0.34. The `labflow_app` user is restricted to readWrite on `labflow`. A separate `labflow_verify` user has readWrite/dbAdmin only on the three acceptance databases. Credentials are stored privately outside Git. Cloud acceptance is in progress. The existing assignment project is untouched. Render workspace `LabFlow` (`tea-dbd4c5jrjlhs73d3k8l0`) is created on Hobby with no card on file. The existing workspace is untouched. Web-service setup and hosted verification are in progress; no live URL is claimed yet. SRS submission and unknown college metadata remain separate.

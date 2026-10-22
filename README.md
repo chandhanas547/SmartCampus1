@@ -40,7 +40,7 @@ The architecture is a React client communicating with an Express JSON API; only 
 
 ## Current status
 
-**Core application locally verified; release preparation is ready for review.** Identity, inventory, decisions/cancellation, issue, damage, inspected return, maintenance and dashboard are implemented. All 45 tests, lint/build and the 80% critical coverage gates pass; real browser and production-process evidence is recorded. Native browser zoom and public deployment acceptance remain open. No hosted application or submission is claimed.
+**Core application locally verified; release preparation is ready for review.** Identity, inventory, decisions/cancellation, issue, damage, inspected return, maintenance and dashboard are implemented. All 47 tests, lint/build and the 80% critical coverage gates pass; real browser and production-process evidence is recorded. Native browser zoom and public deployment acceptance remain open. No hosted application or submission is claimed.
 
 The owner authorized development on 21 October 2026 while SRS approval and submission remain pending. Scope and business rules are recorded in [decisions](docs/DECISIONS.md).
 
@@ -91,13 +91,15 @@ npm run build
 
 Or run `npm run check` for all four. `npm test` covers API/configuration/static-serving behavior and the client API module; integration tests prove transaction commit and rollback on a real replica set. The client tests use a dedicated process with Node's test isolation disabled to ensure all five cases are individually executed and reported on the pinned runtime.
 
+`npm run test:cloud` reuses all 28 integration cases against the approved Atlas cluster. It requires ignored `.local/cloud/acceptance.env` with a dedicated `MONGODB_ACCEPTANCE_URI` targeting `/labflow_acceptance`. The command accepts only three isolated databases (`labflow_acceptance_database`, `_identity`, `_domain`), refuses non-empty databases, and removes only its own test collections afterward. Keep the verification user restricted to those databases; never provide the app database URI. Local checks always use temporary loopback databases.
+
 `npm run test:coverage` enforces the existing 80% line/branch target for auth, ownership and circulation. Accessibility tooling, local performance measurement and the scope of these checks are documented in [the quality baseline](docs/QUALITY.md).
 
-A GitHub Actions workflow runs the same checks plus an audit on pushes and pull requests. Check [Actions](https://github.com/milan-kb/LabFlow/actions) for remote results; the local verification below does not claim a GitHub CI result. Current verification is summarized below; older milestone records remain available in Git history.
+The initial GitHub Actions run passed for `80582af`. A GitHub Actions workflow runs the same checks plus an audit on pushes and pull requests. Check [Actions](https://github.com/milan-kb/LabFlow/actions) for remote results; the local verification below does not claim a GitHub CI result. Current verification is summarized below; older milestone records remain available in Git history.
 
 ## Production shape
 
-Run `npm run build`, provide valid runtime configuration, then run `npm start` with `NODE_ENV=production`. Production requires an explicit HTTPS `APP_ORIGIN`, a transaction-capable MongoDB URI and an appropriate `HOST` (usually `0.0.0.0` on a managed host). HTTPS terminates at the selected host/reverse proxy; the application process listens over HTTP behind it. Cloud hosting, deployment credentials and approval to publish the hosted application remain pending. Repository publishing to `milan-kb/LabFlow` was authorized separately.
+Run `npm run build`, provide valid runtime configuration, then run `npm start` with `NODE_ENV=production`. Production requires an explicit HTTPS `APP_ORIGIN`, a transaction-capable MongoDB URI and an appropriate `HOST` (usually `0.0.0.0` on a managed host). HTTPS terminates at the selected host/reverse proxy; the application process listens over HTTP behind it. The owner approved the zero-cost Render/Atlas deployment and public synthetic demonstration on 22 October 2026; setup and hosted verification are in progress. Repository publishing to `milan-kb/LabFlow` was authorized separately.
 
 ## Scope
 
@@ -115,13 +117,13 @@ For synthetic **local development only**, run `npm run seed:demo` with the local
 
 ## Verification and remaining release work
 
-The local review passes 45 tests (12 server, five client API and 28 real database integration tests), lint and the production build. Tests cover authentication, ownership, concurrent allocation, rollback, strict inputs and administrator-only borrower contacts. Dashboard counts open filtered lists; damaged returns require an inspection note. The browser review checks these changes with synthetic accounts. Critical coverage is 99.41% lines and 92.66% branches; the unchanged 80% gates pass. The dependency audit found zero vulnerabilities. The updated return screen passed axe checks at 1280px and 320px with no findings or horizontal overflow; the equipment archive disclosure also passed and supports keyboard cancellation. Full accessibility scope is recorded in [QUALITY](docs/QUALITY.md).
+The local review passes 47 tests (14 server, five client API and 28 real database integration tests), lint and the production build. Tests cover authentication, ownership, concurrent allocation, rollback, strict inputs and administrator-only borrower contacts. Dashboard counts open filtered lists; damaged returns require an inspection note. The browser review checks these changes with synthetic accounts. Critical coverage is 99.41% lines and 92.66% branches; the unchanged 80% gates pass. The dependency audit found zero vulnerabilities. The updated return screen passed axe checks at 1280px and 320px with no findings or horizontal overflow; the equipment archive disclosure also passed and supports keyboard cancellation. Full accessibility scope is recorded in [QUALITY](docs/QUALITY.md).
 
 Report illustrations and local performance/production measurements are in `docs/evidence/`. Old milestone logs, handoff prompts and temporary review files were removed; their history is preserved in Git. The maintained regression suite and developer accessibility helper remain available to verify fixes.
 
 Remaining before assessment:
 
-- Approve and execute the [deployment proposal](docs/DEPLOYMENT.md), then verify real HTTPS, cloud transactions and the public student/admin journey.
+- Complete the approved [deployment](docs/DEPLOYMENT.md), then verify real HTTPS, cloud transactions and the public student/admin journey.
 - Complete native browser zoom and the selected browser checks; in-app scans and CSS enlargement have narrower scope.
 - Review the [SRS DOCX](docs/exports/LabFlow_SRS_DRAFT_0.4.docx) and [report draft](docs/REPORT_DRAFT.md). The SRS is a 23-page review export, not approved or submitted. Its source is [SRS_DRAFT](docs/SRS_DRAFT.md); regeneration requires rendering and inspecting every page.
 - Fill individual author/student ID, institution/mentor if required; confirm LMS filename, format, deadline and procedure. These details are unknown from the two supplied ICTAK references. Submission requires explicit authorization and a real receipt.

@@ -1,14 +1,13 @@
 import assert from 'node:assert/strict';
 import { after, afterEach, before, test } from 'node:test';
 import { randomBytes } from 'node:crypto';
-import { MongoMemoryReplSet } from 'mongodb-memory-server-core';
-import { connectDatabase } from '../../src/database.js';
+import { openTestDatabase } from '../database-fixture.js';
 import { createApp } from '../../src/app.js';
 import { prepareIdentity, SESSION_MS } from '../../src/identity/index.js';
 import { userModel } from '../../src/identity/user.js';
 import { createAdministrator } from '../../src/identity/admin.js';
 
-let replica, connection, server, base, student;
+let fixture, connection, server, base, student;
 let clock = Date.now();
 const password = randomBytes(24).toString('base64url');
 const headers = { origin: 'http://localhost:5173', 'content-type': 'application/json', 'x-labflow-request': '1' };
@@ -22,8 +21,8 @@ async function login() {
   return response.headers.get('set-cookie').split(';')[0];
 }
 before(async () => {
-  replica = await MongoMemoryReplSet.create({ replSet: { count: 1, ip: '127.0.0.1' } });
-  connection = await connectDatabase(replica.getUri('identity_test'));
+  fixture = await openTestDatabase('identity');
+  connection = fixture.connection;
   await prepareIdentity(connection);
   server = createApp({ connection, sessionSecret: randomBytes(48).toString('hex'), now: () => clock, origin: headers.origin, checkDatabase: async () => {} }).listen(0, '127.0.0.1');
   await new Promise((resolve) => server.once('listening', resolve));
@@ -32,8 +31,7 @@ before(async () => {
 afterEach(async () => connection.db.collection('authLimits').deleteMany({}));
 after(async () => {
   if (server) await new Promise((resolve) => server.close(resolve));
-  await connection?.close();
-  await replica?.stop();
+  await fixture?.close();
 });
 
 test('registration normalizes email, hashes password and returns only safe fields', async () => {
