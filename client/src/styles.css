@@ -111,6 +111,9 @@ textarea { min-height: 90px; resize: vertical; }
 .secondary-button:hover { background: #dce5d6; }
 .danger-button { background: #fff; border: 1px solid #a66c59; color: #913a26; margin-top: 24px; }
 .danger-button:hover { background: #f5e7e1; }
+.archive-confirmation { margin-top: 24px; }
+.archive-confirmation summary { min-height: 44px; padding: 12px 0; cursor: pointer; color: #913a26; font-size: 13px; }
+.archive-confirmation .danger-button { margin-top: 0; }
 .back-link { display: inline-block; min-height: 44px; padding-top: 28px; font-size: 12px; }
 .feedback { font-size: 13px; color: #604718; line-height: 1.7; }
 .feedback:empty { display: none; }

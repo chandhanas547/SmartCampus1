@@ -301,24 +301,23 @@ export function EquipmentDetail({ user, id }) {
                 </form>
               )}
               {['AVAILABLE', 'MAINTENANCE'].includes(row.status) && (
-                <button
-                  type="button"
-                  className="danger-button"
-                  disabled={mutation.busy}
-                  onClick={() => {
-                    if (
-                      window.confirm(
-                        'Archive this equipment? It will be hidden from students and cannot be restored.',
-                      )
-                    )
+                <details className="archive-confirmation">
+                  <summary>Archive equipment</summary>
+                  <p>Archived equipment is hidden from students and cannot be restored.</p>
+                  <button
+                    type="button"
+                    className="danger-button"
+                    disabled={mutation.busy}
+                    onClick={() =>
                       mutation.run(async () => {
                         await apiRequest(`/equipment/${id}`, { method: 'DELETE' });
                         window.location.hash = 'catalog';
-                      }, 'Equipment archived.');
-                  }}
-                >
-                  Archive equipment
-                </button>
+                      }, 'Equipment archived.')
+                    }
+                  >
+                    Confirm archive
+                  </button>
+                </details>
               )}
               <p className="field-hint">
                 Open requests block manual maintenance and archive. Historical borrowing records are
