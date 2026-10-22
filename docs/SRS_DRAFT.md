@@ -3,7 +3,7 @@
 | Document field | Value |
 |---|---|
 | Project | LabFlow — College Laboratory Equipment Management System |
-| Document version | 0.3 Draft |
+| Document version | 0.4 Draft |
 | Status | Draft for review — not approved or submitted |
 | Prepared by | TBD: individual author name and student ID |
 | Institution | TBD |
@@ -17,12 +17,13 @@
 | 0.1 | TBD | TBD | Initial SRS draft based on the approved LabFlow master plan and ICTAK references. |
 | 0.2 | TBD | TBD | Clarified inventory guards, dates, damage inspection and PATCH contract; finalized demo defaults. |
 | 0.3 | 2026-10-21 | TBD | Recorded individual submission and owner authorization to start development; requirements remain a review draft. |
+| 0.4 | 2026-10-22 | TBD | Synchronized implemented input/security policies, quality gates and supporting design; no approval or submission claimed. |
 
 ## 1. Introduction
 
 ### 1.1 Purpose
 
-This Software Requirements Specification (SRS) defines the MVP requirements and verification basis for LabFlow. It is intended for the student team, instructor/reviewer and future implementation sessions. It remains awaiting review and submission. On 21 October 2026 the owner authorized application coding to begin before that process is complete.
+This Software Requirements Specification (SRS) defines the MVP requirements and verification basis for LabFlow. It is intended for the individual student developer, instructor/reviewer and future implementation sessions. It remains awaiting review and submission. On 21 October 2026 the owner authorized application coding to begin before that process is complete.
 
 This SRS uses an IEEE-inspired structure because no mandatory LMS template has been supplied. The LMS requirement for a separate SRS was communicated independently; it is not stated in either local ICTAK DOCX reference.
 
@@ -52,13 +53,13 @@ The MVP is not a production campus identity, finance, notification or repair-man
 | Student borrower | Discover available equipment, request it and track only their own borrowing records. |
 | Lab administrator | Maintain inventory and control every physical lending transition. |
 | College laboratory | Preserve consistent asset availability and borrowing history. |
-| Student development team | Build, test, document and demonstrate the capstone. |
+| Individual student developer | Build, test, document and demonstrate the capstone. |
 | ICTAK/LMS reviewer | Assess requirements, implementation evidence, documentation and live core flows. |
 
 ### 1.6 Requirement status and priority
 
 - **Approved baseline:** established project scope or policy, including the owner's requested demo defaults; this does not mean this draft is approved or submitted.
-- **Provisional:** retained for design continuity but requires confirmation before implementation.
+- **Provisional:** retained for document review; a dated implementation decision may select a working baseline under the owner's coding authorization without implying SRS approval.
 - **TBD:** unresolved; no behavior may be inferred silently.
 - **Must:** necessary for MVP acceptance.
 - **Should:** important, but may be deferred only with an explicit reason.
@@ -105,14 +106,14 @@ MongoDB replica set
 |---|---|
 | A single Node service may serve the built React application and `/api`. | Proposed |
 | Production uses managed MongoDB with replica-set transaction support. | Approved requirement; provider TBD |
-| Frontend and API use one origin to simplify cookie security and CORS. | Proposed |
+| Frontend and API use one origin to simplify cookie security and CORS. | Selected implementation baseline |
 | HTTPS and provider-managed environment variables are required when deployed. | Approved |
 | Only free services may be selected unless paid use is explicitly approved. | Approved |
 | Provider, region, URL, resource limits and sleep behavior are TBD. | TBD |
 
 ## 3. User roles and permissions
 
-Public registration creates only `STUDENT` accounts. Administrator provisioning is controlled outside public registration; its exact procedure is TBD before identity implementation.
+Public registration creates only `STUDENT` accounts. Administrator provisioning is controlled outside public registration through `npm run admin`, reading ignored runtime secrets and refusing elevation of an existing account. See `docs/SECURITY.md`.
 
 | Capability | Public | Student | Admin |
 |---|:---:|:---:|:---:|
@@ -143,7 +144,7 @@ F1–F11 are **Must** capabilities from the approved baseline. Their acceptance 
 | Requirement | The system shall register students and support login, session restoration and logout for valid users. |
 | Acceptance criteria | (1) Valid student registration creates one account and returns a safe user representation. (2) Email is normalized; a duplicate returns `409` and creates nothing. (3) Missing, malformed or out-of-range input is rejected and persisted nowhere. (4) A supplied role or admin field cannot create/elevate an admin. (5) Valid login starts a new session; invalid credentials do not disclose which field failed. (6) Logout destroys the session. (7) Passwords and hashes are never returned or logged. |
 
-Demo registration accepts only `name`, `email` and `password`; no student number or college-verification field is required. Actual author/team identity metadata remains TBD. Exact password and session limits await security implementation review under NFR-SEC.
+Demo registration accepts only `name`, `email` and `password`; no student number or college-verification field is required. Actual author identity metadata remains TBD. Selected password/session limits are defined under NFR-SEC and `docs/SECURITY.md`; formal document review remains pending.
 
 ### F2 — Access control and ownership
 
@@ -243,13 +244,13 @@ If a report exists, return requires a non-empty inspection note and an explicit 
 
 | ID | Priority / status | Requirement and measurable verification |
 |---|---|---|
-| NFR-SEC-01 | Must / Approved baseline; parameters TBD | Passwords shall be stored only as strong salted hashes. Database inspection and API/log checks shall find no plaintext password or returned hash. Algorithm, parameters and password bounds await implementation review before M3. |
-| NFR-SEC-02 | Must / Provisional mechanism | Bounded authentication is mandatory; server-side sessions remain proposed pending implementation review. If selected, production cookies shall be `HttpOnly`, `Secure`, host-only and use a reviewed `SameSite` policy; login regenerates and logout destroys the session. Store and lifetime are TBD. |
+| NFR-SEC-01 | Must / Selected implementation baseline | Passwords shall use salted asynchronous scrypt with N=131072, r=8, p=1, 16-byte random salts and 64-byte derived keys. Passwords are 12–128 characters and at most 512 UTF-8 bytes, without trimming/truncation. No plaintext password or hash is returned or logged. At most two hash jobs run concurrently. |
+| NFR-SEC-02 | Must / Selected implementation baseline | MongoDB-backed server sessions shall have an eight-hour absolute lifetime enforced independently of TTL cleanup. Production cookies are host-only `__Host-labflow.sid`, HttpOnly, Secure, SameSite=Lax and path `/`. Login regenerates; logout destroys. No browser token storage. |
 | NFR-SEC-03 | Must / Approved | Every protected endpoint shall pass tests for valid role, missing authentication and wrong role; owner-scoped endpoints shall also pass cross-user denial tests. |
 | NFR-SEC-04 | Must / Approved | Body, query, path, relevant headers and environment configuration shall be allowlist-validated. NoSQL operators and unapproved fields shall be rejected. |
 | NFR-SEC-05 | Must / Approved | Client errors shall use the documented shape and expose no stack trace, database detail, secret, session identifier or credential. |
-| NFR-SEC-06 | Must / Approved baseline; mechanism TBD | State-changing cookie-authenticated requests shall enforce CSRF protection and trusted origins; untrusted-origin tests shall fail. GET shall not change domain state. The defense mechanism awaits implementation review. |
-| NFR-SEC-07 | Must / Approved baseline; threshold TBD | Authentication endpoints shall be rate-limited. The numeric threshold awaits implementation review before M3 and shall have a boundary test. |
+| NFR-SEC-06 | Must / Selected implementation baseline | Every mutation, including login/registration, shall require exact configured Origin, JSON content type and X-LabFlow-Request header, and reject cross-site Fetch Metadata. GET shall not change domain state. Untrusted-origin and missing-header tests shall fail. |
+| NFR-SEC-07 | Must / Selected implementation baseline | Login/registration shall share a MongoDB-atomic limit of ten attempts per source IP per fixed 15-minute window; the eleventh attempt returns 429 with Retry-After. HMAC window IDs avoid storing raw IPs. Proxy trust requires deployment verification. |
 | NFR-SEC-08 | Must / Approved | Secrets shall exist only in runtime configuration. Repository/history and browser artifact scans shall find none; `.env.example` contains names only. |
 | NFR-PRI-01 | Must / Approved | The demo shall use synthetic identities. Stored personal data shall be limited to approved identity fields; retention/deletion policy is TBD before any real use. |
 
@@ -266,7 +267,7 @@ If a report exists, return requires a non-empty inspection note and an explicit 
 | ID | Priority / status | Requirement and measurable verification |
 |---|---|---|
 | NFR-PERF-01 | Must / Approved | All growing list endpoints shall paginate with a default of 20 and hard maximum of 50 records. |
-| NFR-PERF-02 | Should / Provisional | A quantitative warm-page/API performance budget shall be established from the working MVP in M8 and then recorded without weakening observed behavior. Advanced load testing is deferred until core flows work. |
+| NFR-PERF-02 | Should / Selected local baseline | Warm sequential paginated reads/dashboard shall target p95 below 250ms on the documented synthetic local dataset; a login sample targets below 2s. Initial client JavaScript shall remain below 100KiB gzip and CSS below 20KiB uncompressed. Record environment and samples; these are not hosted/load guarantees. See docs/QUALITY.md. |
 | NFR-PERF-03 | Must / Approved | User actions shall show immediate pending feedback and prevent duplicate submission while a request is in flight. |
 
 ### 5.4 Reliability and data integrity
@@ -285,7 +286,7 @@ If a report exists, return requires a non-empty inspection note and an explicit 
 |---|---|---|
 | NFR-MNT-01 | Must / Approved | Frontend and backend responsibilities shall remain separated; routes contain mapping, the API client contains HTTP calls and shared circulation rules have one server implementation. |
 | NFR-MNT-02 | Must / Approved | The production build and lint commands, once established in M2, shall complete with zero errors before a milestone is accepted. |
-| NFR-MNT-03 | Should / Provisional | Auth, ownership and circulation code shall target at least 80% line and branch coverage. The target is approved or revised before implementation, not lowered to pass existing code. |
+| NFR-MNT-03 | Should / Selected implementation baseline | Auth, ownership and circulation modules shall meet the existing 80% aggregate line and branch coverage target, enforced by npm run test:coverage. Do not lower thresholds, skip tests or remove assertions to pass. Browser/process entry coverage is reported separately. |
 | NFR-MNT-04 | Must / Approved | A fresh clone shall run by following README prerequisites, environment names and commands without undocumented manual source edits. |
 | NFR-MNT-05 | Must / Approved | Each milestone shall update relevant contracts/evidence and use meaningful version-control history; no test or deployment result is claimed before execution. |
 
@@ -438,7 +439,7 @@ PATCH accepts exactly one action per call. Every action requires a non-negative 
 - Frontend validation improves feedback; server validation is authoritative.
 - Validate body, path, query, relevant headers and runtime configuration.
 - Reject unknown writable fields, MongoDB operators, invalid IDs/dates/enums and oversized text/bodies.
-- Proposed initial text limits retained from the earlier design discussion are: names 2–120 characters, purpose 10–500 and descriptions/reports no more than 2,000. These are **Provisional** until SRS approval, not already established by the committed master plan.
+- Selected implementation limits: asset tag 2–40 uppercase characters (letter/digit followed by letters/digits/dot/underscore/hyphen), immutable; equipment name 2–120, category/location 2–80/2–120; purpose 10–500; descriptions/condition notes at most 2,000; required reasons/reports/inspection notes 1–2,000 non-whitespace characters. Search is bounded literal text up to 80. IDs are 24 hexadecimal characters, request keys UUIDs, page 1–10,000 and limit 1–50 (default 20). Unknown fields are rejected. `docs/API_DETAILS.md` defines filter semantics, strict PATCH allowlists and explicit IST input conversion.
 - Date validation follows Section 6.3; metadata edits and explicit transition actions use the PATCH allowlist in Section 8.2. `note` and required inspection notes must contain non-whitespace text.
 - Forms show inline associated errors and preserve recoverable user input.
 
@@ -509,12 +510,12 @@ This table defines planned evidence, not completed results.
 - Existing cancellation policy is retained: students cancel own pending/approved-unissued requests; admins cancel approved-unissued reservations with a reason.
 - No automatic expiry/rejection worker; pending requests and expired reservations require the explicit handling in Section 6.3.
 
-### 12.2 Provisional choices
+### 12.2 Selected implementation choices awaiting document approval
 
-- Server-side MongoDB-backed sessions and single-origin deployment.
-- Initial input lengths and 80% critical-code coverage target.
-- Hash algorithm/parameters, password bounds, session lifetime, CSRF mechanism and rate-limit threshold await security implementation review; required security outcomes are not deferred.
-- Automated accessibility target and initial Chromium verification scope remain draft details for review.
+- MongoDB-backed sessions, single origin, identity parameters in `docs/SECURITY.md`, and bounded fields/filter semantics in `docs/API_DETAILS.md`.
+- Existing 80% critical coverage target and measured local performance budget in `docs/QUALITY.md`; no threshold was reduced to pass.
+- WCAG 2.2 AA remains a target. Automated findings, manual keyboard/reflow, native browser zoom and browser-engine scope must be reported distinctly. The current in-app-browser evidence does not establish full conformance.
+- `docs/DESIGN.md` contains desktop/mobile layouts, navigation, lifecycle and data diagrams.
 
 ### 12.3 Exclusions
 
@@ -531,16 +532,15 @@ This table defines planned evidence, not completed results.
 | Decision | Required before |
 |---|---|
 | LMS SRS template, deadline, filename and evidence of submission | SRS submission |
-| Team names, student IDs, institution and faculty/mentor | SRS submission |
+| Individual author name/student ID, institution and faculty/mentor | SRS submission |
 | Review of this revision's detailed transition, date and PATCH contracts | SRS approval |
-| Password algorithm parameters, password bounds, session store/lifetime and CSRF mechanism | Identity implementation |
-| Authentication rate-limit threshold | Identity implementation |
+| Formal review of selected identity/security policies | SRS approval |
 | Free hosting provider and whether sleeping is acceptable | Deployment planning |
 | Required final browser matrix and measured performance budget | M8 verification planning |
 | Secure delivery of reviewer admin access | Final submission |
 | Data retention/deletion period if use expands beyond synthetic demo data | Before any real-data use |
 
-This revision finalizes defaults previously marked provisional in MASTER_PLAN and elaborates its lifecycle/API guards without adding endpoints. DECISIONS is updated to prevent contradictory implementation guidance; the master plan's older provisional labels are historical, not renewed uncertainty. This SRS remains a review draft, and unresolved security/deployment choices cannot be inferred silently.
+This revision finalizes defaults previously marked provisional in MASTER_PLAN and elaborates its lifecycle/API guards without adding endpoints. DECISIONS is updated to prevent contradictory implementation guidance; the master plan's older provisional labels are historical, not renewed uncertainty. This SRS remains a review draft, and unresolved deployment and submission choices cannot be inferred silently.
 
 ## 13. References
 
@@ -551,8 +551,4 @@ This revision finalizes defaults previously marked provisional in MASTER_PLAN an
 5. `docs/DECISIONS.md`, accepted, proposed and unresolved decisions.
 6. LMS SRS requirement communicated by the project owner. The screenshot/template, deadline and submission procedure are not present in the repository and remain TBD.
 
-Official implementation references identified by ICTAK include React, Node.js, Express, MongoDB, Mongoose, MDN HTTP/CORS, OWASP Top 10 and WCAG 2.2 documentation. Exact framework versions and implementation patterns will be verified before M2; this draft does not select or claim installed versions.
-
-## Implementation policy note
-
-On 21 October 2026 the engineering baseline in `docs/SECURITY.md` selected exact identity/session/CSRF/rate-limit and registration bounds for implementation. Earlier TBD/provisional mechanism references in this draft must be read with that dated note. The SRS remains unapproved and unsubmitted. No functional endpoint is added by the security mechanism.
+Official implementation references include React, Node.js, Express, MongoDB, Mongoose, OWASP and WCAG documentation. Exact installed versions are pinned in the root workspace lockfile; source links for selected mechanisms are in `docs/SECURITY.md` and `docs/QUALITY.md`. Supporting implementation contracts and layouts are in `docs/API_DETAILS.md` and `docs/DESIGN.md`. Measured results live under `docs/evidence/`; requirements and recorded results remain distinct.

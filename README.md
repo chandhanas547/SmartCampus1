@@ -2,15 +2,15 @@
 
 LabFlow is a demo-only, single-laboratory equipment management capstone. Students find individually tagged equipment, request borrowing, review request history and report damage. Lab administrators manage inventory, decide requests, record issue and inspected return, and monitor current activity.
 
-## Planned stack
+## Stack
 
 - MongoDB and Mongoose
 - Express and Node.js
 - React and Vite
 
-The planned architecture is a React client communicating with an Express JSON API; only the API accesses MongoDB.
+The architecture is a React client communicating with an Express JSON API; only the API accesses MongoDB.
 
-## Proposed MVP
+## Capabilities
 
 ### Student
 
@@ -38,7 +38,7 @@ The planned architecture is a React client communicating with an Express JSON AP
 
 ## Current status
 
-**M4–M6 implemented and locally verified; M7/M8 verification in progress.** React connects through the Express API to a real MongoDB replica set. Identity, inventory, request decisions/cancellation, issue, damage reporting, inspected returns, maintenance and dashboard are implemented. The actual student/admin browser journey passed. No hosted application or submission is claimed.
+**Core application locally verified; release preparation is ready for review.** Identity, inventory, decisions/cancellation, issue, damage, inspected return, maintenance and dashboard are implemented. All 44 tests, lint/build and the 80% critical coverage gates pass; real browser and production-process evidence is recorded. Native browser zoom and public deployment acceptance remain open. No hosted application or submission is claimed.
 
 The owner authorized development on 21 October 2026 while SRS approval and submission remain pending. See [decisions](docs/DECISIONS.md), [current handoff](docs/HANDOFF.md) and [task queue](tasks/todo.md).
 
@@ -114,3 +114,7 @@ Two original ICTAK DOCX files remain in the local project root for reference. Th
 Set `ADMIN_NAME`, `ADMIN_EMAIL` and a strong `ADMIN_PASSWORD` in ignored runtime configuration, then run `npm run admin`. The command refuses to elevate an existing account and never prints credentials. Remove the admin password from local configuration after provisioning. Public registration creates students only. `TRUST_PROXY_HOPS` defaults to `0`; set it to `1` only behind the verified single proxy selected for deployment. Identity implementation parameters are in `docs/SECURITY.md`.
 
 For synthetic **local development only**, run `npm run seed:demo` with the local database running. This creates two demo accounts and six example assets without overwriting existing inventory. Random account passwords are saved only in ignored `.local/demo-access.json` with owner-only file permissions. Repeated runs reuse those accounts. Never publish that file or use this seed command against a cloud database.
+
+## Review and release preparation
+
+The [SRS review copy](docs/exports/LabFlow_SRS_DRAFT_0.4.docx) remains unapproved/unsubmitted. [Readiness notes](docs/SRS_READINESS.md), the [evidence index](docs/EVIDENCE_INDEX.md), [report draft](docs/REPORT_DRAFT.md) and [deployment proposal](docs/DEPLOYMENT.md) distinguish verified local results from remaining approvals/live checks. [HANDOFF_PROMPT](docs/HANDOFF_PROMPT.md) routes a future chat to the incrementally maintained project state.

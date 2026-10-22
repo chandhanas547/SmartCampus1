@@ -44,13 +44,13 @@ This document records the assumptions that future sessions must not silently cha
 - Existing damage reports must be resolved at return with reviewer/time, matching inspection result and non-empty note, even for serviceable returns.
 - Inventory PATCH uses expected version and one explicit action: metadata edit, enter maintenance or restore. Manual transition notes are mandatory; allocation states cannot be set through PATCH.
 
-These policies supersede the older provisional labels in MASTER_PLAN. The detailed contract is in `SRS_DRAFT.md` revision 0.3 Draft and remains subject to document review; it is not evidence of SRS submission.
+These policies supersede the older provisional labels in MASTER_PLAN. The detailed contract is in `SRS_DRAFT.md` revision 0.4 Draft and remains subject to document review; it is not evidence of SRS submission.
 
 ## Provisional implementation choices
 
 - MongoDB-backed sessions are selected for implementation; single-origin operation is implemented. Hosting provider remains unselected.
 - Identity implementation policies are recorded in `docs/SECURITY.md`: scrypt, eight-hour absolute MongoDB sessions, strict Origin/custom-header CSRF defense and MongoDB-backed authentication limits.
-- Input lengths, critical-code coverage and draft accessibility/browser targets require review before enforcement; essential security and accessibility outcomes remain mandatory.
+- Bounded inputs in `docs/API_DETAILS.md` and the unchanged 80% critical coverage target in `docs/QUALITY.md` are selected implementation baselines. Formal SRS approval remains pending; browser/zoom limits are reported explicitly.
 
 ## Deferred from MVP
 
@@ -72,7 +72,7 @@ Deferral does not remove basic security, accessibility, responsive design, trans
 | Is the revised SRS transition/date/PATCH contract approved for submission? | Before SRS approval |
 | Identity policy baseline | Selected for implementation in `docs/SECURITY.md`; verify at M3 |
 | Which free hosting options are currently suitable, and is sleeping acceptable for evaluation? | Before deployment planning |
-| What is the team size, ownership split and final deadline? | Before scheduling milestones |
+| What are the individual author/student ID, institution/mentor and final deadline? | Before final submission |
 | How will reviewers receive an admin demo account without exposing credentials? | Before final submission |
 
 ## Change rule
