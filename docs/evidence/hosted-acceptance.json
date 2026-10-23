@@ -1,0 +1,306 @@
+{
+  "date": "2026-10-23",
+  "origin": "https://labflow-lemon.vercel.app",
+  "codeCommit": "75a65ff9bc004d4bf3951dea7a8e91503703a935",
+  "platform": "Vercel Hobby",
+  "functionRegion": "bom1",
+  "atlas": "labflow-capstone / labflow-demo / Free AWS Mumbai",
+  "checks": {
+    "api": {
+      "verifiedAt": "2026-10-23T05:03:35.229Z",
+      "origin": "https://labflow-lemon.vercel.app",
+      "checks": [
+        {
+          "name": "readiness without injected routing parameters",
+          "status": 200
+        },
+        {
+          "name": "strict unknown query rejection",
+          "status": 400
+        },
+        {
+          "name": "cross-origin mutation blocked",
+          "status": 403
+        },
+        {
+          "name": "missing custom CSRF header blocked",
+          "status": 403
+        },
+        {
+          "name": "malformed JSON rejected",
+          "status": 400
+        },
+        {
+          "name": "16 KiB body limit retained on Vercel",
+          "status": 413
+        },
+        {
+          "name": "unauthenticated inventory blocked",
+          "status": 401
+        },
+        {
+          "name": "public registration creates student",
+          "status": 201
+        },
+        {
+          "name": "admin login over production HTTPS",
+          "status": 200
+        },
+        {
+          "name": "secure host-only HttpOnly SameSite session cookie",
+          "passed": true
+        },
+        {
+          "name": "authenticated unknown API is JSON 404",
+          "status": 404
+        },
+        {
+          "name": "admin dashboard and database session",
+          "status": 200
+        },
+        {
+          "name": "admin logout",
+          "status": 204
+        },
+        {
+          "name": "logout invalidates server session",
+          "status": 401
+        }
+      ]
+    },
+    "domain": {
+      "verifiedAt": "2026-10-23T09:59:53.281Z",
+      "origin": "https://labflow-lemon.vercel.app",
+      "checks": [
+        {
+          "name": "synthetic Demo Student login",
+          "status": 200
+        },
+        {
+          "name": "synthetic Demo Lab Administrator login",
+          "status": 200
+        },
+        {
+          "name": "student cannot read admin dashboard",
+          "status": 403
+        },
+        {
+          "name": "student cannot create inventory",
+          "status": 403
+        },
+        {
+          "name": "catalog over hosted database",
+          "status": 200
+        },
+        {
+          "name": "student request for cancellation",
+          "status": 201
+        },
+        {
+          "name": "second synthetic student registration",
+          "status": 201
+        },
+        {
+          "name": "synthetic Demo Ownership Check login",
+          "status": 200
+        },
+        {
+          "name": "another student cannot read request",
+          "status": 404
+        },
+        {
+          "name": "another student cannot cancel request",
+          "status": 404
+        },
+        {
+          "name": "student cannot approve own request",
+          "status": 403
+        },
+        {
+          "name": "owner cancels pending request",
+          "status": 200
+        },
+        {
+          "name": "student request for rejection",
+          "status": 201
+        },
+        {
+          "name": "admin rejects with reason",
+          "status": 200
+        },
+        {
+          "name": "student request for serviceable return",
+          "status": 201
+        },
+        {
+          "name": "admin approval reserves asset",
+          "status": 200
+        },
+        {
+          "name": "admin issue over cloud transaction",
+          "status": 200
+        },
+        {
+          "name": "serviceable return completes loan",
+          "status": 200
+        },
+        {
+          "name": "serviceable return releases equipment",
+          "status": 200
+        },
+        {
+          "name": "synthetic API session logout",
+          "status": 204
+        },
+        {
+          "name": "synthetic API session logout",
+          "status": 204
+        },
+        {
+          "name": "synthetic API session logout",
+          "status": 204
+        }
+      ]
+    },
+    "proxy": {
+      "verifiedAt": "2026-10-23T10:02:15.412Z",
+      "origin": "https://labflow-lemon.vercel.app",
+      "checks": [
+        {
+          "attempt": 1,
+          "status": 400
+        },
+        {
+          "attempt": 2,
+          "status": 400
+        },
+        {
+          "attempt": 3,
+          "status": 400
+        },
+        {
+          "attempt": 4,
+          "status": 400
+        },
+        {
+          "attempt": 5,
+          "status": 400
+        },
+        {
+          "attempt": 6,
+          "status": 400
+        },
+        {
+          "attempt": 7,
+          "status": 400
+        },
+        {
+          "attempt": 8,
+          "status": 400
+        },
+        {
+          "attempt": 9,
+          "status": 400
+        },
+        {
+          "attempt": 10,
+          "status": 400
+        },
+        {
+          "attempt": 11,
+          "status": 429
+        }
+      ],
+      "repeatedSpoofStatus": 429,
+      "retryAfter": 765,
+      "resetAt": "2026-10-23T10:15:00.413Z"
+    },
+    "static": {
+      "verifiedAt": "2026-10-23T10:02:33.843Z",
+      "origin": "https://labflow-lemon.vercel.app",
+      "checks": [
+        {
+          "path": "/",
+          "status": 200,
+          "securityHeaders": true,
+          "contentType": "text/html; charset=utf-8"
+        },
+        {
+          "path": "/requests",
+          "status": 200,
+          "securityHeaders": true,
+          "contentType": "text/html; charset=utf-8"
+        },
+        {
+          "path": "/assets/no-such-file.js",
+          "status": 404,
+          "securityHeaders": true,
+          "contentType": "text/plain; charset=utf-8"
+        },
+        {
+          "path": "/api/health",
+          "status": 200,
+          "securityHeaders": true,
+          "contentType": "application/json; charset=utf-8"
+        },
+        {
+          "path": "/api/health?unexpected=1",
+          "status": 400,
+          "securityHeaders": true,
+          "contentType": "application/json; charset=utf-8"
+        }
+      ],
+      "concurrentHealth": [
+        {
+          "status": 200,
+          "ms": 83
+        },
+        {
+          "status": 200,
+          "ms": 185
+        },
+        {
+          "status": 200,
+          "ms": 168
+        },
+        {
+          "status": 200,
+          "ms": 186
+        },
+        {
+          "status": 200,
+          "ms": 170
+        }
+      ]
+    }
+  },
+  "browser": {
+    "engine": "In-app Chrome 155 on Linux",
+    "verified": [
+      "admin inventory creation",
+      "student catalog and borrowing request",
+      "admin approval and issue",
+      "student damage report",
+      "damaged return resolves report and enters maintenance",
+      "restoration to available",
+      "dashboard counts",
+      "session restoration after reload",
+      "320 CSS pixel dashboard without horizontal overflow",
+      "keyboard skip link focuses main"
+    ],
+    "screenshots": [
+      "login.png",
+      "catalog.png",
+      "student-pending.png",
+      "admin-issued.png",
+      "admin-returned.png",
+      "dashboard.png",
+      "dashboard-320.png"
+    ]
+  },
+  "limitations": [
+    "One readiness request returned 503; UI retry recovered. Ten subsequent sequential and five concurrent health reads returned 200. Root cause not established.",
+    "Native browser zoom, other engines, screen readers, load testing and availability guarantees are not claimed.",
+    "No college approval or submission is claimed."
+  ]
+}

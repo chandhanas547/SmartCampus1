@@ -1,5 +1,7 @@
 # LabFlow
 
+Live demonstration: [LabFlow](https://labflow-lemon.vercel.app) · [API readiness](https://labflow-lemon.vercel.app/api/health). Synthetic data only.
+
 Source repository: [milan-kb/LabFlow](https://github.com/milan-kb/LabFlow).
 
 LabFlow is a demo-only, single-laboratory equipment management capstone. Students find individually tagged equipment, request borrowing, review request history and report damage. Lab administrators manage inventory, decide requests, record issue and inspected return, and monitor current activity.
@@ -40,7 +42,7 @@ The architecture is a React client communicating with an Express JSON API; only 
 
 ## Current status
 
-**Core application locally verified; release preparation is ready for review.** Identity, inventory, decisions/cancellation, issue, damage, inspected return, maintenance and dashboard are implemented. All 49 tests, lint/build and the 80% critical coverage gates pass; real browser and production-process evidence is recorded. Native browser zoom and public deployment acceptance remain open. No hosted application or submission is claimed.
+**The synthetic demo is live on Vercel Hobby with Atlas Free.** Identity, inventory, decisions/cancellation, issue, damage, inspected return, maintenance and dashboard are implemented and verified on the public site. All 49 local tests, lint/build and critical coverage gates pass; all 28 isolated Atlas integration cases also pass. Live API/security checks and the browser borrowing journey pass. Native browser zoom and other-engine checks remain unverified. SRS approval and college submission remain pending; deployment does not imply either.
 
 The owner authorized development on 21 October 2026 while SRS approval and submission remain pending. Scope and business rules are recorded in [decisions](docs/DECISIONS.md).
 
@@ -95,11 +97,11 @@ Or run `npm run check` for all four. `npm test` covers API/configuration/static-
 
 `npm run test:coverage` enforces the existing 80% line/branch target for auth, ownership and circulation. Accessibility tooling, local performance measurement and the scope of these checks are documented in [the quality baseline](docs/QUALITY.md).
 
-The [GitHub Actions run for `bac83f0`](https://github.com/milan-kb/LabFlow/actions/runs/39823154784) passed, including the workflow's checks, coverage gates and audit. The workflow runs on pushes and pull requests. Current local verification is summarized below; older milestone records remain available in Git history.
+The [GitHub Actions run for `9d23544`](https://github.com/milan-kb/LabFlow/actions/runs/39902827649) passed, including the workflow's checks, coverage gates and audit. The workflow runs on pushes and pull requests. Current local verification is summarized below; older milestone records remain available in Git history.
 
 ## Production shape
 
-Run `npm run build`, provide valid runtime configuration, then run `npm start` with `NODE_ENV=production`. Production requires an explicit HTTPS `APP_ORIGIN`, a transaction-capable MongoDB URI and an appropriate `HOST` (usually `0.0.0.0` on a managed host). HTTPS terminates at the selected host/reverse proxy; the application process listens over HTTP behind it. Render required a card even for Free. Vercel Hobby is selected after owner approval of the synthetic-demo Atlas network exception on 23 October 2026. All 28 isolated cloud acceptance cases pass, and their test databases are empty after cleanup. Vercel publication and hosted verification are pending. The local app configuration remains local. See [deployment status](docs/DEPLOYMENT.md). Repository publishing to `milan-kb/LabFlow` was authorized separately.
+Run `npm run build`, provide valid runtime configuration, then run `npm start` with `NODE_ENV=production`. Production requires an explicit HTTPS `APP_ORIGIN`, a transaction-capable MongoDB URI and an appropriate `HOST` (usually `0.0.0.0` on a managed host). HTTPS terminates at the selected host/reverse proxy; the application process listens over HTTP behind it. Render required a card even for Free. Vercel Hobby is selected after owner approval of the synthetic-demo Atlas network exception on 23 October 2026. All 28 isolated cloud acceptance cases pass, and their test databases are empty after cleanup. The public demo is [labflow-lemon.vercel.app](https://labflow-lemon.vercel.app), with the API function and database in Mumbai. Public HTTPS, secure cookies, CSRF, strict parsing, role/ownership restrictions and both return paths were verified on 23 October 2026. The local app configuration remains local. See [deployment status](docs/DEPLOYMENT.md). Repository publishing to `milan-kb/LabFlow` was authorized separately.
 
 ## Scope
 
@@ -123,7 +125,7 @@ Report illustrations and local performance/production measurements are in `docs/
 
 Remaining before assessment:
 
-- Complete card-free [hosting selection and deployment](docs/DEPLOYMENT.md). The ICTAK guide's final checklist asks for a hosted URL and live core-flow evidence; localhost does not satisfy those items unless the reviewer accepts an exception.
+- Review the [deployment evidence and operating limits](docs/DEPLOYMENT.md). The public demo satisfies the hosted-URL/core-flow checklist items; one transient readiness error recovered and is documented, without claiming an availability guarantee.
 - Complete native browser zoom and the selected browser checks; in-app scans and CSS enlargement have narrower scope.
-- Review the [SRS DOCX](docs/exports/LabFlow_SRS_DRAFT_0.4.docx) and [report draft](docs/REPORT_DRAFT.md). The 23-page DOCX is the prior 0.4 review export, not approved or submitted. [SRS_DRAFT](docs/SRS_DRAFT.md) is now 0.5 with the selected hosting policy; a matching DOCX export remains to be rendered and reviewed.
+- Review the current [SRS DOCX](docs/exports/LabFlow_SRS_DRAFT_0.5.docx) and [report draft](docs/REPORT_DRAFT.md). Both remain drafts; neither is approved or submitted. The Markdown SRS and review export are revision 0.5.
 - Fill individual author/student ID, institution/mentor if required; confirm LMS filename, format, deadline and procedure. These details are unknown from the two supplied ICTAK references. Submission requires explicit authorization and a real receipt.

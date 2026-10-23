@@ -1,5 +1,13 @@
 # Changelog
 
+## Hosted demonstration 2026-10-23
+
+- Published the synthetic MERN demonstration on Vercel Hobby with Atlas Free, without a card or paid resource.
+- Verified live borrowing, both return paths, damage resolution, restoration, cancellation, rejection and access restrictions.
+- Fixed Vercel rewrite query pollution while retaining strict input validation.
+- Added public verification evidence and refreshed the SRS/report review copies.
+- SRS approval and college submission remain pending; see the deployment runbook for limitations.
+
 ## Unreleased
 
 - Student registration, sign-in, restored sessions and logout with controlled administrator provisioning.

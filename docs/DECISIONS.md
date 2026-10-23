@@ -24,7 +24,7 @@ This document records the assumptions that future sessions must not silently cha
 | Reserve equipment only when an admin approves | Accepted | Pending requests remain requests; conditional transactional approval chooses one winner. |
 | MongoDB transactions plus unique/partial indexes | Accepted | Prevents partial lifecycle updates and simultaneous double approval. |
 | Server-side sessions in MongoDB | Selected for implementation | Keeps authentication tokens out of browser-accessible storage and avoids another data service. Confirm in SRS. |
-| Single-origin production deployment | Implemented locally; Vercel publication pending | Simplifies cookies, CORS and deployment. Render required a card; the owner requested alternatives after reviewing the hosted-URL submission checklist. See the current hosting decision below. Repository publishing to `milan-kb/LabFlow` was authorized separately. |
+| Single-origin production deployment | Implemented and verified on Vercel Hobby | Simplifies cookies, CORS and deployment. Render required a card; the owner requested alternatives after reviewing the hosted-URL submission checklist. See the current hosting decision below. Repository publishing to `milan-kb/LabFlow` was authorized separately. |
 | JavaScript/JSX rather than TypeScript | Accepted demo default | Finalized by the owner for this capstone; boundary validation remains mandatory. |
 
 ## Finalized demo policies
@@ -71,13 +71,15 @@ Deferral does not remove basic security, accessibility, responsive design, trans
 | What LMS SRS template, deadline, filename and submission evidence are required? | Before SRS submission |
 | Is the revised SRS transition/date/PATCH contract approved for submission? | Before SRS approval |
 | What are the individual author/student ID, institution/mentor and final deadline? | Before final submission |
-| How will reviewers receive an admin demo account without exposing credentials? | Before final submission |
+| How will reviewers receive the privately stored admin demo credential? | Before final submission |
 
 ## Current hosting decision
 
 On 22 October 2026 Render required payment information through both its API (HTTP 402) and Dashboard despite Free being selected; no card or web service was added. The owner briefly chose localhost, then resumed card-free hosting evaluation after reviewing the ICTAK hosted-URL checklist, specifically asking about Vercel and Netlify. The separate Atlas Free project/cluster and restricted database users already exist, with the explicit network exception applied on 23 October 2026. Local configuration remains local.
 
-The original ICTAK guide's section 13 asks for a working hosted URL, README live links and core flows tested on the live site. Those assessment items remain outstanding. After disclosure of the changing function egress IPs, the owner explicitly approved the persistent `0.0.0.0/0` rule for `labflow-capstone` only on 23 October 2026. Automatic review had rejected the earlier general instruction; that earlier attempt made no change. Vercel Hobby with the existing separate Atlas Free cluster is selected. A `0.0.0.0/0` project access entry is authorized for this synthetic demonstration; database authentication, TLS, readWrite limited to `labflow`, exact browser Origin and all application authorization remain mandatory. This replaces the earlier host-IP-only deployment plan for this demo. No card, paid plan or native Atlas integration with broader database roles is authorized. This is not a real-student production baseline or SRS submission approval.
+The original ICTAK guide's section 13 asks for a working hosted URL, README live links and core flows tested on the live site. Those hosted-URL and live core-flow items were verified on 23 October 2026 at [labflow-lemon.vercel.app](https://labflow-lemon.vercel.app); other assessment and submission items remain separate. After disclosure of the changing function egress IPs, the owner explicitly approved the persistent `0.0.0.0/0` rule for `labflow-capstone` only on 23 October 2026. Automatic review had rejected the earlier general instruction; that earlier attempt made no change. Vercel Hobby with the existing separate Atlas Free cluster is selected. A `0.0.0.0/0` project access entry is authorized for this synthetic demonstration; database authentication, TLS, readWrite limited to `labflow`, exact browser Origin and all application authorization remain mandatory. This replaces the earlier host-IP-only deployment plan for this demo. No card, paid plan or native Atlas integration with broader database roles is authorized. This is not a real-student production baseline or SRS submission approval.
+
+On 23 October 2026 the owner explicitly approved creating the synthetic application administrator `admin@labflow.example`. It was created only in `labflow`, with no Atlas/cloud administrator permissions and no elevation of an existing user. Its random password is stored in owner-only ignored `.local/cloud/demo-access.json`. Student demonstration credentials are likewise private; no reusable credential is published.
 
 ## Change rule
 

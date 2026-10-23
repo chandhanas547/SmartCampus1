@@ -1,6 +1,9 @@
 .git/
 .local/
 .vercel/
+.agents/
+.aws/
+.codex/
 node_modules/
 **/node_modules/
 **/.env

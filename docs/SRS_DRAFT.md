@@ -18,7 +18,7 @@
 | 0.2 | TBD | TBD | Clarified inventory guards, dates, damage inspection and PATCH contract; finalized demo defaults. |
 | 0.3 | 2026-10-21 | TBD | Recorded individual submission and owner authorization to start development; requirements remain a review draft. |
 | 0.4 | 2026-10-22 | TBD | Synchronized implemented input/security policies, quality gates and supporting design; no approval or submission claimed. |
-| 0.5 | 2026-10-23 | TBD | Selected Vercel Hobby/Atlas Free and recorded the owner-authorized synthetic-demo network exception; application security requirements remain unchanged. The existing 0.4 DOCX export is a prior review snapshot. |
+| 0.5 | 2026-10-23 | TBD | Selected Vercel Hobby/Atlas Free and recorded the owner-authorized synthetic-demo network exception; application security requirements remain unchanged. Recorded hosted verification and refreshed the matching review export. |
 
 ## 1. Introduction
 
@@ -105,14 +105,14 @@ MongoDB replica set
 
 | Assumption | Status |
 |---|---|
-| Vercel serves the built React assets and an Express Function at `/api`, under one origin. Local Node startup remains supported. | Selected deployment baseline; hosted verification pending |
+| Vercel serves the built React assets and an Express Function at `/api`, under one origin. Local Node startup remains supported. | Implemented and verified on the public demo on 23 October 2026 |
 | Production uses Atlas Free with replica-set transaction support. | Selected provider; 28 isolated cloud acceptance tests passed |
 | Frontend and API use one origin to simplify cookie security and CORS. | Selected implementation baseline |
 | HTTPS and provider-managed environment variables are required when deployed. | Approved |
 | Only free services may be selected unless paid use is explicitly approved. | Approved |
-| Vercel Hobby and Atlas Free (AWS Mumbai) are selected; actual URL, function region and measured limits remain to be recorded. | Selected; verification pending |
+| Vercel Hobby and Atlas Free (AWS Mumbai) are used at https://labflow-lemon.vercel.app; the API function region is bom1. See DEPLOYMENT.md for evidence and limits. | Demo deployment verified; no production availability guarantee |
 
-The owner explicitly authorized Vercel's free backend and the persistent `0.0.0.0/0` rule for `labflow-capstone` only on 23 October 2026. For the separate synthetic-demo Atlas project only, `0.0.0.0/0` may replace host-IP restrictions. Database authentication and TLS remain required, and the app user has readWrite on `labflow` only. No public database credentials or real-person data are permitted. This removes a network restriction, not authentication; it is unsuitable as an unreviewed baseline for real college use. See `DECISIONS.md` and `DEPLOYMENT.md`. The 0.4 DOCX remains a previous review export, not an export of this revision.
+The owner explicitly authorized Vercel's free backend and the persistent `0.0.0.0/0` rule for `labflow-capstone` only on 23 October 2026. For the separate synthetic-demo Atlas project only, `0.0.0.0/0` may replace host-IP restrictions. Database authentication and TLS remain required, and the app user has readWrite on `labflow` only. No public database credentials or real-person data are permitted. This removes a network restriction, not authentication; it is unsuitable as an unreviewed baseline for real college use. See `DECISIONS.md` and `DEPLOYMENT.md`. The matching 0.5 DOCX is a review copy; neither this document nor its export is approved or submitted.
 
 ## 3. User roles and permissions
 
@@ -538,12 +538,12 @@ This table defines planned evidence, not completed results.
 | Individual author name/student ID, institution and faculty/mentor | SRS submission |
 | Review of this revision's detailed transition, date and PATCH contracts | SRS approval |
 | Formal review of selected identity/security policies | SRS approval |
-| Free hosting provider and whether sleeping is acceptable | Deployment planning |
-| Required final browser matrix and measured performance budget | M8 verification planning |
+| Reviewer acceptance of Hobby/Free capacity limits and the recorded transient readiness failure | Final assessment |
+| Required final browser matrix and hosted performance expectations | Final verification |
 | Secure delivery of reviewer admin access | Final submission |
 | Data retention/deletion period if use expands beyond synthetic demo data | Before any real-data use |
 
-This revision finalizes defaults previously marked provisional in MASTER_PLAN and elaborates its lifecycle/API guards without adding endpoints. DECISIONS is updated to prevent contradictory implementation guidance; the master plan's older provisional labels are historical, not renewed uncertainty. This SRS remains a review draft, and unresolved deployment and submission choices cannot be inferred silently.
+This revision finalizes defaults previously marked provisional in MASTER_PLAN and elaborates its lifecycle/API guards without adding endpoints. DECISIONS is updated to prevent contradictory implementation guidance; the master plan's older provisional labels are historical, not renewed uncertainty. This SRS remains a review draft, and remaining assessment and submission choices cannot be inferred silently.
 
 ## 13. References
 
