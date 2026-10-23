@@ -302,5 +302,65 @@
     "One readiness request returned 503; UI retry recovered. Ten subsequent sequential and five concurrent health reads returned 200. Root cause not established.",
     "Native browser zoom, other engines, screen readers, load testing and availability guarantees are not claimed.",
     "No college approval or submission is claimed."
-  ]
+  ],
+  "deployment": {
+    "id": "dpl_J7CSzGrTFg1hmZipsoezNHZqFrPJ",
+    "url": "https://labflow-7je4vpvt6-mln15.vercel.app",
+    "publicOrigin": "https://labflow-lemon.vercel.app",
+    "sourceCommit": "06dcfc952cb137ec3c450d2d4d7b7933e15de78b",
+    "state": "READY",
+    "postDeploymentVerifiedAt": "2026-10-23T11:25:27.354Z",
+    "checks": [
+      {
+        "path": "/",
+        "status": 200
+      },
+      {
+        "path": "/api/health",
+        "status": 200
+      },
+      {
+        "path": "/api/health?unexpected=1",
+        "status": 400
+      },
+      {
+        "path": "/requests",
+        "status": 200
+      },
+      {
+        "path": "/assets/missing.js",
+        "status": 404
+      },
+      {
+        "path": "/api/equipment",
+        "status": 401
+      },
+      {
+        "path": "/api/auth/login",
+        "status": 200,
+        "secureCookie": true
+      },
+      {
+        "path": "/api/auth/me",
+        "status": 200
+      },
+      {
+        "path": "/api/dashboard",
+        "status": 200
+      },
+      {
+        "path": "/api/auth/logout",
+        "status": 204
+      },
+      {
+        "path": "/api/auth/me",
+        "status": 401
+      }
+    ]
+  },
+  "ci": {
+    "sourceCommit": "06dcfc952cb137ec3c450d2d4d7b7933e15de78b",
+    "conclusion": "success",
+    "url": "https://github.com/milan-kb/LabFlow/actions/runs/39936955235"
+  }
 }

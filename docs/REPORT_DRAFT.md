@@ -51,7 +51,7 @@ Accessibility testing found a mismatch between the logo's visible and accessible
 | Verification | Observed result and scope | Evidence |
 |---|---|---|
 | Regression | 16 fast server, five client and 28 real database integration tests pass; lint/build pass | `npm run check` |
-| Remote CI | Checks, coverage gates and audit passed for `9d23544` | [GitHub Actions](https://github.com/milan-kb/LabFlow/actions/runs/39902827649) |
+| Remote CI | Checks, coverage gates and audit passed for `06dcfc9` | [GitHub Actions](https://github.com/milan-kb/LabFlow/actions/runs/39936955235) |
 | Critical coverage | 99.41% lines and 92.66% branches; existing 80% gates enforced | `npm run test:coverage`; quality baseline |
 | Concurrency and rollback | One approval winner; consistent cancellation/report-return races; injected approval/return failures roll back | Domain integration suite |
 | Actual browser journey | Request, approve, issue, damage, inspected return and restoration passed locally and on the public host with synthetic identities | `evidence/hosted/`; `evidence/hosted-acceptance.json` |

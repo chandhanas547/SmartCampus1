@@ -97,7 +97,7 @@ Or run `npm run check` for all four. `npm test` covers API/configuration/static-
 
 `npm run test:coverage` enforces the existing 80% line/branch target for auth, ownership and circulation. Accessibility tooling, local performance measurement and the scope of these checks are documented in [the quality baseline](docs/QUALITY.md).
 
-The [GitHub Actions run for `9d23544`](https://github.com/milan-kb/LabFlow/actions/runs/39902827649) passed, including the workflow's checks, coverage gates and audit. The workflow runs on pushes and pull requests. Current local verification is summarized below; older milestone records remain available in Git history.
+The [GitHub Actions run for `06dcfc9`](https://github.com/milan-kb/LabFlow/actions/runs/39936955235) passed, including the workflow's checks, coverage gates and audit. The workflow runs on pushes and pull requests. Current local verification is summarized below; older milestone records remain available in Git history.
 
 ## Production shape
 
