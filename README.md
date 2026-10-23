@@ -40,7 +40,7 @@ The architecture is a React client communicating with an Express JSON API; only 
 
 ## Current status
 
-**Core application locally verified; release preparation is ready for review.** Identity, inventory, decisions/cancellation, issue, damage, inspected return, maintenance and dashboard are implemented. All 47 tests, lint/build and the 80% critical coverage gates pass; real browser and production-process evidence is recorded. Native browser zoom and public deployment acceptance remain open. No hosted application or submission is claimed.
+**Core application locally verified; release preparation is ready for review.** Identity, inventory, decisions/cancellation, issue, damage, inspected return, maintenance and dashboard are implemented. All 49 tests, lint/build and the 80% critical coverage gates pass; real browser and production-process evidence is recorded. Native browser zoom and public deployment acceptance remain open. No hosted application or submission is claimed.
 
 The owner authorized development on 21 October 2026 while SRS approval and submission remain pending. Scope and business rules are recorded in [decisions](docs/DECISIONS.md).
 
@@ -99,7 +99,7 @@ The [GitHub Actions run for `bac83f0`](https://github.com/milan-kb/LabFlow/actio
 
 ## Production shape
 
-Run `npm run build`, provide valid runtime configuration, then run `npm start` with `NODE_ENV=production`. Production requires an explicit HTTPS `APP_ORIGIN`, a transaction-capable MongoDB URI and an appropriate `HOST` (usually `0.0.0.0` on a managed host). HTTPS terminates at the selected host/reverse proxy; the application process listens over HTTP behind it. Render required a card even for Free. After reviewing the ICTAK hosted-URL checklist, the owner resumed card-free hosting evaluation, including Vercel and Netlify. No web service or hosted URL exists. The previously created Atlas Free cluster has no network access-list entries and is not used by the local app. See [deployment status](docs/DEPLOYMENT.md). Repository publishing to `milan-kb/LabFlow` was authorized separately.
+Run `npm run build`, provide valid runtime configuration, then run `npm start` with `NODE_ENV=production`. Production requires an explicit HTTPS `APP_ORIGIN`, a transaction-capable MongoDB URI and an appropriate `HOST` (usually `0.0.0.0` on a managed host). HTTPS terminates at the selected host/reverse proxy; the application process listens over HTTP behind it. Render required a card even for Free. Vercel Hobby is selected after owner approval of the synthetic-demo Atlas network exception on 23 October 2026. All 28 isolated cloud acceptance cases pass, and their test databases are empty after cleanup. Vercel publication and hosted verification are pending. The local app configuration remains local. See [deployment status](docs/DEPLOYMENT.md). Repository publishing to `milan-kb/LabFlow` was authorized separately.
 
 ## Scope
 
@@ -117,7 +117,7 @@ For synthetic **local development only**, run `npm run seed:demo` with the local
 
 ## Verification and remaining release work
 
-The local review passes 47 tests (14 server, five client API and 28 real database integration tests), lint and the production build. Tests cover authentication, ownership, concurrent allocation, rollback, strict inputs and administrator-only borrower contacts. Dashboard counts open filtered lists; damaged returns require an inspection note. The browser review checks these changes with synthetic accounts. Critical coverage is 99.41% lines and 92.66% branches; the unchanged 80% gates pass. The dependency audit found zero vulnerabilities. The updated return screen passed axe checks at 1280px and 320px with no findings or horizontal overflow; the equipment archive disclosure also passed and supports keyboard cancellation. Full accessibility scope is recorded in [QUALITY](docs/QUALITY.md).
+The local review passes 49 tests (16 server, five client API and 28 real database integration tests), lint and the production build. Tests cover authentication, ownership, concurrent allocation, rollback, strict inputs and administrator-only borrower contacts. Dashboard counts open filtered lists; damaged returns require an inspection note. The browser review checks these changes with synthetic accounts. Critical coverage is 99.41% lines and 92.66% branches; the unchanged 80% gates pass. The dependency audit found zero vulnerabilities. The updated return screen passed axe checks at 1280px and 320px with no findings or horizontal overflow; the equipment archive disclosure also passed and supports keyboard cancellation. Full accessibility scope is recorded in [QUALITY](docs/QUALITY.md).
 
 Report illustrations and local performance/production measurements are in `docs/evidence/`. Old milestone logs, handoff prompts and temporary review files were removed; their history is preserved in Git. The maintained regression suite and developer accessibility helper remain available to verify fixes.
 
@@ -125,5 +125,5 @@ Remaining before assessment:
 
 - Complete card-free [hosting selection and deployment](docs/DEPLOYMENT.md). The ICTAK guide's final checklist asks for a hosted URL and live core-flow evidence; localhost does not satisfy those items unless the reviewer accepts an exception.
 - Complete native browser zoom and the selected browser checks; in-app scans and CSS enlargement have narrower scope.
-- Review the [SRS DOCX](docs/exports/LabFlow_SRS_DRAFT_0.4.docx) and [report draft](docs/REPORT_DRAFT.md). The SRS is a 23-page review export, not approved or submitted. Its source is [SRS_DRAFT](docs/SRS_DRAFT.md); regeneration requires rendering and inspecting every page.
+- Review the [SRS DOCX](docs/exports/LabFlow_SRS_DRAFT_0.4.docx) and [report draft](docs/REPORT_DRAFT.md). The 23-page DOCX is the prior 0.4 review export, not approved or submitted. [SRS_DRAFT](docs/SRS_DRAFT.md) is now 0.5 with the selected hosting policy; a matching DOCX export remains to be rendered and reviewed.
 - Fill individual author/student ID, institution/mentor if required; confirm LMS filename, format, deadline and procedure. These details are unknown from the two supplied ICTAK references. Submission requires explicit authorization and a real receipt.

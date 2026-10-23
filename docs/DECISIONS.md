@@ -24,7 +24,7 @@ This document records the assumptions that future sessions must not silently cha
 | Reserve equipment only when an admin approves | Accepted | Pending requests remain requests; conditional transactional approval chooses one winner. |
 | MongoDB transactions plus unique/partial indexes | Accepted | Prevents partial lifecycle updates and simultaneous double approval. |
 | Server-side sessions in MongoDB | Selected for implementation | Keeps authentication tokens out of browser-accessible storage and avoids another data service. Confirm in SRS. |
-| Single-origin production deployment | Implemented locally; card-free host under evaluation | Simplifies cookies, CORS and deployment. Render required a card; the owner requested alternatives after reviewing the hosted-URL submission checklist. See the current hosting decision below. Repository publishing to `milan-kb/LabFlow` was authorized separately. |
+| Single-origin production deployment | Implemented locally; Vercel publication pending | Simplifies cookies, CORS and deployment. Render required a card; the owner requested alternatives after reviewing the hosted-URL submission checklist. See the current hosting decision below. Repository publishing to `milan-kb/LabFlow` was authorized separately. |
 | JavaScript/JSX rather than TypeScript | Accepted demo default | Finalized by the owner for this capstone; boundary validation remains mandatory. |
 
 ## Finalized demo policies
@@ -44,11 +44,11 @@ This document records the assumptions that future sessions must not silently cha
 - Existing damage reports must be resolved at return with reviewer/time, matching inspection result and non-empty note, even for serviceable returns.
 - Inventory PATCH uses expected version and one explicit action: metadata edit, enter maintenance or restore. Manual transition notes are mandatory; allocation states cannot be set through PATCH.
 
-These policies supersede the older provisional labels in MASTER_PLAN. The detailed contract is in `SRS_DRAFT.md` revision 0.4 Draft and remains subject to document review; it is not evidence of SRS submission.
+These policies supersede the older provisional labels in MASTER_PLAN. The detailed contract is in `SRS_DRAFT.md` revision 0.5 Draft and remains subject to document review; it is not evidence of SRS submission.
 
 ## Provisional implementation choices
 
-- MongoDB-backed sessions and single-origin operation are implemented. Card-free hosting is under evaluation; `DEPLOYMENT.md` records the attempted setup and remaining assessment requirements.
+- MongoDB-backed sessions and single-origin operation are implemented. Vercel Hobby/Atlas Free are selected; `DEPLOYMENT.md` records the attempted setup and remaining assessment requirements.
 - Identity implementation policies are recorded in `docs/SECURITY.md`: scrypt, eight-hour absolute MongoDB sessions, strict Origin/custom-header CSRF defense and MongoDB-backed authentication limits.
 - Bounded inputs in `docs/API_DETAILS.md` and the unchanged 80% critical coverage target in `docs/QUALITY.md` are selected implementation baselines. Formal SRS approval remains pending; browser/zoom limits are reported explicitly.
 
@@ -75,9 +75,9 @@ Deferral does not remove basic security, accessibility, responsive design, trans
 
 ## Current hosting decision
 
-On 22 October 2026 Render required payment information through both its API (HTTP 402) and Dashboard despite Free being selected; no card or web service was added. The owner briefly chose localhost, then resumed card-free hosting evaluation after reviewing the ICTAK hosted-URL checklist, specifically asking about Vercel and Netlify. The separate Atlas Free project/cluster and restricted database users already exist, with no network access-list entries. Local configuration remains local.
+On 22 October 2026 Render required payment information through both its API (HTTP 402) and Dashboard despite Free being selected; no card or web service was added. The owner briefly chose localhost, then resumed card-free hosting evaluation after reviewing the ICTAK hosted-URL checklist, specifically asking about Vercel and Netlify. The separate Atlas Free project/cluster and restricted database users already exist, with the explicit network exception applied on 23 October 2026. Local configuration remains local.
 
-The original ICTAK guide's section 13 asks for a working hosted URL, README live links and core flows tested on the live site. Those assessment items remain outstanding; a local-only exception has not been confirmed. Do not remove these requirements from the SRS or claim hosted acceptance. The card-free/no-payment restriction remains. Vercel/Netlify require a serverless adapter and a decision on Atlas network access; allowing all source IPs is not authorized by the existing restricted-access plan.
+The original ICTAK guide's section 13 asks for a working hosted URL, README live links and core flows tested on the live site. Those assessment items remain outstanding. After disclosure of the changing function egress IPs, the owner explicitly approved the persistent `0.0.0.0/0` rule for `labflow-capstone` only on 23 October 2026. Automatic review had rejected the earlier general instruction; that earlier attempt made no change. Vercel Hobby with the existing separate Atlas Free cluster is selected. A `0.0.0.0/0` project access entry is authorized for this synthetic demonstration; database authentication, TLS, readWrite limited to `labflow`, exact browser Origin and all application authorization remain mandatory. This replaces the earlier host-IP-only deployment plan for this demo. No card, paid plan or native Atlas integration with broader database roles is authorized. This is not a real-student production baseline or SRS submission approval.
 
 ## Change rule
 

@@ -1,0 +1,16 @@
+.git/
+.local/
+.vercel/
+node_modules/
+**/node_modules/
+**/.env
+**/.env.*
+!**/.env.example
+docs/
+*.docx
+coverage/
+test-results/
+playwright-report/
+server/test/
+client/src/*.test.js
+*.log

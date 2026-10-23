@@ -3,7 +3,7 @@
 | Document field | Value |
 |---|---|
 | Project | LabFlow — College Laboratory Equipment Management System |
-| Document version | 0.4 Draft |
+| Document version | 0.5 Draft |
 | Status | Draft for review — not approved or submitted |
 | Prepared by | TBD: individual author name and student ID |
 | Institution | TBD |
@@ -18,6 +18,7 @@
 | 0.2 | TBD | TBD | Clarified inventory guards, dates, damage inspection and PATCH contract; finalized demo defaults. |
 | 0.3 | 2026-10-21 | TBD | Recorded individual submission and owner authorization to start development; requirements remain a review draft. |
 | 0.4 | 2026-10-22 | TBD | Synchronized implemented input/security policies, quality gates and supporting design; no approval or submission claimed. |
+| 0.5 | 2026-10-23 | TBD | Selected Vercel Hobby/Atlas Free and recorded the owner-authorized synthetic-demo network exception; application security requirements remain unchanged. The existing 0.4 DOCX export is a prior review snapshot. |
 
 ## 1. Introduction
 
@@ -104,12 +105,14 @@ MongoDB replica set
 
 | Assumption | Status |
 |---|---|
-| A single Node service may serve the built React application and `/api`. | Proposed |
-| Production uses managed MongoDB with replica-set transaction support. | Approved requirement; provider TBD |
+| Vercel serves the built React assets and an Express Function at `/api`, under one origin. Local Node startup remains supported. | Selected deployment baseline; hosted verification pending |
+| Production uses Atlas Free with replica-set transaction support. | Selected provider; 28 isolated cloud acceptance tests passed |
 | Frontend and API use one origin to simplify cookie security and CORS. | Selected implementation baseline |
 | HTTPS and provider-managed environment variables are required when deployed. | Approved |
 | Only free services may be selected unless paid use is explicitly approved. | Approved |
-| Provider, region, URL, resource limits and sleep behavior are TBD. | TBD |
+| Vercel Hobby and Atlas Free (AWS Mumbai) are selected; actual URL, function region and measured limits remain to be recorded. | Selected; verification pending |
+
+The owner explicitly authorized Vercel's free backend and the persistent `0.0.0.0/0` rule for `labflow-capstone` only on 23 October 2026. For the separate synthetic-demo Atlas project only, `0.0.0.0/0` may replace host-IP restrictions. Database authentication and TLS remain required, and the app user has readWrite on `labflow` only. No public database credentials or real-person data are permitted. This removes a network restriction, not authentication; it is unsuitable as an unreviewed baseline for real college use. See `DECISIONS.md` and `DEPLOYMENT.md`. The 0.4 DOCX remains a previous review export, not an export of this revision.
 
 ## 3. User roles and permissions
 
