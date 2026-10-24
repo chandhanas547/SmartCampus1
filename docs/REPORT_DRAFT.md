@@ -8,7 +8,7 @@ LabFlow is a MERN demonstration for managing individually tagged equipment in on
 
 The local application completes the core borrowing journey and passes 53 automated tests. Real MongoDB tests exercise simultaneous approvals, conflicting actions and rollback after failed writes. Earlier local accessibility scans found no violations or incomplete findings; keyboard and responsive samples were also checked. The application is also published on Vercel Hobby with Atlas Free. All 32 isolated Atlas acceptance cases pass on 24 October 2026, and the public API/security checks and student/admin browser journey were verified on 23 October 2026. College approval and submission remain pending; remaining browser checks are identified below.
 
-The equipment/purpose dropdowns and unlisted assignment flow have real database coverage. On 25 October the owner's instrument-register redesign was preserved and its student request/admin assignment/issue/return journey passed local browser verification. The new form has no axe violations at 320px; the patterned background leaves a manual contrast review item described in QUALITY. Publication is in progress; hosted evidence below describes the preceding release until the deployment runbook is updated.
+The equipment/purpose dropdowns and unlisted assignment flow have real database coverage. On 25 October the owner's instrument-register redesign was preserved and its student request/admin assignment/issue/return journey passed local browser verification. The new form has no axe violations at 320px; the patterned background leaves a manual contrast review item described in QUALITY. The redesign/dropdowns are published on Vercel. Current public read-only checks and student login/dropdown rendering pass; the owner chose to skip a fresh live borrowing write test. Earlier hosted lifecycle evidence below describes the preceding release. The locked parser security update restores a clean dependency audit; see the deployment runbook for the exact source.
 
 ## Introduction
 
@@ -53,7 +53,7 @@ Accessibility testing found a mismatch between the logo's visible and accessible
 | Verification | Observed result and scope | Evidence |
 |---|---|---|
 | Regression | 16 fast server, five client and 32 real database integration tests pass; lint/build pass | `npm run check` |
-| Remote CI | Checks, coverage gates and audit passed for `06dcfc9` | [GitHub Actions](https://github.com/milan-kb/LabFlow/actions/runs/39936955235) |
+| Remote CI | Checks, coverage gates and audit passed for deployed source `684af3c` | [GitHub Actions](https://github.com/milan-kb/LabFlow/actions/runs/40130494194) |
 | Critical coverage | 99.05% lines and 92.58% branches; existing 80% gates enforced | `npm run test:coverage`; quality baseline |
 | Concurrency and rollback | One approval winner; consistent cancellation/report-return races; injected approval/return failures roll back | Domain integration suite |
 | Actual browser journey | Request, approve, issue, damage, inspected return and restoration passed locally and on the public host with synthetic identities | `evidence/hosted/`; `evidence/hosted-acceptance.json` |

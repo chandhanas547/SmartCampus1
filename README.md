@@ -42,9 +42,9 @@ The architecture is a React client communicating with an Express JSON API; only 
 
 ## Current status
 
-**The synthetic demo is live on Vercel Hobby with Atlas Free.** Identity, inventory, decisions/cancellation, issue, damage, inspected return, maintenance and dashboard are implemented and verified on the public site. All 49 local tests, lint/build and critical coverage gates pass; all 28 isolated Atlas integration cases also pass. Live API/security checks and the browser borrowing journey pass. Native browser zoom and other-engine checks remain unverified. SRS approval and college submission remain pending; deployment does not imply either.
+**The synthetic demo is live on Vercel Hobby with Atlas Free.** The 25 October release includes the owner's UI redesign, equipment/purpose dropdowns with Other and atomic admin assignment. All 53 local tests, lint/build, critical coverage gates and the dependency audit pass; all 32 isolated Atlas integration cases passed on 24 October. The redesigned request/assignment/issue/return journey passes locally. Public readiness, strict query rejection, protected API access, static/deep-link serving, student sign-in and dropdown rendering are verified. The owner chose to skip a fresh live borrowing write test; preceding hosted lifecycle evidence is historical. Native browser zoom and other-engine checks remain unverified. SRS approval and college submission remain pending.
 
-**Dropdown and UI update, 25 October:** the owner's visual redesign is preserved. Equipment/purpose dropdowns with Other and atomic admin assignment pass the local browser journey through inspected return. All 53 tests (16 server, five client API and 32 real database integration), lint/build and critical coverage gates pass; all 32 isolated Atlas cases passed on 24 October. The redesigned form has no axe violations or horizontal overflow at 320px; graph-paper backgrounds require manual contrast review, recorded in QUALITY. Publication of this update is in progress; the public verification above describes the previous release until deployment evidence is updated.
+The redesigned form has no axe violations or horizontal overflow at 320px; graph-paper backgrounds require manual contrast review, recorded in QUALITY. The locked parser was updated to body-parser 2.4.0 after the release audit identified GHSA-27r3-jxmh-p828. See [deployment status](docs/DEPLOYMENT.md) for the exact deployed source and evidence.
 
 The owner authorized development on 21 October 2026 while SRS approval and submission remain pending. Scope and business rules are recorded in [decisions](docs/DECISIONS.md).
 
@@ -99,7 +99,7 @@ Or run `npm run check` for all four. `npm test` covers API/configuration/static-
 
 `npm run test:coverage` enforces the existing 80% line/branch target for auth, ownership and circulation. Accessibility tooling, local performance measurement and the scope of these checks are documented in [the quality baseline](docs/QUALITY.md).
 
-The [GitHub Actions run for `06dcfc9`](https://github.com/milan-kb/LabFlow/actions/runs/39936955235) passed, including the workflow's checks, coverage gates and audit. The workflow runs on pushes and pull requests. Current local verification is summarized below; older milestone records remain available in Git history.
+The [GitHub Actions run for deployed source `684af3c`](https://github.com/milan-kb/LabFlow/actions/runs/40130494194) passed checks, coverage gates and audit. The workflow runs on pushes and pull requests. Current local verification is summarized below; older milestone records remain available in Git history.
 
 ## Production shape
 
