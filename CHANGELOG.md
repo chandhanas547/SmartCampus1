@@ -5,6 +5,7 @@
 - Added equipment and purpose dropdowns with required Other descriptions, plus preset/custom inventory metadata choices.
 - Added unlisted requests without a reservation; admin approval assigns and reserves a real available asset atomically, retaining the original description.
 - Preserved the owner's instrument-register visual redesign; corrected production font loading, pagination semantics and low-contrast accent/placeholder colors.
+- Updated the locked transitive body-parser dependency from 2.3.0 to 2.4.0 for GHSA-27r3-jxmh-p828; no direct dependency or install-script policy change.
 - Verified 53 local tests and all 32 isolated Atlas integration cases, including assignment races and rollback. Local browser verification passes through inspected return; see the deployment runbook for current publication evidence.
 
 ## Hosted demonstration 2026-10-23
