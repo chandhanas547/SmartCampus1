@@ -27,49 +27,53 @@ export default function AuthForm({ onSignIn }) {
   return (
     <section className="auth-layout" aria-labelledby="auth-title">
       <div className="auth-intro">
-        <p className="eyebrow">YOUR COLLEGE LABORATORY</p>
+        <p className="eyebrow">LABORATORY ACCESS PROTOCOL</p>
         <h1>
-          Borrow lab
+          Physical assets.
           <br />
-          equipment.
+          Controlled loans.
         </h1>
-        <p className="lede">Check availability, request equipment and track your loans.</p>
+        <p className="lede">
+          Search registered lab equipment, submit formal borrowing requisitions, and track circulation timestamps.
+        </p>
         <p className="auth-note">
-          Collect approved equipment from the lab and return it for inspection.
+          Approved equipment is issued from the central lab bench and must be returned for physical condition inspection.
         </p>
       </div>
       <div className="auth-panel">
-        <p className="eyebrow">{mode === 'login' ? 'WELCOME BACK' : 'STUDENT REGISTRATION'}</p>
+        <p className="eyebrow">{mode === 'login' ? 'LABORATORY DISPATCH' : 'STUDENT REGISTRATION'}</p>
         <h2 id="auth-title">
-          {mode === 'login' ? 'Sign in to LabFlow' : 'Create your student account'}
+          {mode === 'login' ? 'Sign in to LabFlow' : 'Create student account'}
         </h2>
         <form onSubmit={submit} aria-busy={busy}>
           {mode === 'register' && (
             <label>
-              Your name
+              Full name
               <input
                 name="name"
                 autoComplete="name"
                 required
                 minLength="2"
                 maxLength="120"
+                placeholder="e.g. Marie Curie"
                 aria-describedby={error ? 'auth-error' : undefined}
               />
             </label>
           )}
           <label>
-            Email address
+            Institutional email address
             <input
               name="email"
               type="email"
               autoComplete="email"
               required
               maxLength="254"
+              placeholder="operator@college.edu"
               aria-describedby={error ? 'auth-error' : undefined}
             />
           </label>
           <label>
-            Password
+            Passphrase
             <input
               key={mode}
               name="password"
@@ -78,23 +82,24 @@ export default function AuthForm({ onSignIn }) {
               required
               minLength="12"
               maxLength="128"
+              placeholder="Minimum 12 characters"
               aria-describedby={mode === 'register' ? 'password-hint auth-error' : 'auth-error'}
             />
           </label>
           {mode === 'register' && (
             <p id="password-hint" className="field-hint">
-              Use 12–128 characters. Spaces and passphrases are welcome.
+              12–128 characters required. Spaces and passphrases are encouraged for secure storage.
             </p>
           )}
           <p id="auth-error" role="alert" className="form-error">
             {error}
           </p>
           <button disabled={busy} type="submit">
-            {busy ? 'Please wait…' : mode === 'login' ? 'Sign in' : 'Create account'}
+            {busy ? 'Authenticating…' : mode === 'login' ? 'Sign in to station' : 'Register account'}
           </button>
         </form>
         <p className="switch-form">
-          {mode === 'login' ? 'New to the lab?' : 'Already have an account?'}{' '}
+          {mode === 'login' ? 'New laboratory researcher?' : 'Existing laboratory researcher?'}{' '}
           <button
             type="button"
             className="text-button"

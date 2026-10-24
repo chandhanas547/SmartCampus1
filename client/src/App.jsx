@@ -74,20 +74,20 @@ export default function App() {
           </span>
           LabFlow
         </a>
-        <span className="preview-label">ICTAK demonstration</span>
+        <span className="preview-label">Lab Dispatch · Capstone</span>
       </header>
       {connection.state === 'error' && (
         <div className="form-error" role="alert">
           <p>{connection.message}</p>
           <button type="button" onClick={retry}>
-            Try again
+            Retry connection
           </button>
         </div>
       )}
       <main id="main" tabIndex="-1">
         {restoring ? (
           <p role="status" className="page-message">
-            Restoring your session…
+            Verifying laboratory credentials…
           </p>
         ) : user ? (
           createElement(Workspace, { user, onSignOut: signOut })
@@ -97,19 +97,19 @@ export default function App() {
         {!user && (
           <section className="journey" aria-labelledby="journey-title">
             <div className="section-heading">
-              <h2 id="journey-title">How borrowing works</h2>
-              <span>THE BORROWING JOURNEY</span>
+              <h2 id="journey-title">Equipment circulation protocol</h2>
+              <span>LAB PROTOCOL · 4 STAGES</span>
             </div>
             <ol className="steps">
               {[
-                ['Explore', 'Find the right equipment for your work.'],
-                ['Request', 'Send your purpose and preferred return date.'],
-                ['Collect', 'Pick up your approved equipment from the lab.'],
-                ['Return', 'Bring it back for inspection and the next borrower.'],
+                ['01 Catalog', 'Locate available instruments and verify operational condition.'],
+                ['02 Request', 'Submit project purpose and required return timestamp in IST.'],
+                ['03 Handover', 'Present approved reservation at the laboratory circulation desk.'],
+                ['04 Return', 'Submit for return inspection and technical condition verification.'],
               ].map(([title, description], index) => (
                 <li key={title}>
-                  <span className="step-number">0{index + 1}</span>
-                  <h3>{title}</h3>
+                  <span className="step-number">STAGE 0{index + 1}</span>
+                  <h3>{title.split(' ')[1]}</h3>
                   <p>{description}</p>
                 </li>
               ))}
@@ -119,8 +119,8 @@ export default function App() {
       </main>
       <footer>
         <span>LabFlow</span>
-        <p>Equipment borrowing and returns</p>
-        <span>ICTAK capstone · Demo</span>
+        <p>Laboratory Equipment & Circulation Register</p>
+        <span>IST (Asia/Kolkata) · Single-Lab Demo</span>
       </footer>
     </div>
   );

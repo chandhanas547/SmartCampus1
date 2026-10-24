@@ -46,33 +46,55 @@ export function useMutation(refresh) {
   return { busy, message, run };
 }
 
+const STATUS_ICONS = {
+  AVAILABLE: '●',
+  ISSUED: '↗',
+  RESERVED: '◐',
+  MAINTENANCE: '⚙',
+  OVERDUE: '▲',
+  PENDING: '○',
+  APPROVED: '✓',
+  REJECTED: '✕',
+  CANCELLED: '—',
+  ARCHIVED: '—',
+  RETURNED: '●',
+};
+
 export function LoadState({ resource }) {
   return resource.loading ? (
     <p role="status" className="page-message">
-      Loading…
+      Updating laboratory register…
     </p>
   ) : (
     <div className="empty-state">
-      <p role="alert">{resource.error}</p>
+      <h2>Unable to load records</h2>
+      <p role="alert">{resource.error || 'The laboratory service did not respond.'}</p>
       <button type="button" onClick={resource.refresh}>
-        Try again
+        Retry operation
       </button>
     </div>
   );
 }
 export function Status({ value }) {
-  return <span className={`badge badge-${value.toLowerCase()}`}>{value.replaceAll('_', ' ')}</span>;
+  const symbol = STATUS_ICONS[value] || '·';
+  const label = value.replaceAll('_', ' ');
+  return (
+    <span className={`badge badge-${value.toLowerCase()}`}>
+      <span aria-hidden="true">{symbol}</span>
+      <span>{label}</span>
+    </span>
+  );
 }
 export function Pagination({ pagination, onPage }) {
   const pages = Math.max(1, Math.ceil(pagination.total / pagination.limit));
   return (
-    <div className="pagination">
+    <div className="pagination" aria-label="Pagination">
       <button
         type="button"
         disabled={pagination.page <= 1}
         onClick={() => onPage(pagination.page - 1)}
       >
-        Previous
+        ← Previous
       </button>
       <span>
         Page {pagination.page} of {pages} · {pagination.total} records
@@ -82,7 +104,7 @@ export function Pagination({ pagination, onPage }) {
         disabled={pagination.page >= pages}
         onClick={() => onPage(pagination.page + 1)}
       >
-        Next
+        Next →
       </button>
     </div>
   );

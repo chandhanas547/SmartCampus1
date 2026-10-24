@@ -64,24 +64,33 @@ export function Catalog({ user }) {
     <>
       <div className="page-heading">
         <div>
-          <p className="eyebrow">{admin ? 'LAB INVENTORY' : 'LAB EQUIPMENT'}</p>
+          <p className="eyebrow">{admin ? 'LABORATORY INVENTORY' : 'LABORATORY INSTRUMENTS'}</p>
           <h1>Equipment catalog</h1>
-          <p className="lede">Check availability and choose equipment for your work.</p>
+          <p className="lede">Verify operational state, technical specifications, and laboratory storage locations.</p>
         </div>
-        {!admin && <button type="button" onClick={() => setRequesting(!requesting)}>{requesting ? 'Close request form' : 'Request equipment'}</button>}
+        {!admin && (
+          <button type="button" onClick={() => setRequesting(!requesting)}>
+            {requesting ? 'Close request form' : '+ Request equipment'}
+          </button>
+        )}
         {admin && (
           <button type="button" onClick={() => setAdding(!adding)}>
-            {adding ? 'Close form' : 'Add equipment'}
+            {adding ? 'Close registration' : '+ Register new asset'}
           </button>
         )}
       </div>
-      {requesting && <section className="panel" aria-labelledby="borrow-title"><h2 id="borrow-title">Request equipment</h2><BorrowForm refresh={resource.refresh} /></section>}
+      {requesting && (
+        <section className="panel" aria-labelledby="borrow-title">
+          <h2 id="borrow-title">Request equipment loan</h2>
+          <BorrowForm refresh={resource.refresh} />
+        </section>
+      )}
       {adding && (
         <section className="panel" aria-labelledby="create-equipment-title">
-          <h2 id="create-equipment-title">Add equipment</h2>
+          <h2 id="create-equipment-title">Register laboratory asset</h2>
           <form onSubmit={create} aria-busy={mutation.busy}>
             {createElement(EquipmentFields, { create: true })}
-            <button disabled={mutation.busy}>Add equipment</button>
+            <button disabled={mutation.busy}>Record asset in inventory</button>
           </form>
         </section>
       )}
@@ -90,20 +99,28 @@ export function Catalog({ user }) {
       </p>
       <form className="filters" onSubmit={(event) => setFilters({ ...values(event), page: 1 })}>
         <label>
-          Search
+          Search register
           <input
             name="search"
             type="search"
-            placeholder="Name, tag or category"
+            placeholder="Search by name, asset tag, or domain…"
             maxLength="80"
             defaultValue={filters.search}
           />
         </label>
-        <ChoiceField label="Category" name="category" options={['Electronics', 'Optics', 'Prototyping', 'Measurement', 'Computing', 'Mechanical tools']} defaultValue={filters.category} required={false} maxLength={80} emptyLabel="All categories" />
+        <ChoiceField
+          label="Domain"
+          name="category"
+          options={['Electronics', 'Optics', 'Prototyping', 'Measurement', 'Computing', 'Mechanical tools']}
+          defaultValue={filters.category}
+          required={false}
+          maxLength={80}
+          emptyLabel="All domains"
+        />
         <label>
-          Availability
+          Operational state
           <select name="status" defaultValue={filters.status}>
-            <option value="">All equipment</option>
+            <option value="">All statuses</option>
             {['AVAILABLE', 'RESERVED', 'ISSUED', 'MAINTENANCE', ...(admin ? ['ARCHIVED'] : [])].map(
               (state) => (
                 <option key={state}>{state}</option>
@@ -111,7 +128,7 @@ export function Catalog({ user }) {
             )}
           </select>
         </label>
-        <button>Apply filters</button>
+        <button>Apply filter</button>
       </form>
       {!resource.data ? (
         createElement(LoadState, { resource })
@@ -119,10 +136,10 @@ export function Catalog({ user }) {
         <>
           {!resource.data.data.length ? (
             <div className="empty-state">
-              <h2>No equipment found</h2>
+              <h2>No registered assets found</h2>
               <p>
-                Try another search or availability filter.
-                {admin ? ' You can also add the first asset.' : ''}
+                No laboratory items match the active query or filter criteria.
+                {admin ? ' Use the button above to register the first physical asset.' : ' Try clearing search keywords or selecting All statuses.'}
               </p>
             </div>
           ) : (
@@ -133,13 +150,17 @@ export function Catalog({ user }) {
                     <span className="asset-tag">{row.assetTag}</span>
                     {createElement(Status, { value: row.status })}
                   </div>
-                  <h2>
-                    <a href={`#equipment/${row.id}`}>{row.name}</a>
-                  </h2>
-                  <p>{row.category}</p>
+                  <div>
+                    <h2>
+                      <a href={`#equipment/${row.id}`}>{row.name}</a>
+                    </h2>
+                    <p style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', textTransform: 'uppercase', color: 'var(--ink-muted)', marginBottom: '8px' }}>
+                      {row.category}
+                    </p>
+                  </div>
                   <div className="card-bottom">
-                    <span>{row.location}</span>
-                    <a href={`#equipment/${row.id}`}>View equipment ↗</a>
+                    <span>📍 {row.location}</span>
+                    <a href={`#equipment/${row.id}`}>View specs →</a>
                   </div>
                 </article>
               ))}
@@ -174,15 +195,15 @@ export function EquipmentDetail({ user, id }) {
   return (
     <>
       <a className="back-link" href="#catalog">
-        ← Equipment catalog
+        ← Back to equipment catalog
       </a>
       <div className="page-heading">
         <div>
           <p className="eyebrow">
-            {row.assetTag} · {row.category}
+            <span className="asset-tag">{row.assetTag}</span> · {row.category}
           </p>
           <h1>{row.name}</h1>
-          <p className="lede">{row.location}</p>
+          <p className="lede">Laboratory location: {row.location}</p>
         </div>
         {createElement(Status, { value: row.status })}
       </div>
@@ -191,20 +212,19 @@ export function EquipmentDetail({ user, id }) {
       </p>
       <div className="detail-grid">
         <section className="panel">
-          <h2>About this equipment</h2>
-          <p className="preserve-lines">{row.description || 'No description added.'}</p>
-          <h3>Condition</h3>
-          <p className="preserve-lines">{row.conditionNote || 'No condition notes recorded.'}</p>
+          <h2>Technical specification & condition</h2>
+          <p className="preserve-lines">{row.description || 'No technical description recorded in register.'}</p>
+          <h3>Calibration & condition notes</h3>
+          <p className="preserve-lines">{row.conditionNote || 'No condition notes recorded for this asset.'}</p>
         </section>
         <section className="panel">
-          <h2>{admin ? 'Manage equipment' : 'Borrow this equipment'}</h2>
+          <h2>{admin ? 'Asset administration' : 'Loan requisition'}</h2>
           {!admin &&
             (row.status === 'AVAILABLE' ? (
               <BorrowForm equipment={row} refresh={resource.refresh} />
             ) : (
               <p>
-                This equipment is currently {row.status.toLowerCase()}. You can request it when it
-                becomes available.
+                This physical instrument is currently <strong>{row.status.toLowerCase()}</strong>. Requisition will be enabled once returned to available state.
               </p>
             ))}
           {admin && row.status !== 'ARCHIVED' && (

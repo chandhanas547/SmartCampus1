@@ -18,7 +18,15 @@ export default function ChoiceField({ label, name, options, defaultValue = '', r
       {other && (
         <label>
           Specify {label.toLowerCase()}
-          <CustomInput name={name} value={custom} onChange={(event) => setCustom(event.target.value)} required minLength={minLength} maxLength={maxLength} />
+          <CustomInput
+            name={name}
+            value={custom}
+            onChange={(event) => setCustom(event.target.value)}
+            required
+            minLength={minLength}
+            maxLength={maxLength}
+            placeholder={`Specify custom ${label.toLowerCase()}…`}
+          />
         </label>
       )}
     </div>

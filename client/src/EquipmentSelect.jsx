@@ -10,20 +10,29 @@ export default function EquipmentSelect({ selected, onChange, allowOther = false
   return (
     <>
       <label>
-        {allowOther ? 'Equipment' : 'Assign available equipment'}
+        {allowOther ? 'Laboratory instrument' : 'Assign available laboratory asset'}
         <select
           name={selected === 'other' ? undefined : 'equipmentId'}
           value={selected === 'other' ? '__other__' : selected?.id || ''}
           required
           onChange={(event) => onChange(event.target.value === '__other__' ? 'other' : options.find((row) => row.id === event.target.value) || null)}
         >
-          <option value="">Choose equipment</option>
-          {options.map((row) => <option key={row.id} value={row.id}>{row.name} · {row.assetTag} · {row.location}</option>)}
-          {allowOther && <option value="__other__">Other — please specify</option>}
+          <option value="">Select available asset from register…</option>
+          {options.map((row) => (
+            <option key={row.id} value={row.id}>
+              {row.name} · [{row.assetTag}] · {row.location}
+            </option>
+          ))}
+          {allowOther && <option value="__other__">Other unlisted instrument — describe requirements</option>}
         </select>
       </label>
       {resource.data.pagination.total > 50 && <Pagination pagination={resource.data.pagination} onPage={setPage} />}
-      {!rows.length && <p className="field-hint">No available assets on this page.{allowOther ? ' Choose Other to describe what you need.' : ' Add or restore a suitable asset in Equipment, then return here to assign it.'}</p>}
+      {!rows.length && (
+        <p className="field-hint">
+          No operational assets are currently marked AVAILABLE on this page.
+          {allowOther ? ' Select Other to describe unlisted equipment.' : ' Register or restore a suitable asset in Equipment first.'}
+        </p>
+      )}
     </>
   );
 }

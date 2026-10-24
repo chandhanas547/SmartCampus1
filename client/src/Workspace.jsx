@@ -7,44 +7,65 @@ function Dashboard() {
   const resource = useResource('/dashboard');
   if (!resource.data) return createElement(LoadState, { resource });
   const data = resource.data.data;
-  const counts = [
-    ['Pending requests', data.pending, '#requests?status=PENDING'],
-    ['Issued equipment', data.issued, '#requests?status=ISSUED'],
-    ['Overdue loans', data.overdue, '#requests?overdue=true'],
-    ['Unreviewed damage', data.unreviewedDamage, '#requests?damage=true'],
+  const metrics = [
+    { label: 'Pending approval', count: data.pending, link: '#requests?status=PENDING', note: 'Awaiting decision' },
+    { label: 'Active loans', count: data.issued, link: '#requests?status=ISSUED', note: 'In circulation' },
+    { label: 'Overdue loans', count: data.overdue, link: '#requests?overdue=true', note: 'Requires recall', urgent: data.overdue > 0 },
+    { label: 'Damage reports', count: data.unreviewedDamage, link: '#requests?damage=true', note: 'Awaiting inspection', urgent: data.unreviewedDamage > 0 },
   ];
+  const stateMeta = [
+    { key: 'AVAILABLE', symbol: '●', label: 'Available' },
+    { key: 'ISSUED', symbol: '↗', label: 'Issued' },
+    { key: 'RESERVED', symbol: '◐', label: 'Reserved' },
+    { key: 'MAINTENANCE', symbol: '⚙', label: 'Maintenance' },
+    { key: 'ARCHIVED', symbol: '—', label: 'Archived' },
+  ];
+
   return (
     <>
       <div className="page-heading">
         <div>
-          <p className="eyebrow">LAB OPERATIONS</p>
-          <h1>Lab dashboard</h1>
-          <p className="lede">Current equipment, loans and requests that need attention.</p>
+          <p className="eyebrow">LABORATORY OPERATIONS</p>
+          <h1>Circulation summary</h1>
+          <p className="lede">Live inventory distribution, open reservations, and returns requiring physical inspection.</p>
         </div>
         <button type="button" onClick={resource.refresh}>
-          Refresh dashboard
+          ↻ Refresh register
         </button>
       </div>
+
       <div className="stats-grid">
-        {counts.map(([label, count, link]) => (
-          <a href={link} className="stat" key={label}>
+        {metrics.map(({ label, count, link, note, urgent }) => (
+          <a
+            href={link}
+            className={`stat ${urgent ? 'stat-urgent' : ''}`}
+            key={label}
+          >
             <span>{label}</span>
-            <strong>{count}</strong>
-            <span>View requests ↗</span>
+            <strong style={urgent ? { color: 'var(--status-overdue-text)' } : undefined}>
+              {count}
+            </strong>
+            <span>{note} →</span>
           </a>
         ))}
       </div>
+
       <section className="panel">
-        <h2>Equipment by state</h2>
+        <h2>Physical assets by operational state</h2>
         <div className="state-counts">
-          {['AVAILABLE', 'RESERVED', 'ISSUED', 'MAINTENANCE', 'ARCHIVED'].map((status) => (
-            <div key={status}>
-              <span>{status}</span>
-              <strong>{data.equipment[status] || 0}</strong>
+          {stateMeta.map(({ key, symbol, label }) => (
+            <div key={key}>
+              <span>
+                <span aria-hidden="true" style={{ marginRight: '4px' }}>{symbol}</span>
+                {label}
+              </span>
+              <strong>{data.equipment[key] || 0}</strong>
             </div>
           ))}
         </div>
-        <a href="#catalog">Manage inventory ↗</a>
+        <a href="#catalog" style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', fontWeight: 600 }}>
+          Manage equipment catalog →
+        </a>
       </section>
     </>
   );
@@ -87,8 +108,8 @@ export default function Workspace({ user, onSignOut }) {
           </a>
         </nav>
         <div>
-          <span>
-            {user.name} · {admin ? 'Administrator' : 'Student'}
+          <span className="preview-label" style={{ textTransform: 'none' }}>
+            {user.name} · {admin ? 'Staff Administrator' : 'Student'}
           </span>
           <button type="button" className="text-button" onClick={onSignOut}>
             Sign out
@@ -107,9 +128,11 @@ export default function Workspace({ user, onSignOut }) {
         createElement(RequestDetail, { key: id, user, id })
       ) : (
         <section className="empty-state">
-          <h1>Page unavailable</h1>
-          <p>This page does not exist or is not available for your role.</p>
-          <a href="#catalog">Go to equipment</a>
+          <h2>Location not registered</h2>
+          <p>This laboratory record does not exist or requires different clearance permissions.</p>
+          <a href="#catalog" style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', fontWeight: 600 }}>
+            Return to equipment catalog →
+          </a>
         </section>
       )}
     </>

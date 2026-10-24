@@ -23,19 +23,42 @@ export default function BorrowForm({ equipment, refresh }) {
       <EquipmentSelect selected={selected} onChange={setSelected} allowOther />
       {selected === 'other' && (
         <label>
-          Describe the equipment you need
-          <textarea name="requestedEquipment" required minLength="10" maxLength="500" />
-          <span className="field-hint">An administrator must assign a registered asset before approval. This request does not reserve equipment.</span>
+          Describe required equipment or tooling
+          <textarea
+            name="requestedEquipment"
+            required
+            minLength="10"
+            maxLength="500"
+            placeholder="Specify instrument type, required specifications, or experimental needs…"
+          />
+          <span className="field-hint">
+            A staff administrator will assign a specific physical asset tag during approval review. Unassigned requests do not reserve equipment.
+          </span>
         </label>
       )}
-      <ChoiceField label="Purpose" name="purpose" options={['Laboratory practical work', 'Course project work', 'Research experiment', 'Workshop or demonstration', 'Independent learning']} minLength={10} maxLength={500} multiline />
+      <ChoiceField
+        label="Experimental purpose"
+        name="purpose"
+        options={[
+          'Laboratory practical work',
+          'Course project work',
+          'Research experiment',
+          'Workshop or demonstration',
+          'Independent learning',
+        ]}
+        minLength={10}
+        maxLength={500}
+        multiline
+      />
       <label>
-        Preferred return date and time (IST)
+        Requested return timestamp (IST)
         <input name="requestedDueAt" type="datetime-local" required min={localInput(Date.now() + 60000)} />
       </label>
-      <p className="field-hint">Approval confirms the due date. The maximum loan is seven days from approval.</p>
+      <p className="field-hint">
+        Final return deadline is confirmed upon staff approval. Maximum permissible loan duration is 168 hours (7 days).
+      </p>
       <p role="status" className="feedback">{mutation.message}</p>
-      <button disabled={mutation.busy || !selected}>Send borrowing request</button>
+      <button disabled={mutation.busy || !selected}>Submit loan requisition</button>
     </form>
   );
 }

@@ -31,15 +31,15 @@ export function Requests({ user, search = '' }) {
       <div className="page-heading">
         <div>
           <p className="eyebrow">
-            {user.role === 'ADMIN' ? 'CIRCULATION DESK' : 'STUDENT REQUESTS'}
+            {user.role === 'ADMIN' ? 'CIRCULATION DESK · LOAN REGISTER' : 'STUDENT REQUISITIONS'}
           </p>
           <h1>{user.role === 'ADMIN' ? 'Borrowing requests' : 'My requests'}</h1>
-          <p className="lede">Track requests, collection and returns.</p>
+          <p className="lede">Track loan requests, lab handover confirmations, and return inspections.</p>
         </div>
       </div>
       <form className="filters" onSubmit={(event) => setFilters({ ...values(event), page: 1 })}>
         <label>
-          Request status
+          Status filter
           <select name="status" defaultValue={filters.status}>
             <option value="">All statuses</option>
             {['PENDING', 'APPROVED', 'ISSUED', 'RETURNED', 'CANCELLED', 'REJECTED'].map(
@@ -52,7 +52,7 @@ export function Requests({ user, search = '' }) {
         {user.role === 'ADMIN' && (
           <>
             <label>
-              Overdue
+              Overdue filter
               <select name="overdue" defaultValue={filters.overdue}>
                 <option value="">All loans</option>
                 <option value="true">Overdue only</option>
@@ -60,7 +60,7 @@ export function Requests({ user, search = '' }) {
               </select>
             </label>
             <label>
-              Damage reports
+              Damage filter
               <select name="damage" defaultValue={filters.damage}>
                 <option value="">All reports</option>
                 <option value="true">Unreviewed only</option>
@@ -69,7 +69,7 @@ export function Requests({ user, search = '' }) {
             </label>
           </>
         )}
-        <button>Apply filters</button>
+        <button>Apply filter</button>
       </form>
       {!resource.data ? (
         createElement(LoadState, { resource })
@@ -77,31 +77,49 @@ export function Requests({ user, search = '' }) {
         <>
           {!resource.data.data.length ? (
             <div className="empty-state">
-              <h2>No requests to show</h2>
-              <p>Requests matching your filters will appear here.</p>
-              <a href="#catalog">Browse equipment</a>
+              <h2>No circulation requests found</h2>
+              <p>No active or historical requests match your current filter parameters.</p>
+              <a href="#catalog" style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', fontWeight: 600 }}>
+                Browse equipment catalog →
+              </a>
             </div>
           ) : (
             <div className="request-list">
               {resource.data.data.map((row) => (
                 <article key={row.id}>
                   <div>
-                    <p className="eyebrow">{row.assetSnapshot?.assetTag || 'OTHER · Unlisted equipment'}</p>
+                    <div style={{ marginBottom: '8px' }}>
+                      {row.assetSnapshot?.assetTag ? (
+                        <span className="asset-tag">{row.assetSnapshot.assetTag}</span>
+                      ) : (
+                        <span className="asset-tag" style={{ borderStyle: 'dashed' }}>UNLISTED ITEM</span>
+                      )}
+                    </div>
                     <h2>
                       <a href={`#request/${row.id}`}>{row.assetSnapshot?.name || row.requestedEquipment}</a>
                     </h2>
                     {user.role === 'ADMIN' && (
-                      <p>Borrower: {row.borrower?.name || 'Account unavailable'}</p>
+                      <p style={{ fontWeight: 500, color: 'var(--ink)' }}>
+                        Borrower: {row.borrower?.name || 'Account unavailable'} ({row.borrower?.email || 'No email'})
+                      </p>
                     )}
-                    <p>Requested return: {ist(row.requestedDueAt)}</p>
-                    {row.dueAt && <p>Confirmed due: {ist(row.dueAt)}</p>}
+                    <p style={{ fontFamily: 'var(--font-mono)', fontSize: '12px' }}>
+                      Requested due: {ist(row.requestedDueAt)}
+                    </p>
+                    {row.dueAt && (
+                      <p style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--accent)', fontWeight: 600 }}>
+                        Confirmed due: {ist(row.dueAt)}
+                      </p>
+                    )}
                   </div>
                   <div className="request-summary">
                     {createElement(Status, { value: row.status })}
                     {row.damageReport && !row.damageReport.reviewedAt && (
-                      <span className="attention-label">Damage report awaiting inspection</span>
+                      <span className="attention-label">⚠ Inspection pending</span>
                     )}
-                    <a href={`#request/${row.id}`}>View request ↗</a>
+                    <a href={`#request/${row.id}`} style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', fontWeight: 600 }}>
+                      Inspect record →
+                    </a>
                   </div>
                 </article>
               ))}
@@ -109,7 +127,7 @@ export function Requests({ user, search = '' }) {
           )}
           {createElement(Pagination, {
             pagination: resource.data.pagination,
-            onPage: (page) => setFilters((previous) => ({ ...previous, page })),
+            onPage: (previous) => setFilters((prev) => ({ ...prev, page: previous })),
           })}
         </>
       )}
@@ -133,15 +151,15 @@ function DecisionForm({ row, busy, act }) {
       }}
     >
       <label>
-        Decision
+        Administrative decision
         <select value={decision} onChange={(event) => setDecision(event.target.value)}>
-          <option value="APPROVE">Approve</option>
-          <option value="REJECT">Reject</option>
+          <option value="APPROVE">Approve & reserve equipment</option>
+          <option value="REJECT">Reject request</option>
         </select>
       </label>
       {decision === 'APPROVE' ? (
         <>
-          {!row.equipmentId && <><EquipmentSelect selected={assigned} onChange={setAssigned} /><a href="#catalog">Add a missing asset in Equipment</a></>}
+          {!row.equipmentId && <><EquipmentSelect selected={assigned} onChange={setAssigned} /><a href="#catalog" style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', marginTop: '6px', display: 'inline-block' }}>Add a missing asset in Equipment →</a></>}
           <label>
             Confirmed due date and time (IST)
             <input
@@ -163,11 +181,11 @@ function DecisionForm({ row, busy, act }) {
       ) : (
         <label>
           Rejection reason
-          <textarea name="reason" required maxLength="2000" />
+          <textarea name="reason" required maxLength="2000" placeholder="State reason for rejection…" />
         </label>
       )}
       <button disabled={busy || (decision === 'APPROVE' && !row.equipmentId && !assigned)}>
-        {decision === 'APPROVE' ? 'Approve and reserve' : 'Reject request'}
+        {decision === 'APPROVE' ? 'Confirm approval & reserve asset' : 'Confirm rejection'}
       </button>
     </form>
   );
@@ -189,13 +207,23 @@ export function RequestDetail({ user, id }) {
   return (
     <>
       <a className="back-link" href="#requests">
-        ← Borrowing requests
+        ← Back to circulation requests
       </a>
       <div className="page-heading">
         <div>
-          <p className="eyebrow">{row.assetSnapshot?.assetTag || 'OTHER · Unlisted equipment'}</p>
+          <p className="eyebrow">
+            {row.assetSnapshot?.assetTag ? (
+              <>
+                <span className="asset-tag">{row.assetSnapshot.assetTag}</span> · REQUISITION RECORD
+              </>
+            ) : (
+              <>
+                <span className="asset-tag" style={{ borderStyle: 'dashed' }}>UNLISTED NEED</span> · PENDING ASSIGNMENT
+              </>
+            )}
+          </p>
           <h1>{row.assetSnapshot?.name || row.requestedEquipment}</h1>
-          <p className="lede">Borrowing details and timeline</p>
+          <p className="lede">Circulation timeline, loan terms, and inspection log.</p>
         </div>
         {createElement(Status, { value: row.status })}
       </div>
@@ -270,7 +298,7 @@ export function RequestDetail({ user, id }) {
           </ol>
         </section>
         <section className="panel">
-          <h2>Next action</h2>
+          <h2>{admin ? 'Circulation desk actions' : 'Loan requisition actions'}</h2>
           {admin &&
             row.status === 'PENDING' &&
             createElement(DecisionForm, { row, busy: mutation.busy, act })}
@@ -281,12 +309,12 @@ export function RequestDetail({ user, id }) {
                 disabled={mutation.busy || new Date(row.dueAt).getTime() <= Date.now()}
                 onClick={() => act('issue', {})}
               >
-                Record equipment issue
+                Confirm lab handover & issue asset
               </button>
               <form onSubmit={(event) => act('cancellation', values(event))}>
                 <label>
                   Cancellation reason
-                  <textarea name="reason" required maxLength="2000" />
+                  <textarea name="reason" required maxLength="2000" placeholder="State reason for administrative cancellation…" />
                 </label>
                 <button className="secondary-button" disabled={mutation.busy}>
                   Cancel reservation
@@ -300,27 +328,30 @@ export function RequestDetail({ user, id }) {
           )}
           {!admin && ['PENDING', 'APPROVED'].includes(row.status) && (
             <>
-              <p>You can cancel before the equipment is issued.</p>
+              <p>You may cancel this requisition prior to physical handover at the lab.</p>
               <button
                 type="button"
+                className="secondary-button"
                 disabled={mutation.busy}
                 onClick={() => act('cancellation', {})}
               >
-                Cancel my request
+                Withdraw loan request
               </button>
             </>
           )}
           {!admin &&
             row.status === 'ISSUED' &&
             (report ? (
-              <p>Your damage report is recorded. A lab administrator will inspect it at return.</p>
+              <p>Your damage notification has been registered in the log. Staff will verify upon physical return.</p>
             ) : (
               <form onSubmit={(event) => act('damage-report', values(event))}>
                 <label>
-                  Describe the damage
-                  <textarea name="description" required maxLength="2000" />
+                  Incident or damage description
+                  <textarea name="description" required maxLength="2000" placeholder="Describe when and how the issue occurred…" />
                 </label>
-                <button disabled={mutation.busy}>Report damage</button>
+                <button className="danger-button" disabled={mutation.busy}>
+                  Submit damage report
+                </button>
               </form>
             ))}
           {admin && row.status === 'ISSUED' && (
@@ -332,33 +363,36 @@ export function RequestDetail({ user, id }) {
               }}
             >
               <label>
-                Inspection result
+                Physical inspection result
                 <select
                   name="condition"
                   value={returnCondition}
                   onChange={(event) => setReturnCondition(event.target.value)}
                 >
-                  <option value="SERVICEABLE">Serviceable</option>
-                  <option value="DAMAGED">Damaged — enter maintenance</option>
+                  <option value="SERVICEABLE">Serviceable — return to inventory</option>
+                  <option value="DAMAGED">Damaged — transition to maintenance</option>
                 </select>
               </label>
               <label>
-                Inspection note
+                Inspection notes
                 <textarea
                   name="inspectionNote"
                   required={!!report || returnCondition === 'DAMAGED'}
                   maxLength="2000"
+                  placeholder="Record physical inspection findings…"
                 />
               </label>
               <p className="field-hint">
                 A note is required for any reported issue or damaged return. Existing reports are
                 resolved with this inspection result.
               </p>
-              <button disabled={mutation.busy}>Record equipment return</button>
+              <button disabled={mutation.busy}>Confirm return inspection & log condition</button>
             </form>
           )}
           {['RETURNED', 'CANCELLED', 'REJECTED'].includes(row.status) && (
-            <p>This request is complete. Its history is retained.</p>
+            <p style={{ color: 'var(--ink-muted)', fontStyle: 'italic' }}>
+              Requisition record is closed. Audit timeline and loan history are permanently preserved.
+            </p>
           )}
         </section>
       </div>
