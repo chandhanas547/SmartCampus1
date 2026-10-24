@@ -1,6 +1,6 @@
 # LabFlow screen and data design
 
-24 October 2026. Individual demo capstone, one lab. These layouts document the implemented scope; report screenshots in `docs/evidence/` show the verified earlier workflow. The new dropdown screens await browser verification. SRS approval remains pending.
+25 October 2026. Individual demo capstone, one lab. These layouts document the implemented scope. The owner supplied the instrument-register visual redesign in commit 7adfeee; it is preserved, with small font-policy, contrast and pagination semantics fixes. The redesigned unlisted request/assignment/issue/return journey passes local browser verification. SRS approval remains pending.
 
 ## Navigation and screen coverage
 

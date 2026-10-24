@@ -30,6 +30,8 @@ test('a production deep link receives the SPA with HTTPS security headers', asyn
   assert.match(await response.text(), /<title>LabFlow<\/title>/);
   assert.match(response.headers.get('strict-transport-security'), /max-age/);
   assert.match(response.headers.get('content-security-policy'), /upgrade-insecure-requests/);
+  assert.match(response.headers.get('content-security-policy'), /style-src 'self' https:\/\/fonts\.googleapis\.com;/);
+  assert.match(response.headers.get('content-security-policy'), /font-src 'self' https:\/\/fonts\.gstatic\.com;/);
 });
 
 test('unknown API paths and missing JavaScript assets never receive HTML', async () => {

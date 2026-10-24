@@ -10,7 +10,11 @@ export function createApp({ checkDatabase, origin, production = false, clientDis
   app.disable('x-powered-by');
   app.set('trust proxy', trustProxyHops);
   app.use(helmet({
-    contentSecurityPolicy: { directives: { 'upgrade-insecure-requests': production ? [] : null } },
+    contentSecurityPolicy: { directives: {
+      'style-src': ["'self'", 'https://fonts.googleapis.com'],
+      'font-src': ["'self'", 'https://fonts.gstatic.com'],
+      'upgrade-insecure-requests': production ? [] : null,
+    } },
     strictTransportSecurity: production ? undefined : false,
   }));
   app.use('/api', (request, response, next) => {

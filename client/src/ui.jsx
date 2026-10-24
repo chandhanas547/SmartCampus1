@@ -88,7 +88,7 @@ export function Status({ value }) {
 export function Pagination({ pagination, onPage }) {
   const pages = Math.max(1, Math.ceil(pagination.total / pagination.limit));
   return (
-    <div className="pagination" aria-label="Pagination">
+    <nav className="pagination" aria-label="Pagination">
       <button
         type="button"
         disabled={pagination.page <= 1}
@@ -106,7 +106,7 @@ export function Pagination({ pagination, onPage }) {
       >
         Next →
       </button>
-    </div>
+    </nav>
   );
 }
 export function ist(value) {

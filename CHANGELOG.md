@@ -1,10 +1,11 @@
 # Changelog
 
-## Dropdown update in progress 2026-10-24
+## Dropdowns and owner redesign 2026-10-25
 
 - Added equipment and purpose dropdowns with required Other descriptions, plus preset/custom inventory metadata choices.
 - Added unlisted requests without a reservation; admin approval assigns and reserves a real available asset atomically, retaining the original description.
-- Verified 53 local tests and all 32 isolated Atlas integration cases, including assignment races and rollback. Browser verification and publication of this update remain pending.
+- Preserved the owner's instrument-register visual redesign; corrected production font loading, pagination semantics and low-contrast accent/placeholder colors.
+- Verified 53 local tests and all 32 isolated Atlas integration cases, including assignment races and rollback. Local browser verification passes through inspected return; see the deployment runbook for current publication evidence.
 
 ## Hosted demonstration 2026-10-23
 

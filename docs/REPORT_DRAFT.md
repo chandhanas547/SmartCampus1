@@ -8,7 +8,7 @@ LabFlow is a MERN demonstration for managing individually tagged equipment in on
 
 The local application completes the core borrowing journey and passes 53 automated tests. Real MongoDB tests exercise simultaneous approvals, conflicting actions and rollback after failed writes. Earlier local accessibility scans found no violations or incomplete findings; keyboard and responsive samples were also checked. The application is also published on Vercel Hobby with Atlas Free. All 32 isolated Atlas acceptance cases pass on 24 October 2026, and the public API/security checks and student/admin browser journey were verified on 23 October 2026. College approval and submission remain pending; remaining browser checks are identified below.
 
-The new 24 October equipment/purpose dropdowns and unlisted assignment flow are implemented locally with real database coverage. Browser verification is pending local browser access in Work settings, and these changes are not yet published. The hosted evidence below describes the preceding release.
+The equipment/purpose dropdowns and unlisted assignment flow have real database coverage. On 25 October the owner's instrument-register redesign was preserved and its student request/admin assignment/issue/return journey passed local browser verification. The new form has no axe violations at 320px; the patterned background leaves a manual contrast review item described in QUALITY. Publication is in progress; hosted evidence below describes the preceding release until the deployment runbook is updated.
 
 ## Introduction
 

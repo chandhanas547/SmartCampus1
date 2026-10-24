@@ -13,7 +13,7 @@
   /* Ink */
   --ink: #191816;
   --ink-muted: #5e5a50;
-  --ink-faint: #8e897a;
+  --ink-faint: #625e53;
 
   /* Precision Rules */
   --rule: #d7d1c3;
@@ -21,7 +21,7 @@
   --rule-subtle: #e5dfd2;
 
   /* Signal / Accent - Fluke multimeter amber */
-  --accent: #c45d1e;
+  --accent: #9f4716;
   --accent-hover: #a84e18;
   --accent-subtle: #faebe2;
   --accent-text: #ffffff;
