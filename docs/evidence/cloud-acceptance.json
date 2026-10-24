@@ -1,11 +1,11 @@
 {
-  "verifiedOn": "2026-10-23",
+  "verifiedOn": "2026-10-24",
   "environment": "Atlas Free, AWS AP_SOUTH_1, MongoDB 8.0.34",
   "project": "labflow-capstone",
   "cluster": "labflow-demo",
   "command": "npm run test:cloud",
-  "tests": 28,
-  "passed": 28,
+  "tests": 32,
+  "passed": 32,
   "failed": 0,
   "testDatabases": [
     "labflow_acceptance_database",
@@ -15,5 +15,6 @@
   "cleanup": "All three test databases contain no collections after fixture cleanup",
   "appAccount": "readWrite on labflow only, scoped to labflow-demo; connection and index initialization passed",
   "networkException": "Owner explicitly approved persistent 0.0.0.0/0 on this demo project only; TLS/authentication retained",
-  "limits": "Cloud API/database verification; not evidence of Vercel publication or a hosted browser journey"
+  "limits": "Cloud API/database verification; not evidence of Vercel publication or a hosted browser journey",
+  "coveredAddition": "Unlisted request validation/replay/ownership, atomic available-asset assignment, competing allocation and injected assignment rollback"
 }

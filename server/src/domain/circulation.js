@@ -5,7 +5,10 @@ import { userModel } from '../identity/user.js';
 const conflict = (message = 'This request or equipment has changed. Refresh and try again.') => new HttpError(409, 'STATE_CONFLICT', message);
 const invalid = (message) => new HttpError(400, 'INVALID_INPUT', message);
 const scope = (user) => user.role === 'ADMIN' ? {} : { studentId: user._id };
-const samePayload = (row, input) => row.equipmentId.toString() === input.equipmentId && row.purpose === input.purpose && row.requestedDueAt.getTime() === input.requestedDueAt.getTime();
+const samePayload = (row, input) => (row.requestedEquipment
+  ? !input.equipmentId && row.requestedEquipment === input.requestedEquipment
+  : row.equipmentId?.toString() === input.equipmentId && !input.requestedEquipment)
+  && row.purpose === input.purpose && row.requestedDueAt.getTime() === input.requestedDueAt.getTime();
 
 export function circulationService(connection, now = Date.now) {
   const { Equipment, BorrowingRequest } = domainModels(connection);
@@ -31,6 +34,13 @@ export function circulationService(connection, now = Date.now) {
           if (existing) return existing;
           const time = new Date(now());
           if (input.requestedDueAt <= time) throw invalid('Choose a future return date.');
+          if (input.requestedEquipment) {
+            if (await BorrowingRequest.exists({ studentId: user._id, equipmentId: null, status: { $in: OPEN } }).session(session)) throw conflict('You already have an unassigned equipment request. Wait for assignment or cancel it first.');
+            const [row] = await BorrowingRequest.create([{
+              ...input, studentId: user._id, status: 'PENDING', events: [{ action: 'SUBMIT', actor: user._id, at: time }],
+            }], { session });
+            return { data: requestData(row), created: true };
+          }
           const equipment = await Equipment.findById(input.equipmentId).session(session);
           if (!equipment || equipment.status === 'ARCHIVED') throw new HttpError(404, 'NOT_FOUND', 'Equipment not found.');
           if (equipment.status !== 'AVAILABLE') throw conflict('This equipment is not currently available.');
@@ -75,14 +85,24 @@ export function circulationService(connection, now = Date.now) {
       return connection.transaction(async (session) => {
         const row = await BorrowingRequest.findOne({ _id: id, ...scope(user) }).session(session);
         if (!row) throw new HttpError(404, 'NOT_FOUND', 'Request not found.');
-        const equipment = await Equipment.findById(row.equipmentId).session(session);
-        if (!equipment) throw conflict();
+        let equipment = row.equipmentId ? await Equipment.findById(row.equipmentId).session(session) : null;
+        if (row.equipmentId && !equipment) throw conflict();
         const time = new Date(now());
-        const allocated = (status, requestStatus) => equipment.status === status && row.status === requestStatus && equipment.currentRequestId?.equals(row._id);
+        const allocated = (status, requestStatus) => equipment?.status === status && row.status === requestStatus && equipment.currentRequestId?.equals(row._id);
         let assetUpdate;
         switch (action) {
           case 'APPROVE':
             if (input.dueAt <= time || input.dueAt.getTime() > time.getTime() + 168 * 3600000) throw invalid('Return date must be future and within seven days of approval.');
+            if (!row.equipmentId) {
+              if (!input.equipmentId) throw invalid('Choose an available registered asset before approving this request.');
+              equipment = await Equipment.findById(input.equipmentId).session(session);
+              if (!equipment) throw new HttpError(404, 'NOT_FOUND', 'Equipment not found.');
+              if (await BorrowingRequest.exists({ studentId: row.studentId, equipmentId: equipment._id, status: { $in: OPEN } }).session(session)) throw conflict('This student already has an open request for that asset.');
+              row.equipmentId = equipment._id;
+              row.assetSnapshot = { assetTag: equipment.assetTag, name: equipment.name };
+            } else if (input.equipmentId && input.equipmentId !== row.equipmentId.toString()) {
+              throw invalid('A request for a registered asset cannot be reassigned.');
+            }
             if (row.status !== 'PENDING' || row.requestedDueAt <= time || equipment.status !== 'AVAILABLE') throw conflict();
             row.status = 'APPROVED'; row.dueAt = input.dueAt;
             assetUpdate = { status: 'RESERVED', currentRequestId: row._id };

@@ -109,6 +109,89 @@ test('request creation is idempotent under concurrent replay and remains replaya
   assert.equal((await call('POST', '/requests', { ...values, requestKey: randomUUID() }, studentCookie)).status, 400);
 });
 
+test('unlisted requests validate, replay, enforce ownership and close without creating inventory', async () => {
+  const input = { requestedEquipment: 'A digital signal generator with test leads', purpose: 'Laboratory practical work', requestedDueAt: new Date(clock + 86400000).toISOString(), requestKey: randomUUID() };
+  for (const invalid of [{ ...input, equipmentId: 'a'.repeat(24) }, { ...input, requestedEquipment: ' ' }, { ...input, requestedEquipment: 'x'.repeat(501) }, { ...input, role: 'ADMIN' }]) {
+    assert.equal((await call('POST', '/requests', invalid, studentCookie)).status, 400);
+  }
+  const results = await Promise.all([call('POST', '/requests', input, studentCookie), call('POST', '/requests', input, studentCookie)]);
+  assert.deepEqual(results.map((r) => r.status).sort(), [200, 201]);
+  const row = results[0].body.data;
+  assert.equal(row.status, 'PENDING'); assert.equal(row.equipmentId, null);
+  assert.equal(await models.Equipment.countDocuments(), 0);
+  assert.equal((await call('GET', `/requests/${row.id}`, undefined, otherCookie)).status, 404);
+  assert.equal((await call('POST', `/requests/${row.id}/cancellation`, {}, otherCookie)).status, 404);
+  assert.equal((await call('POST', '/requests', { ...input, requestKey: randomUUID() }, studentCookie)).status, 409);
+  assert.equal((await call('POST', `/requests/${row.id}/issue`, {})).status, 409);
+  assert.equal((await call('POST', `/requests/${row.id}/cancellation`, {}, studentCookie)).status, 200);
+  const fresh = await call('POST', '/requests', { ...input, requestKey: randomUUID() }, studentCookie);
+  assert.equal(fresh.status, 201);
+  assert.equal((await call('POST', `/requests/${fresh.body.data.id}/decision`, { action: 'REJECT', reason: 'No suitable equipment is available.' })).status, 200);
+  assert.equal(await models.Equipment.countDocuments(), 0);
+});
+
+test('unlisted approval assigns a real available asset atomically and preserves replay through return', async () => {
+  const equipment = await createAsset();
+  const input = { requestedEquipment: 'An oscilloscope suitable for circuit experiments', purpose: 'Course project work', requestedDueAt: new Date(clock + 86400000).toISOString(), requestKey: randomUUID() };
+  const created = await call('POST', '/requests', input, studentCookie);
+  assert.equal(created.status, 201);
+  const row = created.body.data;
+  const approve = { action: 'APPROVE', dueAt: input.requestedDueAt };
+  assert.equal((await call('POST', `/requests/${row.id}/decision`, approve)).status, 400);
+  assert.equal((await call('POST', `/requests/${row.id}/decision`, { ...approve, equipmentId: equipment.id }, studentCookie)).status, 403);
+  assert.equal((await call('POST', `/requests/${row.id}/decision`, { ...approve, equipmentId: 'a'.repeat(24) })).status, 404);
+  const assigned = await call('POST', `/requests/${row.id}/decision`, { ...approve, equipmentId: equipment.id });
+  assert.equal(assigned.status, 200);
+  assert.equal(assigned.body.data.equipmentId, equipment.id);
+  assert.equal(assigned.body.data.assetSnapshot.assetTag, asset.assetTag);
+  assert.equal(assigned.body.data.requestedEquipment, input.requestedEquipment);
+  assert.equal((await call('POST', '/requests', input, studentCookie)).status, 200);
+  assert.equal((await call('POST', '/requests', { ...input, requestedEquipment: 'A different piece of laboratory equipment' }, studentCookie)).status, 409);
+  assert.equal((await call('POST', `/requests/${row.id}/issue`, {})).status, 200);
+  assert.equal((await call('POST', `/requests/${row.id}/damage-report`, { description: 'Loose connector found during the synthetic test.' }, studentCookie)).status, 201);
+  assert.equal((await call('POST', `/requests/${row.id}/return`, { condition: 'SERVICEABLE', inspectionNote: 'Inspected connector and confirmed serviceable.' })).status, 200);
+  const stored = await models.BorrowingRequest.findById(row.id);
+  assert.equal(stored.damageReport.inspectionResult, 'SERVICEABLE');
+  assert.equal(stored.requestedEquipment, input.requestedEquipment);
+  assert.equal((await models.Equipment.findById(equipment.id)).status, 'AVAILABLE');
+});
+
+test('unlisted assignment races and duplicate student loans preserve the existing allocation guard', async () => {
+  const equipment = await createAsset();
+  const tracked = (await requestEquipment(equipment.id)).body.data;
+  const input = { requestedEquipment: 'An oscilloscope for a waveform demonstration', purpose: 'Laboratory practical work', requestedDueAt: new Date(clock + 86400000).toISOString(), requestKey: randomUUID() };
+  const own = await call('POST', '/requests', input, studentCookie); assert.equal(own.status, 201);
+  const decision = { action: 'APPROVE', equipmentId: equipment.id, dueAt: input.requestedDueAt };
+  assert.equal((await call('POST', `/requests/${own.body.data.id}/decision`, decision)).status, 409);
+  assert.equal((await models.BorrowingRequest.findById(own.body.data.id)).equipmentId, null);
+  const other = await call('POST', '/requests', { ...input, requestKey: randomUUID() }, otherCookie); assert.equal(other.status, 201);
+  const results = await Promise.all([
+    call('POST', `/requests/${tracked.id}/decision`, { action: 'APPROVE', dueAt: input.requestedDueAt }),
+    call('POST', `/requests/${other.body.data.id}/decision`, decision),
+  ]);
+  assert.deepEqual(results.map((r) => r.status).sort(), [200, 409]);
+  assert.equal(await models.BorrowingRequest.countDocuments({ status: 'APPROVED' }), 1);
+  const reserved = await models.Equipment.findById(equipment.id);
+  assert.equal(reserved.status, 'RESERVED');
+  assert.equal((await models.BorrowingRequest.findById(reserved.currentRequestId)).equipmentId.toString(), equipment.id);
+});
+
+test('failed unlisted assignment rolls back snapshot, request and reservation together', async () => {
+  const equipment = await createAsset();
+  const created = await call('POST', '/requests', { requestedEquipment: 'An oscilloscope for a circuit measurement exercise', purpose: 'Research experiment', requestedDueAt: new Date(clock + 86400000).toISOString(), requestKey: randomUUID() }, studentCookie);
+  assert.equal(created.status, 201);
+  const row = created.body.data;
+  await connection.db.command({ collMod: models.BorrowingRequest.collection.name, validator: { status: { $ne: 'APPROVED' } }, validationLevel: 'strict' });
+  try {
+    assert.equal((await call('POST', `/requests/${row.id}/decision`, { action: 'APPROVE', equipmentId: equipment.id, dueAt: new Date(clock + 86400000).toISOString() })).status, 500);
+    const stored = await models.BorrowingRequest.findById(row.id);
+    assert.equal(stored.status, 'PENDING'); assert.equal(stored.equipmentId, null);
+    assert.equal(stored.assetSnapshot?.assetTag, undefined);
+    assert.equal(stored.events.length, 1);
+    assert.equal((await models.Equipment.findById(equipment.id)).status, 'AVAILABLE');
+  } finally { await connection.db.command({ collMod: models.BorrowingRequest.collection.name, validator: {} }); }
+});
+
 test('open-request guards and ownership apply at the API boundary', async () => {
   const equipment = await createAsset();
   const request = await requestEquipment(equipment.id);

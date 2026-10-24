@@ -20,7 +20,8 @@ export function domainModels(connection) {
   equipmentSchema.index({ status: 1, category: 1, createdAt: -1, _id: -1 });
   const requestSchema = new Schema({
     studentId: { type: Schema.Types.ObjectId, required: true },
-    equipmentId: { type: Schema.Types.ObjectId, required: true },
+    equipmentId: { type: Schema.Types.ObjectId, default: null },
+    requestedEquipment: { type: String, maxlength: 500 },
     assetSnapshot: { assetTag: String, name: String },
     requestKey: { type: String, required: true },
     purpose: { type: String, required: true, maxlength: 500 },

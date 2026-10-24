@@ -7,7 +7,7 @@ This document records the assumptions that future sessions must not silently cha
 - LabFlow is a **demo-only, single-lab MERN capstone**.
 - Roles are `STUDENT` and `ADMIN`; public registration can create students only.
 - Equipment is tracked as individual physical assets with unique asset tags.
-- One borrowing request concerns one asset.
+- One borrowing request concerns one asset; an unlisted need remains unassigned until an admin selects a registered asset during approval.
 - The original ICTAK DOCX files stay local and unmodified but are excluded from Git.
 - SRS approval and submission remain pending. On 21 October 2026 the owner instructed development to begin, superseding the earlier submission-before-coding gate.
 - No paid service may be provisioned without explicit approval.
@@ -44,7 +44,7 @@ This document records the assumptions that future sessions must not silently cha
 - Existing damage reports must be resolved at return with reviewer/time, matching inspection result and non-empty note, even for serviceable returns.
 - Inventory PATCH uses expected version and one explicit action: metadata edit, enter maintenance or restore. Manual transition notes are mandatory; allocation states cannot be set through PATCH.
 
-These policies supersede the older provisional labels in MASTER_PLAN. The detailed contract is in `SRS_DRAFT.md` revision 0.5 Draft and remains subject to document review; it is not evidence of SRS submission.
+These policies supersede the older provisional labels in MASTER_PLAN. The detailed contract is in `SRS_DRAFT.md` revision 0.6 Draft and remains subject to document review; it is not evidence of SRS submission.
 
 ## Provisional implementation choices
 
@@ -80,6 +80,12 @@ On 22 October 2026 Render required payment information through both its API (HTT
 The original ICTAK guide's section 13 asks for a working hosted URL, README live links and core flows tested on the live site. Those hosted-URL and live core-flow items were verified on 23 October 2026 at [labflow-lemon.vercel.app](https://labflow-lemon.vercel.app); other assessment and submission items remain separate. After disclosure of the changing function egress IPs, the owner explicitly approved the persistent `0.0.0.0/0` rule for `labflow-capstone` only on 23 October 2026. Automatic review had rejected the earlier general instruction; that earlier attempt made no change. Vercel Hobby with the existing separate Atlas Free cluster is selected. A `0.0.0.0/0` project access entry is authorized for this synthetic demonstration; database authentication, TLS, readWrite limited to `labflow`, exact browser Origin and all application authorization remain mandatory. This replaces the earlier host-IP-only deployment plan for this demo. No card, paid plan or native Atlas integration with broader database roles is authorized. This is not a real-student production baseline or SRS submission approval.
 
 On 23 October 2026 the owner explicitly approved creating the synthetic application administrator `admin@labflow.example`. It was created only in `labflow`, with no Atlas/cloud administrator permissions and no elevation of an existing user. Its random password is stored in owner-only ignored `.local/cloud/demo-access.json`. Student demonstration credentials are likewise private; no reusable credential is published.
+
+## Equipment and purpose choices
+
+On 24 October 2026 the owner requested dropdowns for equipment and purpose, each with Other, and explicitly chose student descriptions for unlisted equipment followed by admin asset assignment before approval. Existing registered-asset requests remain supported. An unlisted request stores `requestedEquipment` (10–500 trimmed characters), starts PENDING without an asset or reservation, and can be cancelled by its owner or rejected by an admin. Approval must assign a registered AVAILABLE asset atomically with reservation, preserving the original description and ownership/date guards. A student may have one unassigned open request at a time under the existing open-request uniqueness guard; assignment or closure permits another. No index is dropped, and no untracked item can be issued.
+
+Native dropdowns also cover known equipment names, categories and locations with required Other text for custom values. Purpose choices and custom purpose continue to store a single 10–500 character purpose string. Existing values survive editing. Search, dates, credentials, damage descriptions and inspection notes retain suitable text/date controls. The endpoint count remains 19.
 
 ## Change rule
 

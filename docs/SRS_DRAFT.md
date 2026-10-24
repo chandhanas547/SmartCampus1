@@ -3,7 +3,7 @@
 | Document field | Value |
 |---|---|
 | Project | LabFlow — College Laboratory Equipment Management System |
-| Document version | 0.5 Draft |
+| Document version | 0.6 Draft |
 | Status | Draft for review — not approved or submitted |
 | Prepared by | TBD: individual author name and student ID |
 | Institution | TBD |
@@ -19,6 +19,7 @@
 | 0.3 | 2026-10-21 | TBD | Recorded individual submission and owner authorization to start development; requirements remain a review draft. |
 | 0.4 | 2026-10-22 | TBD | Synchronized implemented input/security policies, quality gates and supporting design; no approval or submission claimed. |
 | 0.5 | 2026-10-23 | TBD | Selected Vercel Hobby/Atlas Free and recorded the owner-authorized synthetic-demo network exception; application security requirements remain unchanged. Recorded hosted verification and refreshed the matching review export. |
+| 0.6 | 2026-10-24 | TBD | Added owner-requested dropdowns and unlisted equipment requests requiring registered-asset assignment before approval; no approval/submission claim. |
 
 ## 1. Introduction
 
@@ -106,13 +107,13 @@ MongoDB replica set
 | Assumption | Status |
 |---|---|
 | Vercel serves the built React assets and an Express Function at `/api`, under one origin. Local Node startup remains supported. | Implemented and verified on the public demo on 23 October 2026 |
-| Production uses Atlas Free with replica-set transaction support. | Selected provider; 28 isolated cloud acceptance tests passed |
+| Production uses Atlas Free with replica-set transaction support. | Selected provider; 32 isolated cloud acceptance tests passed on 24 October 2026 |
 | Frontend and API use one origin to simplify cookie security and CORS. | Selected implementation baseline |
 | HTTPS and provider-managed environment variables are required when deployed. | Approved |
 | Only free services may be selected unless paid use is explicitly approved. | Approved |
 | Vercel Hobby and Atlas Free (AWS Mumbai) are used at https://labflow-lemon.vercel.app; the API function region is bom1. See DEPLOYMENT.md for evidence and limits. | Demo deployment verified; no production availability guarantee |
 
-The owner explicitly authorized Vercel's free backend and the persistent `0.0.0.0/0` rule for `labflow-capstone` only on 23 October 2026. For the separate synthetic-demo Atlas project only, `0.0.0.0/0` may replace host-IP restrictions. Database authentication and TLS remain required, and the app user has readWrite on `labflow` only. No public database credentials or real-person data are permitted. This removes a network restriction, not authentication; it is unsuitable as an unreviewed baseline for real college use. See `DECISIONS.md` and `DEPLOYMENT.md`. The matching 0.5 DOCX is a review copy; neither this document nor its export is approved or submitted.
+The owner explicitly authorized Vercel's free backend and the persistent `0.0.0.0/0` rule for `labflow-capstone` only on 23 October 2026. For the separate synthetic-demo Atlas project only, `0.0.0.0/0` may replace host-IP restrictions. Database authentication and TLS remain required, and the app user has readWrite on `labflow` only. No public database credentials or real-person data are permitted. This removes a network restriction, not authentication; it is unsuitable as an unreviewed baseline for real college use. See `DECISIONS.md` and `DEPLOYMENT.md`. The 0.5 DOCX is a prior review snapshot; a matching 0.6 export is required after this change is verified. Neither is approved or submitted.
 
 ## 3. User roles and permissions
 
@@ -182,10 +183,10 @@ An **open (active) request** is `PENDING`, `APPROVED` or `ISSUED`. Manual entry 
 | Field | Specification |
 |---|---|
 | Actors | Student |
-| Requirement | A student shall request one available asset and review the resulting history. |
-| Acceptance criteria | (1) Creation uses the authenticated student, valid asset, purpose, requested due date and stable request key. (2) A pending request does not reserve the asset. (3) The same student cannot have multiple active requests for the same asset. (4) Repeating the same request key and payload returns the original request; a changed payload conflicts. (5) History is paginated and shows state, decision reason where applicable and lifecycle timestamps. |
+| Requirement | A student shall select an available asset or describe Other equipment, and review the resulting history. |
+| Acceptance criteria | (1) Creation uses the authenticated student, valid asset or Other description, purpose, requested due date and stable request key. (2) A pending request does not reserve the asset. (3) The same student cannot have multiple active requests for the same asset. (4) Repeating the same request key and payload returns the original request; a changed payload conflicts. (5) History is paginated and shows state, decision reason where applicable and lifecycle timestamps. |
 
-New requests require `AVAILABLE`, non-archived equipment and a future `requestedDueAt`. Date rules and expired pending-request handling are defined in Section 6.3. Identical replay returns the existing request even if its original date has since expired; it does not create a new request or bypass approval checks.
+Registered-asset requests require `AVAILABLE`, non-archived equipment and a future `requestedDueAt`. Other equipment requests instead store a required 10–500 character `requestedEquipment` description and remain PENDING without an allocation until an admin assigns an available registered asset at approval. One unassigned open request per student is allowed; the existing uniqueness guard remains. Owner cancellation and admin rejection require no asset. Equipment/purpose dropdowns offer Other with required text; stored purpose remains 10–500 characters. Date rules and expired pending-request handling are defined in Section 6.3. Identical replay returns the existing request even if its original date has since expired; it does not create a new request or bypass approval checks.
 
 ### F6 — Request approval and rejection
 
@@ -194,6 +195,8 @@ New requests require `AVAILABLE`, non-archived equipment and a future `requested
 | Actors | Admin |
 | Requirement | An administrator shall approve or reject a pending request. |
 | Acceptance criteria | (1) Approval requires a valid due date and atomically changes the request to `APPROVED` and asset from `AVAILABLE` to `RESERVED`. (2) Rejection requires a non-empty reason and does not change asset state. (3) A decision on a non-pending request returns `409`. (4) If two admins approve competing requests simultaneously, exactly one succeeds and the other receives `409`. (5) No partial request/equipment update survives failure. |
+
+For an unassigned Other request, approval requires a registered AVAILABLE `equipmentId`, no existing open request by that student for the selected asset, and an atomic snapshot/assignment/reservation. The original requested description is retained for history and idempotent replay. A registered-asset request cannot be reassigned to another asset.
 
 At approval, both the original `requestedDueAt` and approved `dueAt` must still be future instants. The admin may choose a different `dueAt`, but it must be no later than seven days from the server-recorded approval instant. Expired pending requests cannot be approved; they remain pending until explicitly rejected or cancelled.
 
@@ -316,7 +319,7 @@ If a report exists, return requires a non-empty inspection note and an explicit 
 
 | Action | Request transition | Equipment transition | Guard |
 |---|---|---|---|
-| Submit | New → `PENDING` | Remains `AVAILABLE` | Student authenticated; valid asset/input; no duplicate active request |
+| Submit | New → `PENDING` | Registered asset remains `AVAILABLE`; Other has no assigned asset | Student authenticated; valid asset or Other description/input; no duplicate active request |
 | Approve | `PENDING` → `APPROVED` | `AVAILABLE` → `RESERVED` | Admin; valid due date; atomic conditional update |
 | Reject | `PENDING` → `REJECTED` | No change | Admin; reason required |
 | Cancel pending | `PENDING` → `CANCELLED` | No change | Owner |
@@ -341,13 +344,13 @@ Pending requests do not reserve an asset. Overdue is derived from `ISSUED` plus 
 ### 7.1 Entities and relationships
 
 ```text
-User (student) 1 ---- * BorrowingRequest * ---- 1 Equipment
+User (student) 1 ---- * BorrowingRequest * ---- 0..1 Equipment
 User (admin)   1 ---- * lifecycle events / inventory updates
 BorrowingRequest 1 --- 0..1 embedded DamageReport
 User 1 -------- 0..* Session
 ```
 
-Shared entities are referenced by identifier. Lifecycle events and damage details belong to one request and are embedded with it. A request stores immutable asset name/tag snapshots so archived assets do not erase history.
+Shared entities are referenced by identifier. Lifecycle events and damage details belong to one request and are embedded with it. A request stores immutable asset name/tag snapshots when a registered asset is selected or assigned, so archived assets do not erase history. The original unlisted description remains unchanged after assignment.
 
 ### 7.2 Essential fields
 
@@ -355,7 +358,7 @@ Shared entities are referenced by identifier. Lifecycle events and damage detail
 |---|---|
 | User | `_id`, name, normalized email, password hash excluded by default, role, timestamps |
 | Equipment | `_id`, immutable normalized asset tag, name, category, description, location, state, current request reference, condition note, updated-by reference, version, timestamps |
-| Borrowing request | `_id`, student/equipment references, asset snapshot, request key, purpose, `requestedDueAt`, approved `dueAt`, approval instant in lifecycle event, status, issue/return times, return condition, inspection note, lifecycle events, optional damage report, timestamps |
+| Borrowing request | `_id`, student reference, nullable equipment reference until assignment, original requestedEquipment description for Other, actual asset snapshot after assignment, request key, purpose, `requestedDueAt`, approved `dueAt`, approval instant in lifecycle event, status, issue/return times, return condition, inspection note, lifecycle events, optional damage report, timestamps |
 | Lifecycle event | Action, actor reference, server timestamp, optional reason |
 | Damage report | Description, reporter/time, nullable reviewer/time and inspection result (`SERVICEABLE`/`DAMAGED`); reviewer/time/result present together when resolved |
 | Session | Session identifier/data, user reference and expiry as required by the selected store |
@@ -366,6 +369,7 @@ Shared entities are referenced by identifier. Lifecycle events and damage detail
 - Unique normalized equipment asset tag.
 - Unique `(studentId, requestKey)` for request replay safety.
 - Partial unique `(studentId, equipmentId)` for open/active requests (`PENDING`, `APPROVED`, `ISSUED`).
+- The nullable equipment reference permits at most one unassigned open request per student. Unassigned requests have no allocation; approval requires atomic registered-asset assignment and reservation.
 - Partial unique `equipmentId` for approved/issued allocation.
 - Query indexes for request owner/status/date, overdue lookup and equipment search/filter fields.
 - Strict enums, timestamps, bounded strings, valid identifiers/dates and allowlisted updates.
@@ -403,10 +407,10 @@ Shared entities are referenced by identifier. Lifecycle events and damage detail
 | `POST /api/equipment` | Admin | JSON: asset tag, name, category, description, location, condition note as applicable | `201`, equipment | `400`, `401`, `403`, `409` |
 | `PATCH /api/equipment/:id` | Admin | JSON: expected `version`, `action` (`EDIT_METADATA`, `ENTER_MAINTENANCE`, `RESTORE`), fields or mandatory note as specified below | `200`, updated equipment with incremented version | `400`, `401`, `403`, `404`, `409` |
 | `DELETE /api/equipment/:id` | Admin | Valid asset ID | `204`, asset archived | `400`, `401`, `403`, `404`, `409` |
-| `POST /api/requests` | Student | JSON: available non-archived `equipmentId`, `purpose`, future `requestedDueAt`, stable `requestKey` | `201` new or `200` identical replay | `400`, `401`, `403`, `404`, `409` |
+| `POST /api/requests` | Student | JSON: exactly one of available non-archived `equipmentId` or `requestedEquipment` description, `purpose`, future `requestedDueAt`, stable `requestKey` | `201` new or `200` identical replay | `400`, `401`, `403`, `404`, `409` |
 | `GET /api/requests` | Authenticated | Query: `status`, `page`, `limit`; approved admin filters may include overdue/damage | `200`, role-scoped page | `400`, `401` |
 | `GET /api/requests/:id` | Owner/Admin | Valid request ID | `200`, request/timeline | `400`, `401`, `404` |
-| `POST /api/requests/:id/decision` | Admin | JSON: `action` (`APPROVE`/`REJECT`), plus future `dueAt` within 168 hours of approval or `reason`; expired requested date blocks approval | `200`, updated request | `400`, `401`, `403`, `404`, `409` |
+| `POST /api/requests/:id/decision` | Admin | JSON: `action` (`APPROVE`/`REJECT`), plus future `dueAt` within 168 hours and required `equipmentId` when unassigned, or `reason`; expired requested date blocks approval | `200`, updated request | `400`, `401`, `403`, `404`, `409` |
 | `POST /api/requests/:id/cancellation` | Owner/Admin | JSON: `reason` when admin | `200`, updated request | `400`, `401`, `403`, `404`, `409` |
 | `POST /api/requests/:id/issue` | Admin | No business body | `200`, issued request | `401`, `403`, `404`, `409` |
 | `POST /api/requests/:id/return` | Admin | JSON: `condition` (`SERVICEABLE`/`DAMAGED`); `inspectionNote` required for damage or any existing report; resolves report with matching condition | `200`, returned request and resolved report if present | `400`, `401`, `403`, `404`, `409` |
@@ -426,8 +430,8 @@ PATCH accepts exactly one action per call. Every action requires a non-negative 
 |---|---|---|---|
 | UC-01 | Register and log in | Visitor registers with name/email/password as student, logs in and session identity is restored on reload. | Invalid/duplicate input is rejected; role injection fails; rate limit may return `429`. |
 | UC-02 | Browse catalog | User searches/filters, opens a result and sees current asset state; admin may read archived assets. | Student discovery always excludes archived assets; archived detail returns `404`; invalid filters return `400`; empty/error states offer next steps. |
-| UC-03 | Request equipment | Student submits purpose/date once and sees `PENDING` in history. | Stale asset, duplicate active request or changed idempotency replay returns `409`; unknown network outcome triggers state reload. |
-| UC-04 | Decide request | Admin approves an unexpired pending request with a future due date within 168 hours, or rejects with reason. | Expired pending request remains pending and approval returns `409`; unavailable asset or competing action conflicts without partial state. |
+| UC-03 | Request equipment | Student selects equipment/purpose or specifies Other, submits once and sees `PENDING` in history. | Stale asset, duplicate active request or changed idempotency replay returns `409`; unknown network outcome triggers state reload. |
+| UC-04 | Decide request | Admin assigns a registered available asset for Other, then approves atomically with a future due date within 168 hours, or rejects with reason. | Expired pending request remains pending and approval returns `409`; unavailable asset or competing action conflicts without partial state. |
 | UC-05 | Cancel request | Owner cancels pending/approved request; approved cancellation releases reservation. | Wrong owner is not disclosed; issued/already-final request returns `409`. |
 | UC-06 | Issue equipment | Admin confirms an approved reservation and records physical handover. | Expired/invalid due date or mismatched state returns `409`. |
 | UC-07 | Report damage | Borrower reports damage while request is issued. | Wrong owner/state or duplicate report is rejected without changing the request. |
@@ -503,7 +507,7 @@ This table defines planned evidence, not completed results.
 ### 12.1 Approved assumptions
 
 - Demo-only, one laboratory and two roles: `STUDENT`, `ADMIN`.
-- Individually tagged assets; one asset per request.
+- Individually tagged assets; one asset per request, assigned at approval for an unlisted need.
 - Pending requests do not reserve; admin approval reserves.
 - Transactional inventory safety, server RBAC, ownership and boundary validation are mandatory.
 - Original ICTAK references remain unchanged and outside Git.

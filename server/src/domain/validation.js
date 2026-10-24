@@ -15,8 +15,9 @@ export const patchEquipmentInput = z.discriminatedUnion('action', [
 ]);
 export const equipmentQuery = z.strictObject({ search: text(0, 80).optional(), category: text(2, 80).optional(), status: z.enum(EQUIPMENT_STATES).optional(), page, limit });
 export const requestQuery = z.strictObject({ status: z.enum(REQUEST_STATES).optional(), overdue: z.enum(['true', 'false']).optional(), damage: z.enum(['true', 'false']).optional(), page, limit });
-export const createRequestInput = z.strictObject({ equipmentId: id, purpose: text(10, 500), requestedDueAt: instant, requestKey: z.uuid() });
-export const decisionInput = z.discriminatedUnion('action', [z.strictObject({ action: z.literal('APPROVE'), dueAt: instant }), z.strictObject({ action: z.literal('REJECT'), reason: note })]);
+export const createRequestInput = z.strictObject({ equipmentId: id.optional(), requestedEquipment: text(10, 500).optional(), purpose: text(10, 500), requestedDueAt: instant, requestKey: z.uuid() })
+  .refine((input) => Boolean(input.equipmentId) !== Boolean(input.requestedEquipment));
+export const decisionInput = z.discriminatedUnion('action', [z.strictObject({ action: z.literal('APPROVE'), dueAt: instant, equipmentId: id.optional() }), z.strictObject({ action: z.literal('REJECT'), reason: note })]);
 export const cancellationInput = z.strictObject({ reason: note.optional() });
 export const returnInput = z.strictObject({ condition: z.enum(['SERVICEABLE', 'DAMAGED']), inspectionNote: note.optional() });
 export const reportInput = z.strictObject({ description: note });
