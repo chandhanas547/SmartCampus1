@@ -53,6 +53,8 @@ After deployment, inspect its ID/region, verify the ordinary public production a
 
 ## Monitoring and rollback
 
+The local 24 October dropdown update introduces requests with nullable equipment references before assignment. Once any unlisted request has been stored, the previous 0.5 application is not a compatible rollback reader: it assumes every request has an asset snapshot. Roll back only to a verified deployment that supports unassigned requests, or fix forward. Do not delete request history to make older code work. This update has not been deployed yet; 53 local tests and 32 isolated Atlas tests pass, while new-screen browser verification is pending local browser access.
+
 Record the exact successful deployment ID and Git commit. Inspect health, safe errors, latency and memory during acceptance. A readiness/auth failure, allocation inconsistency or repeated 500 response stops evaluation. Use the Vercel Dashboard deployment history to select the last verified deployment and its rollback action, then repeat health/session/core-flow checks. The initial deployment with broken named rewrite routing is not a rollback candidate. Rollback has not been executed during this acceptance run. Preserve Atlas data/indexes; code rollback does not authorize deleting the database. If there is no successful hosted version, stop advertising the demo until fixed. Hobby usage exhaustion must pause the service rather than incur charges; no upgrade is authorized. See [Vercel account plans](https://vercel.com/docs/plans).
 
 ## Previous host attempt

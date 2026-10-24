@@ -20,14 +20,14 @@ The architecture is a React client communicating with an Express JSON API; only 
 
 - Register, sign in and sign out
 - Browse a searchable, paginated equipment catalog
-- Submit and cancel borrowing requests
+- Select equipment and purpose from dropdowns, or describe Other; cancel eligible borrowing requests
 - View request status and history
 - Report damage for equipment currently issued to them
 
 ### Lab administrator
 
 - Create, update, maintain and archive inventory records
-- Approve or reject requests
+- Assign an available registered asset for an unlisted need, then approve; or reject requests
 - Record equipment issue and return
 - Review damage reports and manage maintenance status
 - View an operational dashboard
@@ -43,6 +43,8 @@ The architecture is a React client communicating with an Express JSON API; only 
 ## Current status
 
 **The synthetic demo is live on Vercel Hobby with Atlas Free.** Identity, inventory, decisions/cancellation, issue, damage, inspected return, maintenance and dashboard are implemented and verified on the public site. All 49 local tests, lint/build and critical coverage gates pass; all 28 isolated Atlas integration cases also pass. Live API/security checks and the browser borrowing journey pass. Native browser zoom and other-engine checks remain unverified. SRS approval and college submission remain pending; deployment does not imply either.
+
+**Dropdown update in progress, 24 October:** equipment/purpose dropdowns with Other and admin assignment are implemented locally. All 53 tests (16 server, five client API and 32 real database integration), lint/build and critical coverage gates pass; all 32 isolated Atlas cases also pass. Browser testing of these new screens is pending because local browser use is disabled in the app's Work settings. This update has not been deployed; the public verification above describes the previous release.
 
 The owner authorized development on 21 October 2026 while SRS approval and submission remain pending. Scope and business rules are recorded in [decisions](docs/DECISIONS.md).
 
@@ -93,7 +95,7 @@ npm run build
 
 Or run `npm run check` for all four. `npm test` covers API/configuration/static-serving behavior and the client API module; integration tests prove transaction commit and rollback on a real replica set. The client tests use a dedicated process with Node's test isolation disabled to ensure all five cases are individually executed and reported on the pinned runtime.
 
-`npm run test:cloud` reuses all 28 integration cases against the approved Atlas cluster. It requires ignored `.local/cloud/acceptance.env` with a dedicated `MONGODB_ACCEPTANCE_URI` targeting `/labflow_acceptance`. The command accepts only three isolated databases (`labflow_acceptance_database`, `_identity`, `_domain`), refuses non-empty databases, and removes only its own test collections afterward. Keep the verification user restricted to those databases; never provide the app database URI. Local checks always use temporary loopback databases.
+`npm run test:cloud` reuses all 32 integration cases against the approved Atlas cluster. It requires ignored `.local/cloud/acceptance.env` with a dedicated `MONGODB_ACCEPTANCE_URI` targeting `/labflow_acceptance`. The command accepts only three isolated databases (`labflow_acceptance_database`, `_identity`, `_domain`), refuses non-empty databases, and removes only its own test collections afterward. Keep the verification user restricted to those databases; never provide the app database URI. Local checks always use temporary loopback databases.
 
 `npm run test:coverage` enforces the existing 80% line/branch target for auth, ownership and circulation. Accessibility tooling, local performance measurement and the scope of these checks are documented in [the quality baseline](docs/QUALITY.md).
 
@@ -119,7 +121,7 @@ For synthetic **local development only**, run `npm run seed:demo` with the local
 
 ## Verification and remaining release work
 
-The local review passes 49 tests (16 server, five client API and 28 real database integration tests), lint and the production build. Tests cover authentication, ownership, concurrent allocation, rollback, strict inputs and administrator-only borrower contacts. Dashboard counts open filtered lists; damaged returns require an inspection note. The browser review checks these changes with synthetic accounts. Critical coverage is 99.41% lines and 92.66% branches; the unchanged 80% gates pass. The dependency audit found zero vulnerabilities. The updated return screen passed axe checks at 1280px and 320px with no findings or horizontal overflow; the equipment archive disclosure also passed and supports keyboard cancellation. Full accessibility scope is recorded in [QUALITY](docs/QUALITY.md).
+The current local review passes 53 tests (16 server, five client API and 32 real database integration tests), lint and the production build. Tests cover authentication, ownership, concurrent allocation, rollback, strict inputs and administrator-only borrower contacts. Dashboard counts open filtered lists; damaged returns require an inspection note. The preceding release was browser-checked with synthetic accounts; browser verification of the new dropdowns and unlisted assignment is pending. Critical coverage is 99.05% lines and 92.58% branches; the unchanged 80% gates pass. The dependency audit found zero vulnerabilities. The updated return screen passed axe checks at 1280px and 320px with no findings or horizontal overflow; the equipment archive disclosure also passed and supports keyboard cancellation. Full accessibility scope is recorded in [QUALITY](docs/QUALITY.md).
 
 Report illustrations and local performance/production measurements are in `docs/evidence/`. Old milestone logs, handoff prompts and temporary review files were removed; their history is preserved in Git. The maintained regression suite and developer accessibility helper remain available to verify fixes.
 
@@ -127,5 +129,5 @@ Remaining before assessment:
 
 - Review the [deployment evidence and operating limits](docs/DEPLOYMENT.md). The public demo satisfies the hosted-URL/core-flow checklist items; one transient readiness error recovered and is documented, without claiming an availability guarantee.
 - Complete native browser zoom and the selected browser checks; in-app scans and CSS enlargement have narrower scope.
-- Review the current [SRS DOCX](docs/exports/LabFlow_SRS_DRAFT_0.5.docx) and [report draft](docs/REPORT_DRAFT.md). Both remain drafts; neither is approved or submitted. The Markdown SRS and review export are revision 0.5.
+- Review the current [SRS DOCX](docs/exports/LabFlow_SRS_DRAFT_0.5.docx) and [report draft](docs/REPORT_DRAFT.md). Both remain drafts; neither is approved or submitted. The Markdown SRS is revision 0.6; the DOCX remains the prior 0.5 review snapshot pending verification/export of this update.
 - Fill individual author/student ID, institution/mentor if required; confirm LMS filename, format, deadline and procedure. These details are unknown from the two supplied ICTAK references. Submission requires explicit authorization and a real receipt.

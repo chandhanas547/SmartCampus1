@@ -1,16 +1,16 @@
 # LabFlow screen and data design
 
-22 October 2026. Individual demo capstone, one lab. These layouts document the implemented scope; report screenshots in `docs/evidence/` show the locally implemented workflow. SRS approval remains pending.
+24 October 2026. Individual demo capstone, one lab. These layouts document the implemented scope; report screenshots in `docs/evidence/` show the verified earlier workflow. The new dropdown screens await browser verification. SRS approval remains pending.
 
 ## Navigation and screen coverage
 
 | Screen | Student | Administrator | States and recovery |
 |---|---|---|---|
 | Welcome and identity | Login, registration | Login only | Pending, invalid fields, credentials rejected, rate limit, unavailable service |
-| Catalog | Search/filter/page; archived excluded | All inventory; add asset | Loading, empty, error/retry, paginated results |
+| Catalog | Search/filter/page; archived excluded; equipment/purpose request dropdowns with Other | All inventory; add asset with preset/custom metadata | Loading, empty, error/retry, paginated results |
 | Equipment detail | Description, condition, available request form | Versioned edit, maintenance, restore, archive | Unavailable/archived, stale version, open-request guard |
 | Request list | Own history only | All requests, overdue/damage filters | Loading, empty, error/retry, pagination |
-| Pending request | Purpose/date/timeline, cancellation | Approve with due date or reject with reason | Expired date and competing allocation conflicts |
+| Pending request | Purpose/date/timeline, original unlisted description, cancellation | Assign an available asset if unlisted, approve with due date or reject with reason | Missing assignment, expired date and competing allocation conflicts |
 | Approved request | Confirmed due, cancellation | Issue or cancel with reason | Expired reservation requires cancellation |
 | Issued request | Single damage report | Physical return and inspection | Required inspection note, duplicate/report-return conflict |
 | Terminal history | Own cancelled/rejected/returned records | All retained histories | Snapshot, timeline, inspection and report resolution |
@@ -50,6 +50,8 @@ Chronological timeline               Submit / pending feedback
 ```
 
 The overview places four filtered request links above equipment-state counts. Administrator request details show borrower name/email for handover; students do not receive contact fields. Archive opens an inline warning and requires a separate confirmation button. Identity screens pair a short introduction with a labelled login/registration form. No dashboard count or inventory record is fabricated in the interface.
+
+The catalog's Request equipment form and the available asset detail share one borrowing form. Equipment choices come from the real available inventory, with name/tag/location to distinguish units and pagination beyond 50 assets. Other requires a 10–500 character description; purpose offers common choices or a required custom description. Only the selected choice or custom field is submitted. An unlisted request creates no inventory and reserves nothing. Admin approval requires an available registered asset; a link to Equipment lets the admin add a missing asset first. The original description remains visible after assignment. Equipment name/category/location also offer native dropdown presets with Other, preserving existing custom values when editing. Search, unique tags, dates, credentials and factual inspection/damage notes retain their appropriate inputs.
 
 ## Phone layouts
 
@@ -112,11 +114,11 @@ Open means PENDING, APPROVED or ISSUED. Damage reporting is a single embedded re
 ```mermaid
 erDiagram
   USER ||--o{ BORROWING_REQUEST : owns
-  EQUIPMENT ||--o{ BORROWING_REQUEST : preserves_history_for
+  EQUIPMENT o|--o{ BORROWING_REQUEST : preserves_history_for
   USER ||--o{ SESSION : authenticates_with
   EQUIPMENT o|--o| BORROWING_REQUEST : current_allocation
   BORROWING_REQUEST ||--|{ EVENT : embeds
   BORROWING_REQUEST ||--o| DAMAGE_REPORT : embeds
 ```
 
-Users contain normalized unique email, hash and server-controlled role. Equipment contains immutable unique tag, metadata, current state/allocation and expected version. Requests contain owner, asset, historical snapshot, UUID replay key, dates/state and embedded events/report. Sessions and HMAC authentication windows have TTL indexes. Sensitive fields are omitted from API responses. Unique partial indexes and shared transactional equipment writes serialize competing operations; see `docs/API_DETAILS.md` and the real database tests.
+Users contain normalized unique email, hash and server-controlled role. Equipment contains immutable unique tag, metadata, current state/allocation and expected version. Requests contain owner, asset (nullable before unlisted assignment), original unlisted description when applicable, historical snapshot after assignment, UUID replay key, dates/state and embedded events/report. Sessions and HMAC authentication windows have TTL indexes. Sensitive fields are omitted from API responses. Unique partial indexes and shared transactional equipment writes serialize competing operations; see `docs/API_DETAILS.md` and the real database tests.

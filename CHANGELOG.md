@@ -1,5 +1,11 @@
 # Changelog
 
+## Dropdown update in progress 2026-10-24
+
+- Added equipment and purpose dropdowns with required Other descriptions, plus preset/custom inventory metadata choices.
+- Added unlisted requests without a reservation; admin approval assigns and reserves a real available asset atomically, retaining the original description.
+- Verified 53 local tests and all 32 isolated Atlas integration cases, including assignment races and rollback. Browser verification and publication of this update remain pending.
+
 ## Hosted demonstration 2026-10-23
 
 - Published the synthetic MERN demonstration on Vercel Hobby with Atlas Free, without a card or paid resource.

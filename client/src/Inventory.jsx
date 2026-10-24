@@ -1,11 +1,11 @@
 import { createElement, useState } from 'react';
 import { apiRequest } from './api.js';
+import BorrowForm from './BorrowForm.jsx';
+import ChoiceField from './ChoiceField.jsx';
 import {
   LoadState,
   Pagination,
   Status,
-  localInput,
-  utcInput,
   useMutation,
   useResource,
   values,
@@ -27,31 +27,10 @@ function EquipmentFields({ equipment, create = false }) {
           />
         </label>
       )}
-      <label>
-        Equipment name
-        <input name="name" required minLength="2" maxLength="120" defaultValue={equipment?.name} />
-      </label>
+      <ChoiceField label="Equipment name" name="name" options={['Digital oscilloscope', 'Digital multimeter', 'Compound microscope', 'Arduino starter kit', 'Bench power supply', 'Vernier caliper', 'Signal generator', 'Soldering station']} defaultValue={equipment?.name} />
       <div className="form-grid">
-        <label>
-          Category
-          <input
-            name="category"
-            required
-            minLength="2"
-            maxLength="80"
-            defaultValue={equipment?.category}
-          />
-        </label>
-        <label>
-          Location
-          <input
-            name="location"
-            required
-            minLength="2"
-            maxLength="120"
-            defaultValue={equipment?.location}
-          />
-        </label>
+        <ChoiceField label="Category" name="category" options={['Electronics', 'Optics', 'Prototyping', 'Measurement', 'Computing', 'Mechanical tools']} defaultValue={equipment?.category} maxLength={80} />
+        <ChoiceField label="Location" name="location" options={['Main lab', 'Electronics bench 1', 'Electronics bench 2', 'Electronics cabinet', 'Optics bench', 'Project cabinet', 'Measurement cabinet']} defaultValue={equipment?.location} />
       </div>
       <label>
         Description
@@ -68,6 +47,7 @@ function EquipmentFields({ equipment, create = false }) {
 export function Catalog({ user }) {
   const [filters, setFilters] = useState({ search: '', status: '', category: '', page: 1 });
   const [adding, setAdding] = useState(false);
+  const [requesting, setRequesting] = useState(false);
   const query = new URLSearchParams(Object.entries(filters).filter(([, value]) => value !== ''));
   const resource = useResource(`/equipment?${query}`);
   const mutation = useMutation(resource.refresh);
@@ -88,12 +68,14 @@ export function Catalog({ user }) {
           <h1>Equipment catalog</h1>
           <p className="lede">Check availability and choose equipment for your work.</p>
         </div>
+        {!admin && <button type="button" onClick={() => setRequesting(!requesting)}>{requesting ? 'Close request form' : 'Request equipment'}</button>}
         {admin && (
           <button type="button" onClick={() => setAdding(!adding)}>
             {adding ? 'Close form' : 'Add equipment'}
           </button>
         )}
       </div>
+      {requesting && <section className="panel" aria-labelledby="borrow-title"><h2 id="borrow-title">Request equipment</h2><BorrowForm refresh={resource.refresh} /></section>}
       {adding && (
         <section className="panel" aria-labelledby="create-equipment-title">
           <h2 id="create-equipment-title">Add equipment</h2>
@@ -117,15 +99,7 @@ export function Catalog({ user }) {
             defaultValue={filters.search}
           />
         </label>
-        <label>
-          Category
-          <input
-            name="category"
-            maxLength="80"
-            placeholder="All categories"
-            defaultValue={filters.category}
-          />
-        </label>
+        <ChoiceField label="Category" name="category" options={['Electronics', 'Optics', 'Prototyping', 'Measurement', 'Computing', 'Mechanical tools']} defaultValue={filters.category} required={false} maxLength={80} emptyLabel="All categories" />
         <label>
           Availability
           <select name="status" defaultValue={filters.status}>
@@ -185,7 +159,6 @@ export function EquipmentDetail({ user, id }) {
   const resource = useResource(`/equipment/${id}`);
   const mutation = useMutation(resource.refresh);
   const [editing, setEditing] = useState(false);
-  const [requestKey] = useState(() => crypto.randomUUID());
   if (!resource.data) return createElement(LoadState, { resource });
   const row = resource.data.data;
   const admin = user.role === 'ADMIN';
@@ -197,21 +170,6 @@ export function EquipmentDetail({ user, id }) {
         body: JSON.stringify({ ...input, version: row.version }),
       }),
     );
-  }
-  function borrow(event) {
-    const input = values(event);
-    mutation.run(async () => {
-      const request = await apiRequest('/requests', {
-        method: 'POST',
-        body: JSON.stringify({
-          equipmentId: id,
-          requestKey,
-          purpose: input.purpose,
-          requestedDueAt: utcInput(input.requestedDueAt),
-        }),
-      });
-      window.location.hash = `request/${request.id}`;
-    }, 'Request submitted.');
   }
   return (
     <>
@@ -242,25 +200,7 @@ export function EquipmentDetail({ user, id }) {
           <h2>{admin ? 'Manage equipment' : 'Borrow this equipment'}</h2>
           {!admin &&
             (row.status === 'AVAILABLE' ? (
-              <form onSubmit={borrow} aria-busy={mutation.busy}>
-                <label>
-                  What will you use it for?
-                  <textarea name="purpose" required minLength="10" maxLength="500" />
-                </label>
-                <label>
-                  Preferred return date and time (IST)
-                  <input
-                    name="requestedDueAt"
-                    type="datetime-local"
-                    required
-                    min={localInput(Date.now() + 60000)}
-                  />
-                </label>
-                <p className="field-hint">
-                  Approval confirms the due date. The maximum loan is seven days from approval.
-                </p>
-                <button disabled={mutation.busy}>Send borrowing request</button>
-              </form>
+              <BorrowForm equipment={row} refresh={resource.refresh} />
             ) : (
               <p>
                 This equipment is currently {row.status.toLowerCase()}. You can request it when it

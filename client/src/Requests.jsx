@@ -1,5 +1,6 @@
 import { createElement, useState } from 'react';
 import { apiRequest } from './api.js';
+import EquipmentSelect from './EquipmentSelect.jsx';
 import {
   LoadState,
   Pagination,
@@ -85,9 +86,9 @@ export function Requests({ user, search = '' }) {
               {resource.data.data.map((row) => (
                 <article key={row.id}>
                   <div>
-                    <p className="eyebrow">{row.assetSnapshot.assetTag}</p>
+                    <p className="eyebrow">{row.assetSnapshot?.assetTag || 'OTHER · Unlisted equipment'}</p>
                     <h2>
-                      <a href={`#request/${row.id}`}>{row.assetSnapshot.name}</a>
+                      <a href={`#request/${row.id}`}>{row.assetSnapshot?.name || row.requestedEquipment}</a>
                     </h2>
                     {user.role === 'ADMIN' && (
                       <p>Borrower: {row.borrower?.name || 'Account unavailable'}</p>
@@ -118,6 +119,7 @@ export function Requests({ user, search = '' }) {
 
 function DecisionForm({ row, busy, act }) {
   const [decision, setDecision] = useState('APPROVE');
+  const [assigned, setAssigned] = useState(null);
   return (
     <form
       onSubmit={(event) => {
@@ -125,7 +127,7 @@ function DecisionForm({ row, busy, act }) {
         act(
           'decision',
           decision === 'APPROVE'
-            ? { action: decision, dueAt: utcInput(input.dueAt) }
+            ? { action: decision, dueAt: utcInput(input.dueAt), ...(!row.equipmentId ? { equipmentId: input.equipmentId } : {}) }
             : { action: decision, reason: input.reason },
         );
       }}
@@ -139,6 +141,7 @@ function DecisionForm({ row, busy, act }) {
       </label>
       {decision === 'APPROVE' ? (
         <>
+          {!row.equipmentId && <><EquipmentSelect selected={assigned} onChange={setAssigned} /><a href="#catalog">Add a missing asset in Equipment</a></>}
           <label>
             Confirmed due date and time (IST)
             <input
@@ -163,7 +166,7 @@ function DecisionForm({ row, busy, act }) {
           <textarea name="reason" required maxLength="2000" />
         </label>
       )}
-      <button disabled={busy}>
+      <button disabled={busy || (decision === 'APPROVE' && !row.equipmentId && !assigned)}>
         {decision === 'APPROVE' ? 'Approve and reserve' : 'Reject request'}
       </button>
     </form>
@@ -190,8 +193,8 @@ export function RequestDetail({ user, id }) {
       </a>
       <div className="page-heading">
         <div>
-          <p className="eyebrow">{row.assetSnapshot.assetTag}</p>
-          <h1>{row.assetSnapshot.name}</h1>
+          <p className="eyebrow">{row.assetSnapshot?.assetTag || 'OTHER · Unlisted equipment'}</p>
+          <h1>{row.assetSnapshot?.name || row.requestedEquipment}</h1>
           <p className="lede">Borrowing details and timeline</p>
         </div>
         {createElement(Status, { value: row.status })}
@@ -217,6 +220,7 @@ export function RequestDetail({ user, id }) {
                 </dd>
               </div>
             )}
+            {row.requestedEquipment && <div><dt>Originally requested equipment</dt><dd className="preserve-lines">{row.requestedEquipment}</dd></div>}
             <div>
               <dt>Purpose</dt>
               <dd className="preserve-lines">{row.purpose}</dd>

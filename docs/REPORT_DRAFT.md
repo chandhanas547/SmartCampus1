@@ -1,12 +1,14 @@
 # LabFlow individual capstone report
 
-Draft dated 23 October 2026. Prepared for review; not submitted. Author/student ID, institution, mentor and required submission date remain TBD. Source repository: [milan-kb/LabFlow](https://github.com/milan-kb/LabFlow). Live synthetic demonstration: [LabFlow](https://labflow-lemon.vercel.app).
+Draft dated 24 October 2026. Prepared for review; not submitted. Author/student ID, institution, mentor and required submission date remain TBD. Source repository: [milan-kb/LabFlow](https://github.com/milan-kb/LabFlow). Live synthetic demonstration: [LabFlow](https://labflow-lemon.vercel.app).
 
 ## Executive summary
 
 LabFlow is a MERN demonstration for managing individually tagged equipment in one college laboratory. It brings discovery, borrowing decisions, physical handover, inspected return and damage history into a shared system. Students can access their own requests; administrators manage inventory and circulation. The implementation uses React/Vite, Express and MongoDB/Mongoose with server validation, role checks and database transactions.
 
-The local application completes the core borrowing journey and passes 49 automated tests. Real MongoDB tests exercise simultaneous approvals, conflicting actions and rollback after failed writes. Earlier local accessibility scans found no violations or incomplete findings; keyboard and responsive samples were also checked. The application is also published on Vercel Hobby with Atlas Free. All 28 isolated Atlas acceptance cases pass, and the public API/security checks and student/admin browser journey were verified on 23 October 2026. College approval and submission remain pending; remaining browser checks are identified below.
+The local application completes the core borrowing journey and passes 53 automated tests. Real MongoDB tests exercise simultaneous approvals, conflicting actions and rollback after failed writes. Earlier local accessibility scans found no violations or incomplete findings; keyboard and responsive samples were also checked. The application is also published on Vercel Hobby with Atlas Free. All 32 isolated Atlas acceptance cases pass on 24 October 2026, and the public API/security checks and student/admin browser journey were verified on 23 October 2026. College approval and submission remain pending; remaining browser checks are identified below.
+
+The new 24 October equipment/purpose dropdowns and unlisted assignment flow are implemented locally with real database coverage. Browser verification is pending local browser access in Work settings, and these changes are not yet published. The hosted evidence below describes the preceding release.
 
 ## Introduction
 
@@ -24,7 +26,7 @@ LabFlow models these transitions explicitly. Equipment is tracked per physical a
 
 ## Scope and deliverables
 
-The application supports one laboratory and two roles. Students register with name/email/password, sign in, browse non-archived assets, request one asset, cancel eligible requests and report damage while borrowing. Administrators create/edit/maintain/archive assets, approve or reject, record issue/return, resolve reports and view current counts. Loans are limited to 168 hours from approval. Times are stored in UTC and displayed in Asia/Kolkata.
+The application supports one laboratory and two roles. Students register with name/email/password, sign in, browse non-archived assets, select one available asset or describe an unlisted need, select a purpose or specify Other, cancel eligible requests and report damage while borrowing. Administrators create/edit/maintain/archive assets, assign a registered available asset before approving an unlisted need, approve or reject, record issue/return, resolve reports and view current counts. Loans are limited to 168 hours from approval. Times are stored in UTC and displayed in Asia/Kolkata.
 
 Deliverables available locally include the application source, npm workspace/lockfile, SRS draft and review export, API/security/design/quality documents, regression tests, report screenshots, CI definition and a verified public demonstration with its deployment runbook. Multi-lab operation, payments, notifications, uploads, QR scanning, renewals and advanced analytics are excluded.
 
@@ -50,9 +52,9 @@ Accessibility testing found a mismatch between the logo's visible and accessible
 
 | Verification | Observed result and scope | Evidence |
 |---|---|---|
-| Regression | 16 fast server, five client and 28 real database integration tests pass; lint/build pass | `npm run check` |
+| Regression | 16 fast server, five client and 32 real database integration tests pass; lint/build pass | `npm run check` |
 | Remote CI | Checks, coverage gates and audit passed for `06dcfc9` | [GitHub Actions](https://github.com/milan-kb/LabFlow/actions/runs/39936955235) |
-| Critical coverage | 99.41% lines and 92.66% branches; existing 80% gates enforced | `npm run test:coverage`; quality baseline |
+| Critical coverage | 99.05% lines and 92.58% branches; existing 80% gates enforced | `npm run test:coverage`; quality baseline |
 | Concurrency and rollback | One approval winner; consistent cancellation/report-return races; injected approval/return failures roll back | Domain integration suite |
 | Actual browser journey | Request, approve, issue, damage, inspected return and restoration passed locally and on the public host with synthetic identities | `evidence/hosted/`; `evidence/hosted-acceptance.json` |
 | Automated accessibility | Updated return screen at 1280px/320px and equipment archive disclosure: zero violations/incomplete findings | Local axe helper; broader earlier checks at `f6af63a` |
@@ -61,7 +63,7 @@ Accessibility testing found a mismatch between the logo's visible and accessible
 | Performance | 30 warm sequential reads per endpoint: equipment p95 6.12ms, requests 7.03ms, dashboard 6.27ms; login sample 290.98ms | `evidence/performance.json` |
 | Production process | Built assets/deep links and secure sessions checked locally after pruning development dependencies | `evidence/production-smoke.json` |
 
-The measurements use a small synthetic loopback dataset and cannot predict load behavior or a sleeping free host. Native browser zoom, standalone stable Chromium and other-engine checks are not established by CSS enlargement or in-app testing alone. Screen-reader testing is also not claimed. All 28 isolated Atlas acceptance tests passed on 23 October 2026; cleanup left their three databases empty. Public HTTPS, secure cookies, strict parsing/CSRF, role/ownership checks, cancellation, rejection and both return paths passed on Vercel Hobby. The live browser journey covers request, approve, issue, report damage, damaged return and restoration. One readiness request returned 503 and recovered through the UI retry; ten subsequent sequential and five concurrent health requests returned 200. Its root cause was not established, and no availability or load-test claim is made. Render was abandoned when it required a card; no paid service was created. The owner explicitly approved the separate demo project network exception on 23 October 2026; TLS, credentials and database roles remain enforced.
+The measurements use a small synthetic loopback dataset and cannot predict load behavior or a sleeping free host. Native browser zoom, standalone stable Chromium and other-engine checks are not established by CSS enlargement or in-app testing alone. Screen-reader testing is also not claimed. All 32 isolated Atlas acceptance tests passed on 24 October 2026; cleanup left their three databases empty. Public HTTPS, secure cookies, strict parsing/CSRF, role/ownership checks, cancellation, rejection and both return paths passed on Vercel Hobby. The live browser journey covers request, approve, issue, report damage, damaged return and restoration. One readiness request returned 503 and recovered through the UI retry; ten subsequent sequential and five concurrent health requests returned 200. Its root cause was not established, and no availability or load-test claim is made. Render was abandoned when it required a card; no paid service was created. The owner explicitly approved the separate demo project network exception on 23 October 2026; TLS, credentials and database roles remain enforced.
 
 ![Administrator dashboard from the live synthetic demonstration](evidence/hosted/dashboard.png)
 
@@ -75,7 +77,7 @@ Completion for assessment still requires the outstanding browser checks, final a
 
 ## Appendix
 
-- Requirements and review copy: `SRS_DRAFT.md`, `exports/LabFlow_SRS_DRAFT_0.5.docx`.
+- Requirements: `SRS_DRAFT.md` revision 0.6; `exports/LabFlow_SRS_DRAFT_0.5.docx` is the prior review snapshot pending verification/export of the dropdown update.
 - Design and contracts: `DESIGN.md`, `API_DETAILS.md`, `SECURITY.md`, `QUALITY.md`.
 - Evidence: `evidence/`.
 - Reproduction: root README, package lockfile and documented npm commands.
