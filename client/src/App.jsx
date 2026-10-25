@@ -120,7 +120,7 @@ export default function App() {
       <footer>
         <span>LabFlow</span>
         <p>Laboratory Equipment & Circulation Register</p>
-        <span>IST (Asia/Kolkata) · Single-Lab Demo</span>
+        <span>IST (Asia/Kolkata) · Central Laboratory System</span>
       </footer>
     </div>
   );

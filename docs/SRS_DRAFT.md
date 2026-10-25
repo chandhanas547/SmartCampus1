@@ -28,7 +28,7 @@ Laboratory equipment lending can become unreliable when availability, approvals,
 
 ### 1.3 Scope
 
-LabFlow is a demo-only web application for one college laboratory. It tracks each physical asset using a unique asset tag. Students can register, authenticate, browse equipment, request one asset at a time, review their request history and report damage for issued equipment. Lab administrators manage inventory, decide requests, record issue and return, handle maintenance and view operational summaries.
+LabFlow is a dedicated web application for college laboratory equipment management. It tracks each physical asset using a unique asset tag. Students can register, authenticate, browse equipment, request one asset at a time, review their request history and report damage for issued equipment. Lab administrators manage inventory, decide requests, record issue and return, handle maintenance and view operational summaries.
 
 The MVP is not a production campus identity, finance, notification or repair-management system.
 
@@ -499,7 +499,7 @@ This table defines planned evidence, not completed results.
 
 ### 12.1 Approved assumptions
 
-- Demo-only, one laboratory and two roles: `STUDENT`, `ADMIN`.
+- Single laboratory scope with two roles: `STUDENT`, `ADMIN`.
 - Individually tagged assets; one asset per request, assigned at approval for an unlisted need.
 - Pending requests do not reserve; admin approval reserves.
 - Transactional inventory safety, server RBAC, ownership and boundary validation are mandatory.

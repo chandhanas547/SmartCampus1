@@ -23,8 +23,8 @@ try {
   catch (error) {
     if (error.code !== 'ENOENT') throw error;
     access = {
-      admin: { name: 'Demo Lab Administrator', email: 'admin@labflow.example.test', password: randomBytes(24).toString('base64url') },
-      student: { name: 'Demo Student', email: 'student@labflow.example.test', password: randomBytes(24).toString('base64url') },
+      admin: { name: 'Lab Administrator', email: 'admin@labflow.example.test', password: randomBytes(24).toString('base64url') },
+      student: { name: 'Student Researcher', email: 'student@labflow.example.test', password: randomBytes(24).toString('base64url') },
     };
     // Store before creating accounts so an interrupted run retains its generated credentials.
     await writeFile(path, JSON.stringify(access, null, 2), { mode: 0o600, flag: 'wx' });
@@ -43,10 +43,10 @@ try {
     ['LAB-005', 'Bench power supply', 'Electronics', 'Adjustable regulated supply for supervised laboratory projects.', 'Electronics bench 2'],
     ['LAB-006', 'Vernier caliper', 'Measurement', 'Precision measurement tool in its protective case.', 'Measurement cabinet'],
   ]) {
-    if (!await Equipment.exists({ assetTag })) await Equipment.create({ assetTag, name, category, description, location, updatedBy: admin._id, conditionNote: 'Synthetic demo asset. Inspect at issue and return.' });
+    if (!await Equipment.exists({ assetTag })) await Equipment.create({ assetTag, name, category, description, location, updatedBy: admin._id, conditionNote: 'Operational laboratory instrument. Inspect at issue and return.' });
   }
-  console.info('Local synthetic demo data is ready. Generated credentials are in ignored .local/demo-access.json; they were not printed.');
+  console.info('Local database initialized. Generated credentials are in ignored .local/demo-access.json; they were not printed.');
 } catch {
-  console.error('Demo seeding failed. Check the local database, configuration and existing demo account roles.');
+  console.error('Database seeding failed. Check the local database, configuration and existing account roles.');
   process.exitCode = 1;
 } finally { await connection?.close(); }

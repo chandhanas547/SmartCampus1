@@ -43,7 +43,7 @@ export default function BorrowForm({ equipment, refresh }) {
           'Laboratory practical work',
           'Course project work',
           'Research experiment',
-          'Workshop or demonstration',
+          'Workshop or practical study',
           'Independent learning',
         ]}
         minLength={10}

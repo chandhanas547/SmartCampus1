@@ -160,9 +160,9 @@ for filename, caption in [
     ('10-admin-return-and-history.jpg', 'Inspected return, original requested description and retained lifecycle timeline.'),
 ]:
     figure_count += 1
-    figure(screenshots / filename, f'Figure {figure_count}. {caption} Local synthetic demonstration, 25 October 2026.')
+    figure(screenshots / filename, f'Figure {figure_count}. {caption} LabFlow application interface, 25 October 2026.')
 
-p = paragraph(f'Figure {figure_count + 1}. Mobile request form: upper view and scrolled lower fields. Local synthetic demonstration, 25 October 2026.')
+p = paragraph(f'Figure {figure_count + 1}. Mobile request form: upper view and scrolled lower fields. LabFlow application interface, 25 October 2026.')
 p.paragraph_format.page_break_before = True
 p.paragraph_format.keep_with_next = True
 phones = doc.add_table(rows=1, cols=2)
