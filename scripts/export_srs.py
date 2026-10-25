@@ -1,5 +1,7 @@
 """Export the Markdown SRS with python-docx; run using the bundled document runtime."""
 from pathlib import Path
+import argparse
+import json
 import re
 from docx import Document
 from docx.shared import Inches, Pt, RGBColor
@@ -8,7 +10,11 @@ from docx.oxml.ns import qn
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / 'docs/SRS_DRAFT.md'
-OUTPUT = ROOT / 'docs/exports/LabFlow_SRS_DRAFT_0.5.docx'
+parser = argparse.ArgumentParser()
+parser.add_argument('--output', type=Path, default=ROOT / '.local/submission/LabFlow_SRS_DRAFT_0.6.docx')
+parser.add_argument('--details', type=Path, help='Ignored private author metadata JSON')
+args = parser.parse_args()
+OUTPUT = args.output
 doc = Document()
 section = doc.sections[0]
 section.page_width, section.page_height = Inches(8.5), Inches(11)
@@ -30,7 +36,7 @@ for name, size in [('Heading 1', 16), ('Heading 2', 13), ('Heading 3', 11.5)]:
     doc.styles[name].paragraph_format.space_before = Pt(12)
     doc.styles[name].paragraph_format.space_after = Pt(6)
 header = section.header.paragraphs[0]
-header.text = 'LabFlow SRS 0.5 Draft'
+header.text = 'LabFlow SRS 0.6 Draft'
 header.runs[0].font.size = Pt(9)
 footer = section.footer.paragraphs[0]
 footer.alignment = 2
@@ -50,6 +56,12 @@ def table(lines):
     count = len(rows[0])
     tbl = doc.add_table(rows=0, cols=count)
     tbl.autofit = False
+    borders = OxmlElement('w:tblBorders')
+    for side in ['top', 'left', 'bottom', 'right', 'insideH', 'insideV']:
+        border = OxmlElement('w:' + side)
+        for key, value in [('val', 'single'), ('sz', '4'), ('color', 'D9D9D9')]: border.set(qn('w:' + key), value)
+        borders.append(border)
+    tbl._tbl.tblPr.append(borders)
     width = 6.9
     if count == 2: widths = [1.8, 5.1]
     elif count == 3: widths = [1.05, 1.55, 4.3]
@@ -87,7 +99,13 @@ def table(lines):
         if index == 0: tr_props.append(OxmlElement('w:tblHeader'))
     doc.add_paragraph().paragraph_format.space_after = Pt(2)
 
-lines = SOURCE.read_text().splitlines()
+text = SOURCE.read_text()
+if args.details:
+    details = json.loads(args.details.read_text())
+    author = f"{details['fullName']} / {details['studentId']} (Sr No: {details['serialNumber']})"
+    text = text.replace('TBD: individual author name and student ID', author)
+    text = text.replace('| Institution | TBD |', f"| Institution | {details['institution']} |")
+lines = text.splitlines()
 index = 0
 while index < len(lines):
     line = lines[index]
@@ -118,7 +136,7 @@ while index < len(lines):
     else: inline(doc.add_paragraph(), line)
     index += 1
 doc.core_properties.title = 'LabFlow Software Requirements Specification'
-doc.core_properties.subject = 'Revision 0.5 Draft pending approval and submission'
+doc.core_properties.subject = 'Revision 0.6 Draft pending approval and submission'
 doc.core_properties.author = ''
 for border in list(doc.element.iter(qn('w:pBdr'))):
     border.getparent().remove(border)

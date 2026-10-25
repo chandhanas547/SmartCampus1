@@ -129,5 +129,5 @@ Remaining before assessment:
 
 - Review the [deployment evidence and operating limits](docs/DEPLOYMENT.md). The public demo satisfies the hosted-URL/core-flow checklist items; one transient readiness error recovered and is documented, without claiming an availability guarantee.
 - Complete native browser zoom and the selected browser checks; in-app scans and CSS enlargement have narrower scope.
-- Review the current [SRS DOCX](docs/exports/LabFlow_SRS_DRAFT_0.5.docx) and [report draft](docs/REPORT_DRAFT.md). Both remain drafts; neither is approved or submitted. The Markdown SRS is revision 0.6; the DOCX remains the prior 0.5 review snapshot pending verification/export of this update.
-- Fill individual author/student ID, institution/mentor if required; confirm LMS filename, format, deadline and procedure. These details are unknown from the two supplied ICTAK references. Submission requires explicit authorization and a real receipt.
+- Review the current [SRS](docs/SRS_DRAFT.md), [report source](docs/REPORT_DRAFT.md) and [submission checklist](docs/SUBMISSION.md). Personalized Word/PDF review copies are generated in ignored `.local/submission/`; student identifiers must not enter the public repository. Approval and submission remain pending.
+- Author/student identifiers and institution are populated privately. Mentor and LMS filename, format, deadline and procedure remain unknown from the two supplied ICTAK references. Submission requires explicit authorization and a real receipt.

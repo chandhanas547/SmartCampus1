@@ -113,7 +113,7 @@ MongoDB replica set
 | Only free services may be selected unless paid use is explicitly approved. | Approved |
 | Vercel Hobby and Atlas Free (AWS Mumbai) are used at https://labflow-lemon.vercel.app; the API function region is bom1. See DEPLOYMENT.md for evidence and limits. | Demo deployment verified; no production availability guarantee |
 
-The owner explicitly authorized Vercel's free backend and the persistent `0.0.0.0/0` rule for `labflow-capstone` only on 23 October 2026. For the separate synthetic-demo Atlas project only, `0.0.0.0/0` may replace host-IP restrictions. Database authentication and TLS remain required, and the app user has readWrite on `labflow` only. No public database credentials or real-person data are permitted. This removes a network restriction, not authentication; it is unsuitable as an unreviewed baseline for real college use. See `DECISIONS.md` and `DEPLOYMENT.md`. The 0.5 DOCX is a prior review snapshot; a matching 0.6 export is required after this change is verified. Neither is approved or submitted.
+The owner explicitly authorized Vercel's free backend and the persistent `0.0.0.0/0` rule for `labflow-capstone` only on 23 October 2026. For the separate synthetic-demo Atlas project only, `0.0.0.0/0` may replace host-IP restrictions. Database authentication and TLS remain required, and the app user has readWrite on `labflow` only. No public database credentials or real-person data are permitted. This removes a network restriction, not authentication; it is unsuitable as an unreviewed baseline for real college use. See `DECISIONS.md` and `DEPLOYMENT.md`. Personalized revision 0.6 Word/PDF review copies are generated privately; identifiers are omitted from the public source. Approval and submission remain pending.
 
 ## 3. User roles and permissions
 
@@ -148,7 +148,7 @@ F1–F11 are **Must** capabilities from the approved baseline. Their acceptance 
 | Requirement | The system shall register students and support login, session restoration and logout for valid users. |
 | Acceptance criteria | (1) Valid student registration creates one account and returns a safe user representation. (2) Email is normalized; a duplicate returns `409` and creates nothing. (3) Missing, malformed or out-of-range input is rejected and persisted nowhere. (4) A supplied role or admin field cannot create/elevate an admin. (5) Valid login starts a new session; invalid credentials do not disclose which field failed. (6) Logout destroys the session. (7) Passwords and hashes are never returned or logged. |
 
-Demo registration accepts only `name`, `email` and `password`; no student number or college-verification field is required. Actual author identity metadata remains TBD. Selected password/session limits are defined under NFR-SEC and `docs/SECURITY.md`; formal document review remains pending.
+Demo registration accepts only `name`, `email` and `password`; no student number or college-verification field is required. Author identity is supplied privately in review exports. Selected password/session limits are defined under NFR-SEC and `docs/SECURITY.md`; formal document review remains pending.
 
 ### F2 — Access control and ownership
 
@@ -539,7 +539,7 @@ This table defines planned evidence, not completed results.
 | Decision | Required before |
 |---|---|
 | LMS SRS template, deadline, filename and evidence of submission | SRS submission |
-| Individual author name/student ID, institution and faculty/mentor | SRS submission |
+| Confirm private author/institution details on the review copy; faculty/mentor remains unknown | SRS submission |
 | Review of this revision's detailed transition, date and PATCH contracts | SRS approval |
 | Formal review of selected identity/security policies | SRS approval |
 | Reviewer acceptance of Hobby/Free capacity limits and the recorded transient readiness failure | Final assessment |

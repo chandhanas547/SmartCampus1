@@ -1,6 +1,6 @@
 # LabFlow individual capstone report
 
-Draft dated 24 October 2026. Prepared for review; not submitted. Author/student ID, institution, mentor and required submission date remain TBD. Source repository: [milan-kb/LabFlow](https://github.com/milan-kb/LabFlow). Live synthetic demonstration: [LabFlow](https://labflow-lemon.vercel.app).
+Prepared 25 October 2026 for individual submission review; not submitted. Confirmed author and institution details are applied only to ignored personalized exports. Source repository: [milan-kb/LabFlow](https://github.com/milan-kb/LabFlow). Live synthetic demonstration: [LabFlow](https://labflow-lemon.vercel.app).
 
 ## Executive summary
 
@@ -8,7 +8,7 @@ LabFlow is a MERN demonstration for managing individually tagged equipment in on
 
 The local application completes the core borrowing journey and passes 53 automated tests. Real MongoDB tests exercise simultaneous approvals, conflicting actions and rollback after failed writes. Earlier local accessibility scans found no violations or incomplete findings; keyboard and responsive samples were also checked. The application is also published on Vercel Hobby with Atlas Free. All 32 isolated Atlas acceptance cases pass on 24 October 2026, and the public API/security checks and student/admin browser journey were verified on 23 October 2026. College approval and submission remain pending; remaining browser checks are identified below.
 
-The equipment/purpose dropdowns and unlisted assignment flow have real database coverage. On 25 October the owner's instrument-register redesign was preserved and its student request/admin assignment/issue/return journey passed local browser verification. The new form has no axe violations at 320px; the patterned background leaves a manual contrast review item described in QUALITY. The redesign/dropdowns are published on Vercel. Current public read-only checks and student login/dropdown rendering pass; the owner chose to skip a fresh live borrowing write test. Earlier hosted lifecycle evidence below describes the preceding release. The locked parser security update restores a clean dependency audit; see the deployment runbook for the exact source.
+The equipment/purpose dropdowns and unlisted assignment flow have real database coverage. The instrument-register redesign and its student request/admin assignment/issue/return journey passed local browser verification on 25 October. The new form has no axe violations at 320px; the patterned background leaves a manual contrast review item described in QUALITY. The redesign/dropdowns are published on Vercel from source 684af3c. Current public read-only checks, student login and session reload pass; a fresh live borrowing write test was deliberately skipped. Earlier hosted lifecycle evidence below describes the preceding release. The locked parser security update restores a clean dependency audit.
 
 ## Introduction
 
@@ -30,9 +30,13 @@ The application supports one laboratory and two roles. Students register with na
 
 Deliverables available locally include the application source, npm workspace/lockfile, SRS draft and review export, API/security/design/quality documents, regression tests, report screenshots, CI definition and a verified public demonstration with its deployment runbook. Multi-lab operation, payments, notifications, uploads, QR scanning, renewals and advanced analytics are excluded.
 
+Student story: As a student, I want to describe an unlisted instrument so that staff can identify a suitable asset. Acceptance requires a 10–500 character description, purpose, future requested return time and stable request key. Submission creates no asset or reservation; the owner may cancel before handover.
+
+Administrator story: As an administrator, I want to assign an available registered asset and approve the request so that the instrument has one consistent reservation. Assignment, snapshot, approval, reservation and event must commit together. Competing approval or a failed write must leave no partial allocation. The SRS defines the remaining feature acceptance criteria.
+
 ## Methodology
 
-Development followed documented requirements and small verified increments in Git, preserving the initial M0 history. The working specification distinguishes accepted scope, selected implementation policies and unapproved submission details. The owner authorized coding on 21 October 2026 while SRS approval remained pending.
+Development followed documented requirements and small verified increments in Git, preserving the initial M0 history. The working specification distinguishes accepted scope, selected implementation policies and unapproved submission details. The SRS remains a review draft; implementation and deployment do not imply academic approval or submission.
 
 The browser calls a relative JSON API; only the server accesses MongoDB. Strict boundary schemas reject unknown fields and invalid IDs/dates. Authorization uses the stored session role and owner-scoped database queries. MongoDB transactions and unique partial indexes protect allocation; optimistic equipment versions detect stale edits. A real replica set, rather than browser mocks, verifies database behavior.
 
@@ -48,6 +52,8 @@ Verification found and corrected several concrete issues. Mongoose transaction r
 
 Accessibility testing found a mismatch between the logo's visible and accessible text. A decorative vector mark resolved the mismatch without disabling checks. The skip link was also fixed to focus content without changing the application route.
 
+The final visual update required explicit Google Fonts source allowances in the production content security policy, a navigation landmark for pagination and darker accent/placeholder text. The release audit then identified GHSA-27r3-jxmh-p828; updating the one locked body-parser package to 2.4.0 restored a zero-finding audit without enabling dependency scripts.
+
 ## Results and findings
 
 | Verification | Observed result and scope | Evidence |
@@ -56,8 +62,8 @@ Accessibility testing found a mismatch between the logo's visible and accessible
 | Remote CI | Checks, coverage gates and audit passed for deployed source `684af3c` | [GitHub Actions](https://github.com/milan-kb/LabFlow/actions/runs/40130494194) |
 | Critical coverage | 99.05% lines and 92.58% branches; existing 80% gates enforced | `npm run test:coverage`; quality baseline |
 | Concurrency and rollback | One approval winner; consistent cancellation/report-return races; injected approval/return failures roll back | Domain integration suite |
-| Actual browser journey | Request, approve, issue, damage, inspected return and restoration passed locally and on the public host with synthetic identities | `evidence/hosted/`; `evidence/hosted-acceptance.json` |
-| Automated accessibility | Updated return screen at 1280px/320px and equipment archive disclosure: zero violations/incomplete findings | Local axe helper; broader earlier checks at `f6af63a` |
+| Actual browser journey | Redesigned unlisted request/assignment/issue/return passed locally; preceding hosted lifecycle acceptance passed on 23 October; current live write test skipped | `evidence/hosted-acceptance.json`; current screenshots |
+| Automated accessibility | Current borrowing form: zero axe violations and no horizontal overflow at 320px; contrast incomplete results retained for manual review | Local axe helper; `QUALITY.md` |
 | Keyboard and reflow | Core keyboard flow, 320px samples and 200% CSS content enlargement checked | Historical verification at `f6af63a` |
 | Fresh setup | A fully cold clone at 94bc7e9 installed, downloaded the pinned binary, and passed check/coverage | Historical verification at `f6af63a` |
 | Performance | 30 warm sequential reads per endpoint: equipment p95 6.12ms, requests 7.03ms, dashboard 6.27ms; login sample 290.98ms | `evidence/performance.json` |
@@ -65,22 +71,28 @@ Accessibility testing found a mismatch between the logo's visible and accessible
 
 The measurements use a small synthetic loopback dataset and cannot predict load behavior or a sleeping free host. Native browser zoom, standalone stable Chromium and other-engine checks are not established by CSS enlargement or in-app testing alone. Screen-reader testing is also not claimed. All 32 isolated Atlas acceptance tests passed on 24 October 2026; cleanup left their three databases empty. Public HTTPS, secure cookies, strict parsing/CSRF, role/ownership checks, cancellation, rejection and both return paths passed on Vercel Hobby. The live browser journey covers request, approve, issue, report damage, damaged return and restoration. One readiness request returned 503 and recovered through the UI retry; ten subsequent sequential and five concurrent health requests returned 200. Its root cause was not established, and no availability or load-test claim is made. Render was abandoned when it required a card; no paid service was created. The owner explicitly approved the separate demo project network exception on 23 October 2026; TLS, credentials and database roles remain enforced.
 
-![Administrator dashboard from the live synthetic demonstration](evidence/hosted/dashboard.png)
+![Current student dropdown form on the hosted application](evidence/hosted/dropdown-request.png)
 
-![Live inspected return with retained timeline](evidence/hosted/admin-returned.png)
+![Current redesigned inspected return with retained original description in the local synthetic demonstration](evidence/redesign-returned.png)
 
 ## Conclusion
 
 The local implementation demonstrates the intended single-lab borrowing workflow and verifies its main authorization and transaction invariants. Testing against real concurrent database operations and a cold setup exposed failures that a simple browser demonstration would have missed. The regression suite keeps these invariants reproducible as the application changes.
 
-Completion for assessment still requires the outstanding browser checks, final author/institution fields and the actual college submission procedure. The hosted URL and live core-flow evidence are now available. This draft must retain its actual limitations and be completed with the college's submission details before final submission.
+Completion for assessment still requires review of this report, the outstanding browser checks and the actual college submission procedure. The hosted URL and historical live core-flow evidence are available. This draft retains its actual limitations; document approval and submission must be recorded separately.
 
 ## Appendix
 
-- Requirements: `SRS_DRAFT.md` revision 0.6; `exports/LabFlow_SRS_DRAFT_0.5.docx` is the prior review snapshot pending verification/export of the dropdown update.
+- Requirements: `SRS_DRAFT.md` revision 0.6 and its matching review export.
 - Design and contracts: `DESIGN.md`, `API_DETAILS.md`, `SECURITY.md`, `QUALITY.md`.
 - Evidence: `evidence/`.
 - Reproduction: root README, package lockfile and documented npm commands.
 - Live release and operating instructions: `DEPLOYMENT.md`, root `vercel.json`.
 - Business rules and implementation choices: `DECISIONS.md`.
 - Source references: the unchanged local ICTAK project guidelines and internship report template. The supplied report reference defines the nine sections used here; its sample names/date are not project facts.
+
+Student walkthrough: sign in or register, open Equipment, choose Request equipment, select an available asset or Other, select a purpose or provide Other text, and choose a future return time. Follow the request in My requests. An eligible request can be withdrawn before handover; an issued item supports a damage report.
+
+Administrator walkthrough: sign in using privately shared application credentials, review pending requests, and assign an available registered asset for an unlisted need. Register a missing asset first if necessary. Approve with a due time within 168 hours, record physical handover, then inspect and return the asset. Damage or an existing report requires an inspection note. The application administrator has no Atlas/cloud administrator privileges.
+
+Reviewer credentials must be shared privately and excluded from submission archives. No reusable password appears in this report or its screenshots. The README lists environment variable names and startup commands; actual credentials stay outside Git.

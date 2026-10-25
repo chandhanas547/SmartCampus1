@@ -1,12 +1,36 @@
 {
-  "revision": "0.5 Draft",
-  "status": "Not approved or submitted",
-  "renderedPagesReviewed": 23,
-  "sourceSha256": "1cd2251560e8e7c9e769283ce7043e467c33280a7e92917e7fdb7fbed89e9d2f",
-  "docxSha256": "1490e542592ce591b9d64cfe7e013d7605c614641ce2b118483ed6a6e92e56c9",
+  "prepared": "2026-10-25",
+  "revision": "0.6 Draft",
+  "status": "Prepared for review; not approved or submitted",
+  "personalDetails": "Stored only in ignored local metadata and exports",
+  "outputs": [
+    {
+      "kind": "report",
+      "pagesVisuallyReviewed": 10,
+      "sourceSha256": "1915e9469923ab0e0284defce5023b755e976c1daf75df4d22ce6503348d4ec9",
+      "privateDocx": ".local/submission/LabFlow_Project_Report_DRAFT.docx",
+      "docxSha256": "6a09094a78565df6f81140566b204b5a3fa53cbd0f5626760728f9819af5a78f",
+      "privatePdf": ".local/submission/LabFlow_Project_Report_DRAFT.pdf",
+      "pdfSha256": "404823e5404ee8c6a4cc77a61281a8fd53d06d5bba52e1ea80528595b1c8798c"
+    },
+    {
+      "kind": "SRS",
+      "pagesVisuallyReviewed": 24,
+      "sourceSha256": "fd9cff99385495184771a4f6e000973256ed86b76fe0135233e2bdc6b49f9172",
+      "privateDocx": ".local/submission/LabFlow_SRS_DRAFT_0.6.docx",
+      "docxSha256": "6a9018814abb6ee5f9379d69ec9d13d362c27cb1c77c7b0ceb087011c7cbc7ed",
+      "privatePdf": ".local/submission/LabFlow_SRS_DRAFT_0.6.pdf",
+      "pdfSha256": "585b5203fba8df4d0c4048003e89cb330f456af17d82c8276c1f23a0a97c2a80"
+    }
+  ],
+  "checks": {
+    "allPagesVisuallyReviewed": true,
+    "originalReportTemplateUnchangedPartsPreserved": true,
+    "privateFilesIgnoredByGit": true,
+    "applicationTests": "21 fast regression cases passed on 25 October for this documentation increment; no application changes. Database/build/coverage results refer to the recorded release verification, not a new run.",
+    "lint": "PASS"
+  },
   "unknownMetadata": [
-    "individual author and student ID",
-    "institution",
     "mentor",
     "LMS deadline filename and submission procedure"
   ]

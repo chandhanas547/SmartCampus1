@@ -30,7 +30,7 @@ This document records the assumptions that future sessions must not silently cha
 ## Finalized demo policies
 
 - Maximum lending period: **seven days (168 hours) from the server-recorded approval instant**. `requestedDueAt` must be future at creation and approval; approved `dueAt` must be future and within this limit. An admin may choose a different due date at approval, not at issue.
-- Registration fields are `name`, `email` and `password` only; actual report authorship/institution metadata remains TBD.
+- Registration fields are `name`, `email` and `password` only. Report authorship/institution details supplied on 25 October are stored only in ignored private submission metadata and personalized exports.
 - Pending requests do not reserve an asset; more than one student may have a pending request for it.
 - A student may not have more than one active request for the same asset.
 - Students may cancel pending or approved-but-unissued requests. Admin cancellation requires a reason.
@@ -70,7 +70,7 @@ Deferral does not remove basic security, accessibility, responsive design, trans
 |---|---|
 | What LMS SRS template, deadline, filename and submission evidence are required? | Before SRS submission |
 | Is the revised SRS transition/date/PATCH contract approved for submission? | Before SRS approval |
-| What are the individual author/student ID, institution/mentor and final deadline? | Before final submission |
+| Mentor and final deadline remain unknown; author, institution and student identifiers are supplied privately. | Before final submission |
 | How will reviewers receive the privately stored admin demo credential? | Before final submission |
 
 ## Current hosting decision
