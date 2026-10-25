@@ -6,6 +6,7 @@ coverage/
 .vite/
 .vercel/
 .local/
+submission_package/
 test-results/
 playwright-report/
 
