@@ -1,16 +1,29 @@
 # LabFlow
 
-Live demonstration: [LabFlow](https://labflow-lemon.vercel.app) · [API readiness](https://labflow-lemon.vercel.app/api/health). Synthetic data only.
+[![MongoDB](https://img.shields.io/badge/MongoDB-8.0-47A248?style=flat-square&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
+[![Express.js](https://img.shields.io/badge/Express-4.x-000000?style=flat-square&logo=express&logoColor=white)](https://expressjs.com/)
+[![React](https://img.shields.io/badge/React-19-20232A?style=flat-square&logo=react&logoColor=61DAFB)](https://react.dev/)
+[![Node.js](https://img.shields.io/badge/Node.js-24.21-339933?style=flat-square&logo=nodedotjs&logoColor=white)](https://nodejs.org/)
+[![Vite](https://img.shields.io/badge/Vite-8.x-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Tests](https://img.shields.io/badge/Tests-53%20Passed-brightgreen?style=flat-square&logo=githubactions&logoColor=white)](https://github.com/milan-kb/LabFlow/actions)
+[![Academic Capstone](https://img.shields.io/badge/ICTAK-Capstone%20Project-0284c7?style=flat-square)](docs/DECISIONS.md)
 
-Source repository: [milan-kb/LabFlow](https://github.com/milan-kb/LabFlow).
+> A modern, transaction-safe MERN web application for managing individually tagged laboratory equipment, student loan requisitions, and inspected returns in a college laboratory.
+
+**Live demonstration:** [labflow-lemon.vercel.app](https://labflow-lemon.vercel.app) · **API readiness:** [labflow-lemon.vercel.app/api/health](https://labflow-lemon.vercel.app/api/health) *(Synthetic demonstration data)*
+
+**Source repository:** [milan-kb/LabFlow](https://github.com/milan-kb/LabFlow)
+
+![LabFlow Equipment Catalog Preview](docs/evidence/screenshots/catalog-preview.jpg)
 
 LabFlow is a demo-only, single-laboratory equipment management capstone. Students find individually tagged equipment, request borrowing, review request history and report damage. Lab administrators manage inventory, decide requests, record issue and inspected return, and monitor current activity.
 
 ## Stack
 
-- MongoDB and Mongoose
-- Express and Node.js
-- React and Vite
+- **MongoDB & Mongoose:** Multi-document ACID transactions, optimistic concurrency control, and partial unique indexes.
+- **Express & Node.js:** Strict schema boundary validation, scrypt password hashing, session regeneration, and rate limiting.
+- **React & Vite:** Single-page application with responsive, accessible scientific instrument register UI.
+- **Deployment:** Vercel Hobby serverless compute + MongoDB Atlas Free replica set (AWS Mumbai `AP_SOUTH_1`).
 
 The architecture is a React client communicating with an Express JSON API; only the API accesses MongoDB.
 
