@@ -20,7 +20,7 @@ export async function apiRequest(path, { signal, headers, envelope = false, ...o
     const messages = { 400: 'Check the form values and try again.', 401: 'Please check your sign-in details or sign in again.', 403: 'This action is not allowed.', 404: 'This item could not be found.', 409: 'This record already exists or has changed. Refresh and try again.', 429: 'Too many attempts. Please try again later.' };
     const error = new Error(messages[response.status] || 'The request could not be completed. Please try again.');
     error.status = response.status;
-    error.code = payload.error?.code;
+    error.code = payload?.error?.code;
     throw error;
   }
   if (!payload || typeof payload !== 'object' || !Object.hasOwn(payload, 'data')) {

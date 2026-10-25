@@ -15,7 +15,7 @@ from docx.text.paragraph import Paragraph
 
 ROOT = Path(__file__).resolve().parents[1]
 REFERENCE = ROOT / 'Summer Internship Report __ React.docx'
-OUTPUT = ROOT / '.local/submission/LabFlow_Project_Report_DRAFT.docx'
+OUTPUT = ROOT / '.local/submission/LabFlow_Project_Report.docx'
 DETAILS = ROOT / '.local/submission-details.json'
 details = json.loads(DETAILS.read_text()) if DETAILS.exists() else {}
 assert hashlib.sha256(REFERENCE.read_bytes()).hexdigest() == '192f563bee16a0853fffd4924524d666cdc678b6d8aa346fc65eb22a51f5fb90'
@@ -71,26 +71,13 @@ def figure(path, caption):
     from PIL import Image
     with Image.open(path) as image:
         width, height = image.size
-    # Crop only empty lower page space in the document frame, preserving the source capture.
-    crop_bottom = .60 if path.name == 'redesign-returned.png' else 0
-    visible_height = height * (1 - crop_bottom)
-    max_width = 2.65 if width < 500 else 6.5
-    size = min(max_width, 6.5 * width / visible_height)
-    holder = paragraph('')
-    holder.paragraph_format.keep_with_next = True
-    holder.paragraph_format.keep_together = True
-    picture = holder.add_run().add_picture(str(path), width=Inches(size))
-    if crop_bottom:
-        picture.height = Inches(size * visible_height / width)
-        fill = picture._inline.graphic.graphicData.pic.blipFill
-        crop = OxmlElement('a:srcRect')
-        crop.set('b', str(round(crop_bottom * 100000)))
-        fill.insert(1, crop)
     p = paragraph(caption)
-    p.paragraph_format.keep_together = True
-    for run in p.runs:
-        run.italic = True
-        run.font.size = Pt(10)
+    p.paragraph_format.page_break_before = True
+    p.paragraph_format.keep_with_next = True
+    size = min(6.5, 7.5 * width / height)
+    holder = paragraph('')
+    holder.paragraph_format.keep_together = True
+    holder.add_run().add_picture(str(path), width=Inches(size))
 
 
 def table(lines):
@@ -161,9 +148,30 @@ while index < len(lines):
             paragraph(clean(line))
     index += 1
 
-mobile = ROOT / 'docs/evidence/hosted/dropdown-mobile.png'
-if mobile.exists():
-    figure(mobile, f'Figure {figure_count + 1}. Current hosted borrowing form at 320 CSS pixels. No borrowing request was submitted for this capture.')
+screenshots = ROOT / '.local/submission/screenshots'
+for filename, caption in [
+    ('01-login.jpg', 'Sign-in screen and laboratory access information.'),
+    ('03-student-catalog.jpg', 'Student equipment catalog with availability and search filters.'),
+    ('04-student-request-other.jpg', 'Equipment and purpose dropdowns with Other descriptions.'),
+    ('05-student-request-history.jpg', 'Student borrowing history and request states.'),
+    ('06-admin-dashboard.jpg', 'Administrator circulation summary and inventory state counts.'),
+    ('08-admin-register-asset.jpg', 'Administrator asset registration with preset metadata choices.'),
+    ('09-admin-request-management.jpg', 'Administrator request management with status, overdue and damage filters.'),
+    ('10-admin-return-and-history.jpg', 'Inspected return, original requested description and retained lifecycle timeline.'),
+]:
+    figure_count += 1
+    figure(screenshots / filename, f'Figure {figure_count}. {caption} Local synthetic demonstration, 25 October 2026.')
+
+p = paragraph(f'Figure {figure_count + 1}. Mobile request form: upper view and scrolled lower fields. Local synthetic demonstration, 25 October 2026.')
+p.paragraph_format.page_break_before = True
+p.paragraph_format.keep_with_next = True
+phones = doc.add_table(rows=1, cols=2)
+phones.autofit = False
+for col in phones.columns:
+    col.width = Inches(3.25)
+for cell, filename in zip(phones.rows[0].cells, ['11-mobile-overview.jpg', '12-mobile-request-form.jpg']):
+    cell.width = Inches(3.25)
+    cell.paragraphs[0].add_run().add_picture(str(screenshots / filename), width=Inches(3.0))
 
 buffer = BytesIO()
 doc.save(buffer)

@@ -3,31 +3,24 @@
 | Document field | Value |
 |---|---|
 | Project | LabFlow — College Laboratory Equipment Management System |
-| Document version | 0.6 Draft |
-| Status | Draft for review — not approved or submitted |
+| Document version | 0.7 |
+| Status | Prepared for academic submission |
 | Prepared by | TBD: individual author name and student ID |
 | Institution | TBD |
-| Faculty/mentor | TBD |
-| LMS submission deadline | TBD |
 
 ## Revision history
 
 | Version | Date | Author | Change |
 |---|---|---|---|
-| 0.1 | TBD | TBD | Initial SRS draft based on the approved LabFlow master plan and ICTAK references. |
-| 0.2 | TBD | TBD | Clarified inventory guards, dates, damage inspection and PATCH contract; finalized demo defaults. |
-| 0.3 | 2026-10-21 | TBD | Recorded individual submission and owner authorization to start development; requirements remain a review draft. |
-| 0.4 | 2026-10-22 | TBD | Synchronized implemented input/security policies, quality gates and supporting design; no approval or submission claimed. |
-| 0.5 | 2026-10-23 | TBD | Selected Vercel Hobby/Atlas Free and recorded the owner-authorized synthetic-demo network exception; application security requirements remain unchanged. Recorded hosted verification and refreshed the matching review export. |
-| 0.6 | 2026-10-24 | TBD | Added owner-requested dropdowns and unlisted equipment requests requiring registered-asset assignment before approval; no approval/submission claim. |
+| 0.7 | 2026-10-25 | Project author | Consolidated individual capstone specification for submission. Business rules and endpoint scope are unchanged from revision 0.6. Earlier revisions remain in repository history. |
 
 ## 1. Introduction
 
 ### 1.1 Purpose
 
-This Software Requirements Specification (SRS) defines the MVP requirements and verification basis for LabFlow. It is intended for the individual student developer, instructor/reviewer and future implementation sessions. It remains awaiting review and submission. On 21 October 2026 the owner authorized application coding to begin before that process is complete.
+This Software Requirements Specification (SRS) defines the MVP requirements and verification basis for LabFlow. It is intended for the individual student developer and the ICTAK assessor.
 
-This SRS uses an IEEE-inspired structure because no mandatory LMS template has been supplied. The LMS requirement for a separate SRS was communicated independently; it is not stated in either local ICTAK DOCX reference.
+The document uses an IEEE-inspired structure and accompanies the separate final project report.
 
 ### 1.2 Problem statement
 
@@ -60,13 +53,13 @@ The MVP is not a production campus identity, finance, notification or repair-man
 
 ### 1.6 Requirement status and priority
 
-- **Approved baseline:** established project scope or policy, including the owner's requested demo defaults; this does not mean this draft is approved or submitted.
-- **Provisional:** retained for document review; a dated implementation decision may select a working baseline under the owner's coding authorization without implying SRS approval.
+- **Approved baseline:** accepted project scope or business policy; this label is not a record of academic approval.
+- **Provisional:** a target or parameter whose verification remains limited, as identified in this specification and the quality evidence.
 - **TBD:** unresolved; no behavior may be inferred silently.
 - **Must:** necessary for MVP acceptance.
 - **Should:** important, but may be deferred only with an explicit reason.
 
-Functional capabilities retain their approved baseline status. Newly specified contract details are draft elaborations for review. Provisional parameters and security mechanisms are not approved merely because their parent capability is required.
+Requirements describe expected behavior. Completed verification results and remaining limitations are recorded separately in the project report and quality documentation.
 
 ## 2. System overview
 
@@ -113,7 +106,7 @@ MongoDB replica set
 | Only free services may be selected unless paid use is explicitly approved. | Approved |
 | Vercel Hobby and Atlas Free (AWS Mumbai) are used at https://labflow-lemon.vercel.app; the API function region is bom1. See DEPLOYMENT.md for evidence and limits. | Demo deployment verified; no production availability guarantee |
 
-The owner explicitly authorized Vercel's free backend and the persistent `0.0.0.0/0` rule for `labflow-capstone` only on 23 October 2026. For the separate synthetic-demo Atlas project only, `0.0.0.0/0` may replace host-IP restrictions. Database authentication and TLS remain required, and the app user has readWrite on `labflow` only. No public database credentials or real-person data are permitted. This removes a network restriction, not authentication; it is unsuitable as an unreviewed baseline for real college use. See `DECISIONS.md` and `DEPLOYMENT.md`. Personalized revision 0.6 Word/PDF review copies are generated privately; identifiers are omitted from the public source. Approval and submission remain pending.
+The separate synthetic-demo Atlas project permits Vercel connections through an explicitly authorized `0.0.0.0/0` network rule. Database authentication, TLS and readWrite restricted to `labflow` remain mandatory. No public database credentials or real-person data are permitted. This synthetic-demo exception removes an IP restriction and is not a production baseline for real college use. The deployment runbook records its scope and operational limits.
 
 ## 3. User roles and permissions
 
@@ -138,7 +131,7 @@ Authorization must be enforced by the API for every protected request. Hiding a 
 
 ## 4. Functional requirements
 
-F1–F11 are **Must** capabilities from the approved baseline. Their acceptance criteria include draft clarifications in this revision; explicitly provisional details remain awaiting approval. No passing result is claimed.
+F1–F11 are **Must** capabilities. Their acceptance criteria define the functional verification basis; results are recorded separately.
 
 ### F1 — Student registration and authentication
 
@@ -148,7 +141,7 @@ F1–F11 are **Must** capabilities from the approved baseline. Their acceptance 
 | Requirement | The system shall register students and support login, session restoration and logout for valid users. |
 | Acceptance criteria | (1) Valid student registration creates one account and returns a safe user representation. (2) Email is normalized; a duplicate returns `409` and creates nothing. (3) Missing, malformed or out-of-range input is rejected and persisted nowhere. (4) A supplied role or admin field cannot create/elevate an admin. (5) Valid login starts a new session; invalid credentials do not disclose which field failed. (6) Logout destroys the session. (7) Passwords and hashes are never returned or logged. |
 
-Demo registration accepts only `name`, `email` and `password`; no student number or college-verification field is required. Author identity is supplied privately in review exports. Selected password/session limits are defined under NFR-SEC and `docs/SECURITY.md`; formal document review remains pending.
+Demo registration accepts only `name`, `email` and `password`; no student number or college-verification field is required. Password/session limits are defined under NFR-SEC and `docs/SECURITY.md`.
 
 ### F2 — Access control and ownership
 
@@ -418,7 +411,7 @@ Shared entities are referenced by identifier. Lifecycle events and damage detail
 | `GET /api/dashboard` | Admin | — | `200`, operational counts/lists | `401`, `403` |
 | `GET /api/health` | Public | — | `200` ready or `503` unavailable | `503` |
 
-Exact field lengths and optionality not already defined are completed during M1 review and then represented in boundary schemas.
+Exact field lengths and optionality are enforced by the boundary schemas and documented in `docs/API_DETAILS.md`.
 
 PATCH accepts exactly one action per call. Every action requires a non-negative integer expected `version`; success atomically increments it and records the admin as `updatedBy`. `EDIT_METADATA` requires at least one of `name`, `category`, `description`, `location`, `conditionNote`; it cannot modify `assetTag`, status, allocation, server timestamps or version directly. It does not move or release equipment. Metadata edits to archived assets return `409`; admin read/history access remains available.
 
@@ -512,12 +505,11 @@ This table defines planned evidence, not completed results.
 - Transactional inventory safety, server RBAC, ownership and boundary validation are mandatory.
 - Original ICTAK references remain unchanged and outside Git.
 - No paid service without explicit approval.
-- The owner authorized coding on 21 October 2026 while SRS approval/submission remain pending.
-- Demo defaults finalized by the owner: JavaScript/JSX; name/email/password-only registration; maximum seven days (168 hours) from approval; UTC persistence and `Asia/Kolkata` display.
+- Demo defaults: JavaScript/JSX; name/email/password-only registration; maximum seven days (168 hours) from approval; UTC persistence and `Asia/Kolkata` display.
 - Existing cancellation policy is retained: students cancel own pending/approved-unissued requests; admins cancel approved-unissued reservations with a reason.
 - No automatic expiry/rejection worker; pending requests and expired reservations require the explicit handling in Section 6.3.
 
-### 12.2 Selected implementation choices awaiting document approval
+### 12.2 Selected implementation choices
 
 - MongoDB-backed sessions, single origin, identity parameters in `docs/SECURITY.md`, and bounded fields/filter semantics in `docs/API_DETAILS.md`.
 - Existing 80% critical coverage target and measured local performance budget in `docs/QUALITY.md`; no threshold was reduced to pass.
@@ -534,20 +526,16 @@ This table defines planned evidence, not completed results.
 - Advanced analytics, exports and real-time updates
 - Advanced performance/load, backup restoration and full cross-browser gates before the core MVP works
 
-### 12.4 Unresolved decisions and blockers
+### 12.4 Operational and assessment limitations
 
-| Decision | Required before |
+| Limitation | Required action |
 |---|---|
-| LMS SRS template, deadline, filename and evidence of submission | SRS submission |
-| Confirm private author/institution details on the review copy; faculty/mentor remains unknown | SRS submission |
-| Review of this revision's detailed transition, date and PATCH contracts | SRS approval |
-| Formal review of selected identity/security policies | SRS approval |
-| Reviewer acceptance of Hobby/Free capacity limits and the recorded transient readiness failure | Final assessment |
-| Required final browser matrix and hosted performance expectations | Final verification |
-| Secure delivery of reviewer admin access | Final submission |
-| Data retention/deletion period if use expands beyond synthetic demo data | Before any real-data use |
+| Hobby/Free capacity limits and a recorded transient readiness failure | Do not claim production availability or hosted load guarantees. |
+| Native zoom, screen readers and a full browser-engine matrix are unverified | Record these as limitations rather than completed checks. |
+| Administrator demonstration access is private | Deliver reviewer credentials through the assessment channel. |
+| Retention/deletion policy for real personal data is undefined | Use synthetic data only; define and approve the policy before real-data use. |
 
-This revision finalizes defaults previously marked provisional in MASTER_PLAN and elaborates its lifecycle/API guards without adding endpoints. DECISIONS is updated to prevent contradictory implementation guidance; the master plan's older provisional labels are historical, not renewed uncertainty. This SRS remains a review draft, and remaining assessment and submission choices cannot be inferred silently.
+The specification covers 19 endpoints. Requirements, measured verification results and operational limitations are distinct; implementation does not establish formal academic acceptance.
 
 ## 13. References
 
@@ -556,6 +544,6 @@ This revision finalizes defaults previously marked provisional in MASTER_PLAN an
 3. `README.md`, LabFlow project overview and current status.
 4. `docs/MASTER_PLAN.md`, approved architecture, scope, requirements, lifecycle and milestone baseline.
 5. `docs/DECISIONS.md`, accepted, proposed and unresolved decisions.
-6. LMS SRS requirement communicated by the project owner. The screenshot/template, deadline and submission procedure are not present in the repository and remain TBD.
+6. ICTAK LMS assignment pages supplied on 25 October 2026: separate SRS submission and final submission of the report, public GitHub URL, hosted URL and major application screenshots.
 
 Official implementation references include React, Node.js, Express, MongoDB, Mongoose, OWASP and WCAG documentation. Exact installed versions are pinned in the root workspace lockfile; source links for selected mechanisms are in `docs/SECURITY.md` and `docs/QUALITY.md`. Supporting implementation contracts and layouts are in `docs/API_DETAILS.md` and `docs/DESIGN.md`. Measured results live under `docs/evidence/`; requirements and recorded results remain distinct.

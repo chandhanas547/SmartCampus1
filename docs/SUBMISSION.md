@@ -20,12 +20,12 @@ The retained ICTAK project guide, section 13, supplies the following checklist. 
 
 Personalized Word and PDF copies are generated in ignored `.local/submission/`:
 
-- `LabFlow_Project_Report_DRAFT.docx` and `.pdf`
-- `LabFlow_SRS_DRAFT_0.6.docx` and `.pdf`
+- `LabFlow_Project_Report.docx` and `.pdf`
+- `LabFlow_SRS.docx` and `.pdf`
 
 Names are proposed, not an asserted LMS convention. Author, registration number, serial number and institution are supplied through ignored `.local/submission-details.json`; public Markdown retains no registration number. Mentor and submission deadline remain unknown. SRS approval remains pending.
 
-The original report template and guide remain unchanged. Rebuild with the bundled document runtime using `scripts/export_report.py` and `scripts/export_srs.py --details .local/submission-details.json --output .local/submission/LabFlow_SRS_DRAFT_0.6.docx`. Render and inspect every page after changes; PDF copies must match the reviewed Word files.
+The original report template and guide remain unchanged. Rebuild with the bundled document runtime using `scripts/export_report.py` and `scripts/export_srs.py --details .local/submission-details.json --output .local/submission/LabFlow_SRS.docx`. Render and inspect every page after changes; PDF copies must match the reviewed Word files.
 
 ## Before uploading
 

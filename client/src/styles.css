@@ -70,9 +70,6 @@
   --status-archived-border: #aba79a;
   --status-archived-text: #4f4d45;
 
-  /* Legacy variables for backwards compatibility */
-  --muted: var(--ink-muted);
-  --line: var(--rule);
 }
 
 * {

@@ -11,7 +11,7 @@ from docx.oxml.ns import qn
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / 'docs/SRS_DRAFT.md'
 parser = argparse.ArgumentParser()
-parser.add_argument('--output', type=Path, default=ROOT / '.local/submission/LabFlow_SRS_DRAFT_0.6.docx')
+parser.add_argument('--output', type=Path, default=ROOT / '.local/submission/LabFlow_SRS.docx')
 parser.add_argument('--details', type=Path, help='Ignored private author metadata JSON')
 args = parser.parse_args()
 OUTPUT = args.output
@@ -36,7 +36,7 @@ for name, size in [('Heading 1', 16), ('Heading 2', 13), ('Heading 3', 11.5)]:
     doc.styles[name].paragraph_format.space_before = Pt(12)
     doc.styles[name].paragraph_format.space_after = Pt(6)
 header = section.header.paragraphs[0]
-header.text = 'LabFlow SRS 0.6 Draft'
+header.text = 'LabFlow SRS 0.7'
 header.runs[0].font.size = Pt(9)
 footer = section.footer.paragraphs[0]
 footer.alignment = 2
@@ -129,14 +129,13 @@ while index < len(lines):
     if line.startswith('# '): doc.add_paragraph('LabFlow Software Requirements Specification', 'Title')
     elif re.match(r'^#{2,4} ', line):
         marker, heading = line.split(' ', 1)
-        heading = re.sub(r'[^\w\s]', ' ', heading)
-        doc.add_heading(re.sub(r'\s+', ' ', heading).strip(), len(marker) - 1)
+        doc.add_heading(heading.replace('**', '').strip(), len(marker) - 1)
     elif line.startswith('- '): inline(doc.add_paragraph(style='List Bullet'), line[2:])
     elif re.match(r'^\d+\. ', line): inline(doc.add_paragraph(), line)
     else: inline(doc.add_paragraph(), line)
     index += 1
 doc.core_properties.title = 'LabFlow Software Requirements Specification'
-doc.core_properties.subject = 'Revision 0.6 Draft pending approval and submission'
+doc.core_properties.subject = 'Revision 0.7 prepared for academic submission'
 doc.core_properties.author = ''
 for border in list(doc.element.iter(qn('w:pBdr'))):
     border.getparent().remove(border)

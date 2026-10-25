@@ -22,6 +22,8 @@ test('API client gives safe actionable errors for service and network failures',
   await assert.rejects(apiRequest('/health'), /temporarily unavailable/);
   globalThis.fetch.mock.mockImplementation(async () => { throw new TypeError('private networking detail'); });
   await assert.rejects(apiRequest('/health'), /connection/);
+  globalThis.fetch.mock.mockImplementation(async () => Response.json(null, { status: 401 }));
+  await assert.rejects(apiRequest('/auth/me'), (error) => error.status === 401 && /sign in again/.test(error.message));
 });
 
 test('API client rejects HTML and malformed success envelopes', async (t) => {

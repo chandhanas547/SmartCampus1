@@ -1,6 +1,6 @@
 # LabFlow individual capstone report
 
-Prepared 25 October 2026 for individual submission review; not submitted. Confirmed author and institution details are applied only to ignored personalized exports. Source repository: [milan-kb/LabFlow](https://github.com/milan-kb/LabFlow). Live synthetic demonstration: [LabFlow](https://labflow-lemon.vercel.app).
+Prepared 25 October 2026 for individual academic submission. Confirmed author and institution details are applied only to ignored personalized exports. Source repository: [milan-kb/LabFlow](https://github.com/milan-kb/LabFlow). Live synthetic demonstration: [LabFlow](https://labflow-lemon.vercel.app).
 
 ## Executive summary
 
@@ -36,7 +36,7 @@ Administrator story: As an administrator, I want to assign an available register
 
 ## Methodology
 
-Development followed documented requirements and small verified increments in Git, preserving the initial M0 history. The working specification distinguishes accepted scope, selected implementation policies and unapproved submission details. The SRS remains a review draft; implementation and deployment do not imply academic approval or submission.
+Development followed documented requirements and small verified increments in Git, preserving the initial M0 history. The specification defines the accepted scope, business rules, selected implementation policies and verification criteria.
 
 The browser calls a relative JSON API; only the server accesses MongoDB. Strict boundary schemas reject unknown fields and invalid IDs/dates. Authorization uses the stored session role and owner-scoped database queries. MongoDB transactions and unique partial indexes protect allocation; optimistic equipment versions detect stale edits. A real replica set, rather than browser mocks, verifies database behavior.
 
@@ -71,19 +71,17 @@ The final visual update required explicit Google Fonts source allowances in the 
 
 The measurements use a small synthetic loopback dataset and cannot predict load behavior or a sleeping free host. Native browser zoom, standalone stable Chromium and other-engine checks are not established by CSS enlargement or in-app testing alone. Screen-reader testing is also not claimed. All 32 isolated Atlas acceptance tests passed on 24 October 2026; cleanup left their three databases empty. Public HTTPS, secure cookies, strict parsing/CSRF, role/ownership checks, cancellation, rejection and both return paths passed on Vercel Hobby. The live browser journey covers request, approve, issue, report damage, damaged return and restoration. One readiness request returned 503 and recovered through the UI retry; ten subsequent sequential and five concurrent health requests returned 200. Its root cause was not established, and no availability or load-test claim is made. Render was abandoned when it required a card; no paid service was created. The owner explicitly approved the separate demo project network exception on 23 October 2026; TLS, credentials and database roles remain enforced.
 
-![Current student dropdown form on the hosted application](evidence/hosted/dropdown-request.png)
-
-![Current redesigned inspected return with retained original description in the local synthetic demonstration](evidence/redesign-returned.png)
+The appendix illustrates the current student and administrator screens using the local synthetic demonstration. Original-resolution captures are also supplied separately with the submission package.
 
 ## Conclusion
 
 The local implementation demonstrates the intended single-lab borrowing workflow and verifies its main authorization and transaction invariants. Testing against real concurrent database operations and a cold setup exposed failures that a simple browser demonstration would have missed. The regression suite keeps these invariants reproducible as the application changes.
 
-Completion for assessment still requires review of this report, the outstanding browser checks and the actual college submission procedure. The hosted URL and historical live core-flow evidence are available. This draft retains its actual limitations; document approval and submission must be recorded separately.
+The deployed application and source repository provide a reproducible demonstration of the implemented scope. Future improvements include broader browser and screen-reader verification, operational monitoring and a defined retention policy before any real-student deployment.
 
 ## Appendix
 
-- Requirements: `SRS_DRAFT.md` revision 0.6 and its matching review export.
+- Requirements: `SRS_DRAFT.md` revision 0.7 and its matching submission copy.
 - Design and contracts: `DESIGN.md`, `API_DETAILS.md`, `SECURITY.md`, `QUALITY.md`.
 - Evidence: `evidence/`.
 - Reproduction: root README, package lockfile and documented npm commands.
